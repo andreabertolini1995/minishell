@@ -34,24 +34,50 @@ char	*ft_strcat(char *dest, char *src)
 	return (dest);
 }
 
+char	*ft_strncpy(char *dest, char *src, unsigned int n)
+{
+	int	i;
+	int	nb;
+
+	nb = n;
+	i = 0;
+	while (i < nb && src[i] != '\0')
+	{
+		dest[i] = src[i];
+		i++;
+	}
+	while (i < nb)
+	{
+		dest[i] = '\0';
+		i++;
+	}
+	return (dest);
+}
+
+char	*combine_path_cmd(char *cmd)
+{
+	char *path;
+	char *path_cmd;
+
+	path = "/bin";
+	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
+	if (path_cmd == NULL)
+		return (NULL);
+	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
+	path_cmd = ft_strcat(path_cmd, cmd);
+	return (path_cmd);
+}
+
 int main()
 {
 	char *cmd;
-	char *path;
 	char *path_cmd;
-	char *argv[2] = {"ls", `NULL};
+	char *argv[2] = {"ls", NULL};
 	char *envp[2] = {"/bin", NULL};
 	
 	cmd = "/ls";
-	path = "/bin";
-	// Find a better solution to copy concatenate the two strings.
-	// Current idea is to use ft_concat but need to probbaly use ft_strncpy before too
-	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
-	if (path_cmd == NULL)
-		return (1);
-	path_cmd = ft_strcat(path, cmd);
-	printf("%s", path);
-	if (execve(path, argv, envp) == -1)
+	path_cmd = combine_path_cmd(cmd);
+	if (execve(path_cmd, argv, envp) == -1)
 		perror("Could not execve.");
 	return (0);
 }
