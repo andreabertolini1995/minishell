@@ -21,5 +21,10 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <string.h>
+
+// Utils
+int     ft_strlen(char *str);
+char    *ft_strcat(char *dest, char *src);
 
 #endif

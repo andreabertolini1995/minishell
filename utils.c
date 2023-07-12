@@ -12,46 +12,33 @@
 
 #include "minishell.h"
 
-void clear()
+int	ft_strlen(char *str)
 {
-    // Clearing the shell using escape sequences
-    printf("\033[H\033[J");
-}
-  
-void init_shell()
-{
-    printf("\n\n\n\n******************"
-        "************************");
-    printf("\n\n\n\t****MY SHELL****");
-    printf("\n\n\n\n*******************"
-        "***********************");
-    char* username = getenv("USER");
-    printf("\n\n\nUSER is: @%s", username);
-    printf("\n");
-    sleep(1);
-    clear();
-}
-  
-int takeInput()
-{
-    char* buf;
-  
-    buf = readline(">>> ");
-    if (strlen(buf) != 0) {
-        add_history(buf);
-        return 0;
-    } else {
-        return 1;
-    }
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i] != '\0')
+	{
+		count++;
+		i++;
+	}
+	return (count);
 }
 
-int main()
+char	*ft_strcat(char *dest, char *src)
 {
-    init_shell();
+	int	dest_len;
+	int	i;
 
-    while (42) {
-        // Reading input continously from the shell
-        if (takeInput())
-            continue;
-    }
+	dest_len = ft_strlen(dest);
+	i = 0;
+	while (src[i] != '\0')
+	{
+		dest[dest_len + i] = src[i];
+		i++;
+	}
+	dest[dest_len + i] = '\0';
+	return (dest);
 }
