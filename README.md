@@ -1,2 +1,2 @@
 # minishell
-A C implementation of a simlpe shell.
+A C implementation of a simple shell.
