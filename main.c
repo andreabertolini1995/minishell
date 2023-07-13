@@ -25,20 +25,45 @@ void init_shell()
     printf("\n\n\n\t****MY SHELL****");
     printf("\n\n\n\n*******************"
         "***********************");
-    char* username = getenv("USER");
-    printf("\n\n\nUSER is: @%s", username);
+    // char* username = getenv("USER");
+    // printf("\n\n\nUSER is: @%s", username);
     printf("\n");
-    sleep(1);
+    sleep(3);
     clear();
+}
+
+char	*combine_path_cmd(char *cmd)
+{
+	char *path;
+	char *path_cmd;
+
+	path = "/bin/";
+	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
+	if (path_cmd == NULL)
+		return (NULL);
+	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
+	path_cmd = ft_strcat(path_cmd, cmd);
+	return (path_cmd);
 }
   
 int takeInput()
 {
-    char* buf;
-  
-    buf = readline(">>> ");
-    if (strlen(buf) != 0) {
-        add_history(buf);
+    char* cmd;
+    char *path_cmd;
+    char *argv[2];
+	char *envp[2];
+
+    cmd = readline(">>> ");
+    argv[0] = cmd;
+    argv[1] = NULL;
+    envp[0] = "/bin";
+    envp[1] = NULL;
+    if (ft_strlen(cmd) != 0)
+    {
+        add_history(cmd);
+        path_cmd = combine_path_cmd(cmd);
+        if (execve(path_cmd, argv, envp) == -1)
+            perror("Could not execve.");
         return 0;
     } else {
         return 1;
