@@ -25,8 +25,6 @@ void init_shell()
     printf("\n\n\n\t****MY SHELL****");
     printf("\n\n\n\n*******************"
         "***********************");
-    // char* username = getenv("USER");
-    // printf("\n\n\nUSER is: @%s", username);
     printf("\n");
     sleep(3);
     clear();
@@ -75,7 +73,6 @@ int main()
     init_shell();
 
     while (42) {
-        // Reading input continously from the shell
         if (takeInput())
             continue;
     }

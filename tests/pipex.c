@@ -10,25 +10,38 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <string.h>
+/* Example of implement a pipe as in the pipex project.
+    Only handling two processes for the moment. */
 
-// Pipex
-char	*combine_path_cmd(char *cmd);
+int ft_pipe(char *cmd1, char *cmd2)
+{
+    int pipe_fd[2];
+    int id;
 
-// Utils
-int     ft_strlen(char *str);
-char    *ft_strcat(char *dest, char *src);
-char	*ft_strncpy(char *dest, char *src, unsigned int n);
+    if (pipe(pipe_fd) == -1)
+        return (1);
+    id = fork();
+    if (id == -1)
+        return (2);
+    if (id == 0)
+    {
+        close(pipe_fd[0]);
+        dup2(pipe_fd[1], STDOUT_FILENO);
+        close(pipe_fd[1]);
+    }
+    else
+    {
+        close(pipe_fd[1]);
+        dup2(pipe_fd[0], STDIN_FILENO);
+        close(pipe_fd[0]);
+        //wait(NULL);
+    }
+    return (0);
+}
 
-#endif
+int main(int argc, char **argv)
+{
+    ft_pipe(argv[1], argv[2]);
+}
