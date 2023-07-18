@@ -10,34 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <string.h>
-
-// Command struct
-typedef struct s_command
+char	*combine_path_cmd(char *cmd)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
+	char *path;
+	char *path_cmd;
 
-// Path
-char	*combine_path_cmd(char *cmd);
-
-// Utils
-int     ft_strlen(char *str);
-char    *ft_strcat(char *dest, char *src);
-char	*ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	path = "/bin/";
+	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
+	if (path_cmd == NULL)
+		return (NULL);
+	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
+	path_cmd = ft_strcat(path_cmd, cmd);
+	return (path_cmd);
+}

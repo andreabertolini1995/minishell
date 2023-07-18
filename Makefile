@@ -1,5 +1,5 @@
 NAME = minishell
-SOURCES = main.c utils.c
+SOURCES = main.c utils.c path.c
 OBJS = $(SOURCES:.c=.o)
 
 CC = cc

@@ -51,32 +51,21 @@ char	*ft_strncpy(char *dest, char *src, unsigned int n)
 	return (dest);
 }
 
-char	*combine_path_cmd(char *cmd)
-{
-	char *path;
-	char *path_cmd;
-
-	path = "/bin/";
-	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
-	if (path_cmd == NULL)
-		return (NULL);
-	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
-	path_cmd = ft_strcat(path_cmd, cmd);
-	return (path_cmd);
-}
-
 int main()
 {
-    char *path_cmd;
-    char *argv[2];
-	char *envp[2];
+    // char *path_cmd;
+    // char *argv[2];
+	// char *envp[2];
 
-    argv[0] = "ls";
-    argv[1] = NULL;
-    envp[0] = "/bin";
-    envp[1] = NULL;
-    path_cmd = combine_path_cmd("ls");
-    printf("Path cmd: %s\n", path_cmd);
-    if (execve(path_cmd, argv, envp) == -1)
-        perror("Could not execve.");   
+    // argv[0] = "ls";
+    // argv[1] = NULL;
+    // envp[0] = "/bin";
+    // envp[1] = NULL;
+    // path_cmd = combine_path_cmd("ls");
+    // printf("Path cmd: %s\n", path_cmd);
+    // if (execve(path_cmd, argv, envp) == -1)
+    //     perror("Could not execve."); 
+	char *test[3] = {"Ciao", "Hello", "ola"};
+	printf("Size: %lu\n", sizeof(test)/(sizeof(char*)));
+	  
 }
