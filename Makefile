@@ -1,22 +1,36 @@
 NAME = minishell
-SOURCES = main.c utils.c
-OBJS = $(SOURCES:.c=.o)
+SOURCES = main.c utils.c list_utils.c path.c parser.c
+OBJ_DIR = obj
+OBJS = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
+LIBFT = libft/libft.a
+INCLUDES = -I libft/includes
 
 CC = cc
 RM = rm -f
 CFLAGS = -Wall -Wextra -Werror
-THREADS_LEAKS_FLAGS = -fsanitize=address -fno-omit-frame-pointer
+LEAKS_FLAGS = -fsanitize=address -fno-omit-frame-pointer
 READLINE_FLAGS = -lreadline
 
 all: $(NAME)	
 
-$(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(LEAKS_FLAGS) $(READLINE_FLAGS) $(OBJS) -o $(NAME)
+$(NAME): $(OBJS) $(LIBFT)
+	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
+
+$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(LIBFT):
+	make -C libft
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 clean:
-	$(RM) $(OBJS)
+	make -C libft clean
+	$(RM) -r $(OBJ_DIR)
 
 fclean: clean
+	make -C libft clean
 	$(RM) $(NAME)
 
 re: fclean $(NAME)

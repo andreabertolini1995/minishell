@@ -10,44 +10,15 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-
-// Command struct
-typedef struct s_command
+void	*ft_calloc(size_t n, size_t size)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
+	void	*str;
 
-// Parser
-t_command   *parser(char **tokens);
-
-// Path
-char	    *combine_path_cmd(char *cmd);
-
-// List utils
-void	    add_cmd_back(t_command **lst, t_command *new);
-t_command	*last_cmd(t_command *lst);
-
-// Pipex
-char	*combine_path_cmd(char *cmd);
-
-// Utils
-char        *ft_strcat(char *dest, char *src);
-char	    *ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	str = malloc (n * size);
+	if (str == NULL)
+		return (NULL);
+	ft_bzero(str, n * size);
+	return (str);
+}

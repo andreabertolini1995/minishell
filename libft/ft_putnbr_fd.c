@@ -10,44 +10,24 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-
-// Command struct
-typedef struct s_command
+void	ft_putnbr_fd(int n, int fd)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
-
-// Parser
-t_command   *parser(char **tokens);
-
-// Path
-char	    *combine_path_cmd(char *cmd);
-
-// List utils
-void	    add_cmd_back(t_command **lst, t_command *new);
-t_command	*last_cmd(t_command *lst);
-
-// Pipex
-char	*combine_path_cmd(char *cmd);
-
-// Utils
-char        *ft_strcat(char *dest, char *src);
-char	    *ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	if (n == -2147483648)
+		write(fd, "-2147483648", 11);
+	else if (n >= 0 && n < 10)
+	{
+		ft_putchar_fd(n + 48, fd);
+	}
+	else if (n >= 10)
+	{
+		ft_putnbr_fd(n / 10, fd);
+		ft_putchar_fd((n % 10) + 48, fd);
+	}
+	else if (n < 0)
+	{
+		ft_putchar_fd(45, fd);
+		ft_putnbr_fd(-n, fd);
+	}
+}

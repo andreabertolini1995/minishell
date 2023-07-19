@@ -1,49 +1,31 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abertoli <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/18 17:33:54 by abertoli          #+#    #+#             */
-/*   Updated: 2022/10/21 18:29:38 by abertoli         ###   ########.fr       */
+/*   Created: 2022/10/26 14:27:37 by abertoli          #+#    #+#             */
+/*   Updated: 2022/10/26 14:27:38 by abertoli         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-char	*ft_strcat(char *dest, char *src)
+char	*ft_strdup(const char *src)
 {
-	int	dest_len;
-	int	i;
+	char	*dest;
+	int		i;
 
-	dest_len = ft_strlen(dest);
+	dest = (char *) malloc (ft_strlen(src) + 1);
+	if (dest == NULL)
+		return (NULL);
 	i = 0;
 	while (src[i] != '\0')
-	{
-		dest[dest_len + i] = src[i];
-		i++;
-	}
-	dest[dest_len + i] = '\0';
-	return (dest);
-}
-
-char	*ft_strncpy(char *dest, char *src, unsigned int n)
-{
-	int	i;
-	int	nb;
-
-	nb = n;
-	i = 0;
-	while (i < nb && src[i] != '\0')
 	{
 		dest[i] = src[i];
 		i++;
 	}
-	while (i < nb)
-	{
-		dest[i] = '\0';
-		i++;
-	}
+	dest[i] = '\0';
 	return (dest);
 }

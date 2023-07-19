@@ -10,44 +10,18 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-
-// Command struct
-typedef struct s_command
+char	*combine_path_cmd(char *cmd)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
+	char *path;
+	char *path_cmd;
 
-// Parser
-t_command   *parser(char **tokens);
-
-// Path
-char	    *combine_path_cmd(char *cmd);
-
-// List utils
-void	    add_cmd_back(t_command **lst, t_command *new);
-t_command	*last_cmd(t_command *lst);
-
-// Pipex
-char	*combine_path_cmd(char *cmd);
-
-// Utils
-char        *ft_strcat(char *dest, char *src);
-char	    *ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	path = "/bin/";
+	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
+	if (path_cmd == NULL)
+		return (NULL);
+	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
+	path_cmd = ft_strcat(path_cmd, cmd);
+	return (path_cmd);
+}
