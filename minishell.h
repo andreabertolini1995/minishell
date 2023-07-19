@@ -33,6 +33,25 @@ typedef struct s_command
     struct s_command    *next;
 }   t_command;
 
+
+typedef enum e_token_type
+{
+    WORD = 0,
+    PIPE = 1,
+    R_S_RDIR = 2, // right-single
+    R_D_RDIR = 3, // right-double
+    L_S_RDIR = 4, // left-single
+    L_D_RDIR = 5, // left-double
+}   t_token_type;
+
+
+typedef struct s_token
+{
+    t_token_type    type;
+    char            *content;
+}   t_token;
+
+
 // Parser
 t_command   *parser(char **tokens);
 

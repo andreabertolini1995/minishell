@@ -23,16 +23,6 @@ bool    is_cmd(char *str)
         return false;
 }
 
-// bool    is_operator(char *str)
-// {
-//     if (!ft_strncmp(str, "&", ft_strlen(str)) || !ft_strncmp(str, ";", ft_strlen(str))
-//         || !ft_strncmp(str, "&&", ft_strlen(str)) || !ft_strncmp(str, "|", ft_strlen(str))
-//         || !ft_strncmp(str, "||", ft_strlen(str)))
-//         return true;
-//     else
-//         return false;
-// }
-
 /*  Function to create a new command struct. 
     Currently assuming the only fields are cmd, arg and operator
     and there can be only one argument. */
