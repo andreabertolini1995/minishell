@@ -10,41 +10,34 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "minishell.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-
-// Command struct
-typedef struct s_command
+void	add_cmd_back(t_command **lst, t_command *new)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
+	t_command	*last_node;
 
-// Parser
-t_command   *parser(char **tokens);
+	if ((*lst) == NULL)
+	{
+		new->next = NULL;
+		*lst = new;
+	}
+	else
+	{
+		last_node = last_cmd(*lst);
+		last_node->next = new;
+	}
+}
 
-// Path
-char	    *combine_path_cmd(char *cmd);
+t_command	*last_cmd(t_command *lst)
+{
+	t_command	*last_node;
 
-// List utils
-void	    add_cmd_back(t_command **lst, t_command *new);
-t_command	*last_cmd(t_command *lst);
-
-// Utils
-char        *ft_strcat(char *dest, char *src);
-char	    *ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	if (lst == NULL)
+		last_node = NULL;
+	while (lst != NULL)
+	{
+		last_node = lst;
+		lst = lst->next;
+	}
+	return (last_node);
+}

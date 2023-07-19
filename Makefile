@@ -1,5 +1,5 @@
 NAME = minishell
-SOURCES = main.c utils.c path.c
+SOURCES = main.c utils.c list_utils.c path.c parser.c
 OBJ_DIR = obj
 OBJS = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 LIBFT = libft/libft.a
@@ -14,7 +14,7 @@ READLINE_FLAGS = -lreadline
 all: $(NAME)	
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(LEAKS_FLAGS) $(READLINE_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

@@ -59,11 +59,23 @@ int takeInput()
 
 int main()
 {
-    init_shell();
+    // init_shell();
 
-    while (42) {
-        // Reading input continously from the shell
-        if (takeInput())
-            continue;
+    // while (42) {
+    //     // Reading input continously from the shell
+    //     if (takeInput())
+    //         continue;
+    // }
+    char *tokens[5] = {"ls", "-al", "|", "grep", "me"};
+    t_command   *cmd_list;
+
+    cmd_list = parser(tokens);
+    while (cmd_list != NULL)
+    {
+        printf("Command: %s\n", cmd_list->cmd);
+        printf("Arguments: %s\n", cmd_list->arg);
+        printf("Operator: %s\n", cmd_list->operator);
+        printf("\n");
+        cmd_list = cmd_list->next;
     }
 }

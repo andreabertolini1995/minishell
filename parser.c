@@ -23,33 +23,59 @@ bool    is_cmd(char *str)
         return false;
 }
 
-bool    is_operator(char *str)
+// bool    is_operator(char *str)
+// {
+//     if (!ft_strncmp(str, "&", ft_strlen(str)) || !ft_strncmp(str, ";", ft_strlen(str))
+//         || !ft_strncmp(str, "&&", ft_strlen(str)) || !ft_strncmp(str, "|", ft_strlen(str))
+//         || !ft_strncmp(str, "||", ft_strlen(str)))
+//         return true;
+//     else
+//         return false;
+// }
+
+/*  Function to create a new command struct. 
+    Currently assuming the only fields are cmd, arg and operator
+    and there can be only one argument. */
+t_command   *new_command(char **tokens, int i)
 {
-    if (str == "&" || str == ";" || str == "&&"
-        || str == "|" || str == "||")
-        return true;
+    t_command   *tmp;
+
+    tmp = (t_command*) malloc (sizeof(t_command));
+    if (tmp == NULL)
+        return (NULL);
+    while (!ft_strncmp(tokens[i], "|", ft_strlen(tokens[i])))
+    {
+        if (is_cmd(tokens[i]))
+            tmp->cmd = tokens[i];
+        else
+            tmp->arg = tokens[i];
+        i++;
+    }
+    if (i == (sizeof(tokens)/sizeof(char*)))
+        tmp->operator = NULL;
     else
-        return false;
+        tmp->operator = tokens[i];
+    tmp->next = NULL;
+    return (tmp);
 }
 
 /* Function to get a list of tokens as input and organize its data into a Command Table. */
 t_command *parser(char **tokens)
 {
-    t_command   *commands_list;
-    int         i;
+    t_command       *commands_list;
+    unsigned long   i;
 
     commands_list = (t_command*) malloc (sizeof(t_command));
     if (commands_list == NULL)
         return (NULL);
     i = 0;
-    while (!is_operator(tokens[i]))
+    while (i < (sizeof(tokens)/sizeof(char*)))
     {
-        if (is_cmd(tokens[i]))
-            printf("File exists.\n");
+        if (i == 0)
+            commands_list = new_command(tokens, i);
         else
-            printf("File does not exist.\n");
+            add_cmd_back(&commands_list, new_command(tokens, i));
+        i = i + 3; // hardcoded - to be changed
     }
-    
-    
     return (commands_list);
 }
