@@ -10,34 +10,20 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+#include "libft.h"
 
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
-# include <stdbool.h>
-# include <readline/readline.h>
-# include <readline/history.h>
-# include "libft/libft.h"
-
-// Command struct
-typedef struct s_command
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-    char                *cmd;
-    char                *arg;
-    char                *operator;
-    struct s_command    *next;
-}   t_command;
+	t_list	*last_node;
 
-// Path
-char	*combine_path_cmd(char *cmd);
-
-// Utils
-char    *ft_strcat(char *dest, char *src);
-char	*ft_strncpy(char *dest, char *src, unsigned int n);
-
-#endif
+	if ((*lst) == NULL)
+	{
+		new->next = NULL;
+		*lst = new;
+	}
+	else
+	{
+		last_node = ft_lstlast(*lst);
+		last_node->next = new;
+	}
+}
