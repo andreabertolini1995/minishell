@@ -62,6 +62,8 @@ int         check_for_operators(char *cmd, int i, t_list **tokens_list);
 char        *create_word(char *cmd, int length, int i);
 t_token     *create_token(char *str, int type);
 t_list      *lexer(char *cmd);
+char *check_if_env(char *word);
+
 
 // Executor
 int         execute_cmd(t_command *command);

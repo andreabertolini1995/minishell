@@ -62,6 +62,17 @@ char *create_word(char *cmd, int length, int i)
     return (word);
 }
 
+char *check_if_env(char *word)
+{   
+    
+    if(word[0] == '$' && word[1])
+    {
+        word += 1;    
+        return(getenv(word));
+    }
+    return(word);
+}
+
 t_token *create_token(char *str, int type)
 {
     t_token *token;
@@ -96,6 +107,7 @@ t_list  *lexer(char *cmd)
         if (length > 0)
         {
             word = create_word(cmd, length, i);
+            word = check_if_env(word);
             ft_lstadd_back(&tokens_list, ft_lstnew(create_token(word, WORD)));
         }
         while (cmd[i] == ' ' || cmd[i] == '\t')

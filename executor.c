@@ -46,7 +46,7 @@ int execute_cmd(t_command *command)
         path_cmd = combine_path_cmd(command->cmd);
         if (execve(path_cmd, argv, envp) == -1)
         {
-            perror("Could not execve.");
+            perror(command->cmd);
             free(argv);
             exit(1);
         }
