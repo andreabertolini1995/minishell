@@ -24,11 +24,17 @@ void    print_token(void *content)
 
 void    print_command(void *content)
 {
-    t_command *command;
+    t_command   *command;
+    int         i;
 
     command = (t_command*) content;
     printf("Command: %s\n", command->cmd);
-    printf("Args: %s\n", command->arg);
+    i = 0;
+    while (i < command->num_args)
+    {
+        printf("Arg %d: %s\n", i + 1, command->args[i]);
+        i++;
+    }
     printf("Operator: %s\n", command->operator);
     printf("\n");
 }

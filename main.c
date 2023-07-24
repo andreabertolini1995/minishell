@@ -40,11 +40,11 @@ int main()
     while (42)
     {
         cmd = readline("*** ");
-        tokens_list = lexer(cmd); // input for the parser
+        tokens_list = lexer(cmd);
         commands_list = parser(tokens_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);
         // Parser test
-        // ft_lstiter(commands_list, print_command);
+        ft_lstiter(commands_list, print_command);
     }
 }

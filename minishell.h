@@ -28,7 +28,8 @@
 typedef struct s_command
 {
     char                *cmd;
-    char                *arg;
+    int                 num_args;
+    char                **args;
     char                *operator;
     struct s_command    *next;
 }   t_command;
