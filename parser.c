@@ -26,11 +26,11 @@ bool    is_cmd(char *str)
 
 bool    is_operator(char *str)
 {
-    if (!ft_strncmp(str, "&", ft_strlen(str))
-        || !ft_strncmp(str, ";", ft_strlen(str))
-        || !ft_strncmp(str, "&&", ft_strlen(str))
-        || !ft_strncmp(str, "|", ft_strlen(str))
-        || !ft_strncmp(str, "||", ft_strlen(str)))
+    if (!ft_strncmp(str, ">", ft_strlen(str))
+        || !ft_strncmp(str, "<", ft_strlen(str))
+        || !ft_strncmp(str, ">>", ft_strlen(str))
+        || !ft_strncmp(str, "<<", ft_strlen(str))
+        || !ft_strncmp(str, "|", ft_strlen(str)))
         return true;
     else
         return false;

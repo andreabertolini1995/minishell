@@ -40,6 +40,7 @@ int main()
     while (42)
     {
         cmd = readline("*** ");
+        add_history(cmd);
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list);
         // Lexer test
