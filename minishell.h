@@ -55,6 +55,12 @@ typedef struct s_token
 // Parser
 t_command   *parser(char **tokens);
 
+// Lexer
+int         check_for_operators(char *cmd, int i, t_list **tokens_list);
+char        *create_word(char *cmd, int length, int i);
+t_token     *create_token(char *str, int type);
+t_list      *lexer(char *cmd);
+
 // Path
 char	    *combine_path_cmd(char *cmd);
 

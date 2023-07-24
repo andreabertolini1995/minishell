@@ -12,45 +12,27 @@
 
 #include "minishell.h"
 
-void clear()
-{
-    // Clearing the shell using escape sequences
-    printf("\033[H\033[J");
-}
-  
-void init_shell()
-{
-    printf("\n\n\n\n******************"
-        "************************");
-    printf("\n\n\n\t****MY SHELL****");
-    printf("\n\n\n\n*******************"
-        "***********************");
-    printf("\n");
-    sleep(3);
-    clear();
-}
-
-void    print_token(void *content)
-{
-    t_token *token;
-
-    token = (t_token*) content;
-    printf("Content: %s\n", token->content);
-    printf("Type: %d\n", token->type);
-    printf("\n");
-}
-
-int main()
+int takeInput()
 {
     char* cmd;
-    t_list  *tokens_list;
+    char *path_cmd;
+    char *argv[2];
+	char *envp[2];
 
-    init_shell();
-    while (42)
+    cmd = readline(">>> ");
+    printf("Prompt: %s\n", cmd);
+    argv[0] = cmd;
+    argv[1] = NULL;
+    envp[0] = "/bin";
+    envp[1] = NULL;
+    if (ft_strlen(cmd) != 0)
     {
-        cmd = readline("*** ");
-        tokens_list = lexer(cmd);
-        // Lexer Test
-        ft_lstiter(tokens_list, print_token);
+        add_history(cmd);
+        path_cmd = combine_path_cmd(cmd);
+        if (execve(path_cmd, argv, envp) == -1)
+            perror("Could not execve.");
+        return 0;
+    } else {
+        return 1;
     }
 }
