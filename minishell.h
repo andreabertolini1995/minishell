@@ -22,6 +22,7 @@
 # include <stdbool.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
 # include "libft/libft.h"
 
 // Command struct
@@ -61,6 +62,9 @@ int         check_for_operators(char *cmd, int i, t_list **tokens_list);
 char        *create_word(char *cmd, int length, int i);
 t_token     *create_token(char *str, int type);
 t_list      *lexer(char *cmd);
+
+// Executor
+int         execute_cmd(t_command *command);
 
 // Path
 char	    *combine_path_cmd(char *cmd);

@@ -23,7 +23,6 @@ bool    is_cmd(char *str)
         return false;
 }
 
-
 bool    is_operator(char *str)
 {
     if (!ft_strncmp(str, ">", ft_strlen(str))
