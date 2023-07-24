@@ -12,39 +12,23 @@
 
 #include "minishell.h"
 
-void clear()
+void    print_token(void *content)
 {
-    // Clearing the shell using escape sequences
-    printf("\033[H\033[J");
-}
-  
-void init_shell()
-{
-    printf("\n\n\n\n******************"
-        "************************");
-    printf("\n\n\n\t****MY SHELL****");
-    printf("\n\n\n\n*******************"
-        "***********************");
+    t_token *token;
+
+    token = (t_token*) content;
+    printf("Content: %s\n", token->content);
+    printf("Type: %d\n", token->type);
     printf("\n");
-    sleep(1);
-    clear();
 }
 
-int main()
+void    print_command(void *content)
 {
-    char* cmd;
-    t_list  *tokens_list;
-    t_list  *commands_list;
+    t_command *command;
 
-    init_shell();
-    while (42)
-    {
-        cmd = readline("*** ");
-        tokens_list = lexer(cmd); // input for the parser
-        commands_list = parser(tokens_list);
-        // Lexer test
-        // ft_lstiter(tokens_list, print_token);
-        // Parser test
-        // ft_lstiter(commands_list, print_command);
-    }
+    command = (t_command*) content;
+    printf("Command: %s\n", command->cmd);
+    printf("Args: %s\n", command->arg);
+    printf("Operator: %s\n", command->operator);
+    printf("\n");
 }

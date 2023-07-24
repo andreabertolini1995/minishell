@@ -14,7 +14,7 @@
 
 int    check_for_operators(char *cmd, int i, t_list **tokens_list)
 {
-    if ( cmd[i] == '|')
+    if (cmd[i] == '|')
     {
         ft_lstadd_back(tokens_list, ft_lstnew(create_token("|", PIPE)));
         i++;
@@ -71,11 +71,8 @@ t_token *create_token(char *str, int type)
         return (NULL);
     token->content = str;
     token->type = type;
-    // printf("Token content: %s\n", token->content);
-    // printf("Token type: %d\n", token->type);
     return (token);
 }
-
 
 t_list  *lexer(char *cmd)
 {

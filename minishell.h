@@ -53,7 +53,7 @@ typedef struct s_token
 
 
 // Parser
-t_command   *parser(char **tokens);
+t_list      *parser(t_list *tokens_list);
 
 // Lexer
 int         check_for_operators(char *cmd, int i, t_list **tokens_list);
@@ -69,10 +69,14 @@ void	    add_cmd_back(t_command **lst, t_command *new);
 t_command	*last_cmd(t_command *lst);
 
 // Pipex
-char	*combine_path_cmd(char *cmd);
+char	    *combine_path_cmd(char *cmd);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);
 char	    *ft_strncpy(char *dest, char *src, unsigned int n);
+
+// Prints
+void        print_token(void *content);
+void        print_command(void *content);
 
 #endif

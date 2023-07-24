@@ -1,5 +1,5 @@
 NAME = minishell
-SOURCES = main.c utils.c list_utils.c path.c parser.c lexer.c
+SOURCES = main.c utils.c list_utils.c path.c parser.c lexer.c prints.c
 OBJ_DIR = obj
 OBJS = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
 LIBFT = libft/libft.a

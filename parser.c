@@ -23,49 +23,60 @@ bool    is_cmd(char *str)
         return false;
 }
 
-/*  Function to create a new command struct. 
-    Currently assuming the only fields are cmd, arg and operator
-    and there can be only one argument. */
-t_command   *new_command(char **tokens, int i)
-{
-    t_command   *tmp;
 
-    tmp = (t_command*) malloc (sizeof(t_command));
-    if (tmp == NULL)
-        return (NULL);
-    while (!ft_strncmp(tokens[i], "|", ft_strlen(tokens[i])))
-    {
-        if (is_cmd(tokens[i]))
-            tmp->cmd = tokens[i];
-        else
-            tmp->arg = tokens[i];
-        i++;
-    }
-    if (i == (sizeof(tokens)/sizeof(char*)))
-        tmp->operator = NULL;
+bool    is_operator(char *str)
+{
+    if (!ft_strncmp(str, "&", ft_strlen(str))
+        || !ft_strncmp(str, ";", ft_strlen(str))
+        || !ft_strncmp(str, "&&", ft_strlen(str))
+        || !ft_strncmp(str, "|", ft_strlen(str))
+        || !ft_strncmp(str, "||", ft_strlen(str)))
+        return true;
     else
-        tmp->operator = tokens[i];
-    tmp->next = NULL;
-    return (tmp);
+        return false;
+}
+
+t_command *create_command()
+{
+    t_command *command;
+
+    command = (t_command *) malloc (sizeof(t_command));
+    if (command == NULL)
+        return (NULL);
+    command->cmd = NULL;
+    command->arg = NULL;
+    command->operator = NULL;
+    return (command);
 }
 
 /* Function to get a list of tokens as input and organize its data into a Command Table. */
-t_command *parser(char **tokens)
+t_list  *parser(t_list *tokens_list)
 {
-    t_command       *commands_list;
-    unsigned long   i;
+    t_list          *commands_list;
+    t_token         *token;
+    t_command       *command;
 
-    commands_list = (t_command*) malloc (sizeof(t_command));
-    if (commands_list == NULL)
-        return (NULL);
-    i = 0;
-    while (i < (sizeof(tokens)/sizeof(char*)))
+    commands_list = NULL;
+    while (tokens_list != NULL)
     {
-        if (i == 0)
-            commands_list = new_command(tokens, i);
-        else
-            add_cmd_back(&commands_list, new_command(tokens, i));
-        i = i + 3; // hardcoded - to be changed
+        token = tokens_list->content;
+        command = create_command();
+        while (token->type == WORD && tokens_list != NULL)
+        {
+            if (command->cmd == NULL)
+                command->cmd = token->content;
+            else
+                command->arg = token->content;
+            tokens_list = tokens_list->next;
+            if (tokens_list != NULL)
+                token = tokens_list->content;
+        }
+        if (is_operator(token->content))
+        {
+            command->operator = token->content;
+            tokens_list = tokens_list->next;
+        }
+        ft_lstadd_back(&commands_list, ft_lstnew(command));
     }
     return (commands_list);
 }
