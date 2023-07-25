@@ -32,7 +32,6 @@ typedef struct s_command
     int                 num_args;
     char                **args;
     char                *operator;
-    struct s_command    *next;
 }   t_command;
 
 
@@ -61,7 +60,15 @@ t_list      *parser(t_list *tokens_list);
 t_list      *lexer(char *cmd);
 
 // Executor
+void        executor(t_list *commands_list);
 int         execute_cmd(t_command *command);
+int         **initialize_pipe_fds(int num_pipes);
+void        create_pipes(int num_pipes, int **pipe_fd);
+int         get_num_pipes(t_list *commands_list);
+int         ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids);
+int         ft_pipe(t_list *commands_list, int num_pipes);
+void        close_fds(int num_pipes, int **pipe_fd);
+void        wait_processes(int num_pipes, int *pids);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);

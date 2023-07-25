@@ -33,7 +33,6 @@ int execute_cmd(t_command *command)
 	char    *envp[2];
     int     i;
     pid_t   pid;
-    int     status;
     
     argv = (char**) malloc (sizeof(char*) * (command->num_args + 2));
     if (argv == NULL)
@@ -67,9 +66,63 @@ int execute_cmd(t_command *command)
     }
     else
     {
-        waitpid(pid, &status, 0); // Wait for the child process to finish
+        waitpid(pid, NULL, 0);
         free(argv);
         return (0);
     }
     return (0);
+}
+
+void close_fds(int num_pipes, int **pipe_fd)
+{
+    int i;
+
+    i = 0;
+    while (i < num_pipes)
+    {
+        close(pipe_fd[i][0]);
+        close(pipe_fd[i][1]);
+        i++;
+    }
+}
+
+void wait_processes(int num_pipes, int *pids)
+{
+    int i;
+
+    i = 0;
+    while (i < (num_pipes + 1))
+    {
+        waitpid(pids[i], NULL, 0);
+        i++;
+    }
+}
+
+void    executor(t_list *commands_list)
+{
+    t_command   *command;
+    int         num_pipes;
+    int         i;
+
+    /* Hypothetical scenario where command list is only a chain of pipes. */
+    num_pipes = get_num_pipes(commands_list);
+    while (commands_list != NULL)
+    {
+        command = commands_list->content;
+        if (num_pipes == 0)
+        {
+            execute_cmd(command);
+            commands_list = commands_list->next;
+        }
+        else
+        {
+            ft_pipe(commands_list, num_pipes);
+            i = 0;
+            while (i < (num_pipes + 1))
+            {
+                commands_list = commands_list->next;
+                i++;
+            }
+        } 
+    }
 }

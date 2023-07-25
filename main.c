@@ -43,7 +43,7 @@ int main()
         add_history(cmd);
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list);
-        execute_cmd(commands_list->content);
+        executor(commands_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);
         // Parser test

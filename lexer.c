@@ -58,7 +58,7 @@ static int    check_for_operators(char *cmd, int i, t_list **tokens_list)
 
 static char *create_word(char *cmd, int length, int i)
 {
-    char       *word;
+    char    *word;
     int     j;
 
     word = (char*) malloc (sizeof(char) * length);
@@ -71,6 +71,7 @@ static char *create_word(char *cmd, int length, int i)
         length--;
         j++;
     }
+    word[j] = '\0';
     return (word);
 }
 
