@@ -12,7 +12,19 @@
 
 #include "minishell.h"
 
-int    check_for_operators(char *cmd, int i, t_list **tokens_list)
+static t_token *create_token(char *str, int type)
+{
+    t_token *token;
+
+    token = (t_token *) malloc (sizeof(t_token));
+    if (token == NULL)
+        return (NULL);
+    token->content = str;
+    token->type = type;
+    return (token);
+}
+
+static int    check_for_operators(char *cmd, int i, t_list **tokens_list)
 {
     if (cmd[i] == '|')
     {
@@ -44,7 +56,7 @@ int    check_for_operators(char *cmd, int i, t_list **tokens_list)
     return (i);
 }
 
-char *create_word(char *cmd, int length, int i)
+static char *create_word(char *cmd, int length, int i)
 {
     char       *word;
     int     j;
@@ -62,7 +74,7 @@ char *create_word(char *cmd, int length, int i)
     return (word);
 }
 
-char *check_if_env(char *word)
+static char *check_if_env(char *word)
 {   
     
     if(word[0] == '$' && word[1])
@@ -71,18 +83,6 @@ char *check_if_env(char *word)
         return(getenv(word));
     }
     return(word);
-}
-
-t_token *create_token(char *str, int type)
-{
-    t_token *token;
-
-    token = (t_token *) malloc (sizeof(t_token));
-    if (token == NULL)
-        return (NULL);
-    token->content = str;
-    token->type = type;
-    return (token);
 }
 
 t_list  *lexer(char *cmd)
@@ -98,6 +98,9 @@ t_list  *lexer(char *cmd)
     {
         i = check_for_operators(cmd, i, &tokens_list);
         length = 0;
+        // if case for "" and ' look for the 2nd parenthesis, if 2 are there, dont include them in the WORD.
+        // but include operators like "|" as chars.For " -> $ specifications. if there is only one bash calls some quote shit, where u can right in.
+        // (maybe) if (cmd[i] " or ')  while (cmd[i]!= ' or "){ length++;i++} call word_create(cmd, length, i); what to do when only open parenthesis without closing?
         while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
             && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\0')
         {

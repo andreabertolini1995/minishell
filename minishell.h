@@ -58,25 +58,10 @@ typedef struct s_token
 t_list      *parser(t_list *tokens_list);
 
 // Lexer
-int         check_for_operators(char *cmd, int i, t_list **tokens_list);
-char        *create_word(char *cmd, int length, int i);
-t_token     *create_token(char *str, int type);
 t_list      *lexer(char *cmd);
-char *check_if_env(char *word);
-
 
 // Executor
 int         execute_cmd(t_command *command);
-
-// Path
-char	    *combine_path_cmd(char *cmd);
-
-// List utils
-void	    add_cmd_back(t_command **lst, t_command *new);
-t_command	*last_cmd(t_command *lst);
-
-// Pipex
-char	    *combine_path_cmd(char *cmd);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);

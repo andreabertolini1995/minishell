@@ -12,18 +12,19 @@
 
 #include "minishell.h"
 
-bool    is_cmd(char *str)
-{
-    char *path_cmd;
+/* Currently not used */
+// bool    is_cmd(char *str)
+// {
+//     char *path_cmd;
 
-    path_cmd = combine_path_cmd(str);
-    if (access(path_cmd, F_OK) == 0)
-        return true;
-    else
-        return false;
-}
+//     path_cmd = combine_path_cmd(str);
+//     if (access(path_cmd, F_OK) == 0)
+//         return true;
+//     else
+//         return false;
+// }
 
-bool    is_operator(char *str)
+static bool    is_operator(char *str)
 {
     if (!ft_strncmp(str, ">", ft_strlen(str))
         || !ft_strncmp(str, "<", ft_strlen(str))
@@ -35,7 +36,7 @@ bool    is_operator(char *str)
         return false;
 }
 
-t_command *create_command(int num_args)
+static t_command *create_command(int num_args)
 {
     t_command *command;
 
@@ -50,7 +51,7 @@ t_command *create_command(int num_args)
     return (command);
 }
 
-int ft_num_args(t_list *tokens_list)
+static int ft_num_args(t_list *tokens_list)
 {
     int     num_args;
     t_token *token;
