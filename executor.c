@@ -12,16 +12,15 @@
 
 #include "minishell.h"
 
-static char	*combine_path_cmd(char *cmd)
+static char	*combine_path_cmd(char *cmd, char *path)
 {
-	char *path;
 	char *path_cmd;
-
-	path = "/bin/";
-	path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + ft_strlen(cmd)));
-	if (path_cmd == NULL)
-		return (NULL);
+    
+    path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + 1 + ft_strlen(cmd)));
+    if (path_cmd == NULL)
+        return (NULL);
 	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
+    path_cmd = ft_strcat(path_cmd, "/");
 	path_cmd = ft_strcat(path_cmd, cmd);
 	return (path_cmd);
 }
@@ -47,17 +46,28 @@ static char **fill_argv(t_command *command)
 
 static void    execute(t_command *command, char *outfile, char **argv, char *envp[2])
 {
-    char    *path_cmd;
     int     file;
+    char    *path;
+    char    *path_cmd;
+    char    **sub_paths;
+    int     i;
 
     if (outfile != NULL)
-            file = redirect_output(outfile);
-    path_cmd = combine_path_cmd(command->cmd);
-    if (execve(path_cmd, argv, envp) == -1)
+        file = redirect_output(outfile);
+    path = getenv("PATH");
+    sub_paths = ft_split(path, ':');
+    i = 0;
+    while (ft_strncmp(sub_paths[i],  "\0", ft_strlen(sub_paths[i])))
     {
-        perror(command->cmd);
-        free(argv);
-        exit(1);
+        path_cmd = combine_path_cmd(command->cmd, sub_paths[i]);
+        if (execve(path_cmd, argv, envp) == -1)
+        {
+            i++;
+            continue;
+            // perror(command->cmd); // error handling to be kept
+            // free(argv);
+            // exit(1);
+        }
     }
 }
 
@@ -68,8 +78,7 @@ int execute_cmd(t_command *command, char *outfile)
     pid_t   pid;
 
     argv = fill_argv(command);
-    envp[0] = "/bin";
-    envp[1] = NULL;
+    envp[0] = NULL;
     pid = fork();
     if (pid < 0)
     {

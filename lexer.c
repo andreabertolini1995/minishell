@@ -81,7 +81,7 @@ static char *check_if_env(char *word)
     if(word[0] == '$' && word[1])
     {
         word += 1;    
-        return(getenv(word));
+        return (getenv(word));
     }
     return(word);
 }
