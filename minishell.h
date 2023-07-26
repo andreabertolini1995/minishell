@@ -66,13 +66,11 @@ int         execute_cmd(t_command *command, char *outfile);
 int         **initialize_pipe_fds(int num_pipes);
 void        create_pipes(int num_pipes, int **pipe_fd);
 int         get_num_pipes(t_list *commands_list);
-// int         ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids);
 int         ft_pipe(t_list *commands_list, int num_pipes, char *outfile);
 void        close_fds(int num_pipes, int **pipe_fd);
 void        wait_processes(int num_pipes, int *pids);
 
 // Redirections
-// bool        to_redirect(t_list *commands_list);
 char        *get_name_outfile(t_list *commands_list);
 int         redirect_output(char *file_name);
 
