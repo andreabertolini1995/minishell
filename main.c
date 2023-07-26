@@ -17,17 +17,18 @@ void clear()
     // Clearing the shell using escape sequences
     printf("\033[H\033[J");
 }
-  
+
 void init_shell()
 {
-    printf("\n\n\n\n******************"
-        "************************");
-    printf("\n\n\n\t****MY SHELL****");
-    printf("\n\n\n\n*******************"
-        "***********************");
-    printf("\n");
-    sleep(1);
-    clear();
+    printf("\n           _       _     _          _ _");
+    printf("\n _ __ ___ (_)_ __ (_) __| |_    ___| | |");
+    printf("\n|  _   _ \\| |  _ \\| / __|  _ \\ / _ \\ | |");
+    printf("\n| | | | | | | | | | \\__ \\ | | |  __/ | |");
+    printf("\n|_| |_| |_|_|_| |_|_|___/_| |_|\\___|_|_|");
+    printf("\n\n");
+    printf("         by abertoli & shurlebu\n\n");
+    sleep(2);
+    // clear();
 }
 
 int main()
