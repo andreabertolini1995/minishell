@@ -26,17 +26,14 @@ static char	*combine_path_cmd(char *cmd)
 	return (path_cmd);
 }
 
-int execute_cmd(t_command *command)
+static char **fill_argv(t_command *command)
 {
-    char    *path_cmd;
     char    **argv;
-	char    *envp[2];
     int     i;
-    pid_t   pid;
-    
+
     argv = (char**) malloc (sizeof(char*) * (command->num_args + 2));
     if (argv == NULL)
-        return (1);
+        return (NULL);
     argv[0] = command->cmd;
     i = 1;
     while (i < (command->num_args + 1))
@@ -45,6 +42,32 @@ int execute_cmd(t_command *command)
         i++;
     }
     argv[i] = NULL;
+    return (argv);
+}
+
+static void    execute(t_command *command, char *outfile, char **argv, char *envp[2])
+{
+    char    *path_cmd;
+    int     file;
+
+    if (outfile != NULL)
+            file = redirect_output(outfile);
+    path_cmd = combine_path_cmd(command->cmd);
+    if (execve(path_cmd, argv, envp) == -1)
+    {
+        perror(command->cmd);
+        free(argv);
+        exit(1);
+    }
+}
+
+int execute_cmd(t_command *command, char *outfile)
+{
+    char    **argv;
+	char    *envp[2];
+    pid_t   pid;
+
+    argv = fill_argv(command);
     envp[0] = "/bin";
     envp[1] = NULL;
     pid = fork();
@@ -55,15 +78,7 @@ int execute_cmd(t_command *command)
         return (1);
     }
     else if (pid == 0)
-    {
-        path_cmd = combine_path_cmd(command->cmd);
-        if (execve(path_cmd, argv, envp) == -1)
-        {
-            perror(command->cmd);
-            free(argv);
-            exit(1);
-        }
-    }
+        execute(command, outfile, argv, envp);
     else
     {
         waitpid(pid, NULL, 0);
@@ -98,31 +113,43 @@ void wait_processes(int num_pipes, int *pids)
     }
 }
 
+static t_list    *update_commands_list(t_list *commands_list, int num_pipes, char *outfile)
+{
+    int i;
+
+    if (num_pipes == 0)
+        commands_list = commands_list->next;
+    else
+    {
+        i = 0;
+        while (i < (num_pipes + 1))
+        {
+            commands_list = commands_list->next;
+            i++;
+        }
+    }
+    if (outfile != NULL)
+        commands_list = commands_list->next;
+    return (commands_list);
+}
+
 void    executor(t_list *commands_list)
 {
     t_command   *command;
     int         num_pipes;
-    int         i;
+    char        *outfile;
 
-    /* Hypothetical scenario where command list is only a chain of pipes. */
+    /*  Hypothetical scenario where command list is only a chain of pipes
+        and a final redirection. */
     num_pipes = get_num_pipes(commands_list);
+    outfile = get_name_outfile(commands_list);
     while (commands_list != NULL)
     {
         command = commands_list->content;
         if (num_pipes == 0)
-        {
-            execute_cmd(command);
-            commands_list = commands_list->next;
-        }
+            execute_cmd(command, outfile);
         else
-        {
-            ft_pipe(commands_list, num_pipes);
-            i = 0;
-            while (i < (num_pipes + 1))
-            {
-                commands_list = commands_list->next;
-                i++;
-            }
-        } 
+            ft_pipe(commands_list, num_pipes, outfile);
+        commands_list = update_commands_list(commands_list, num_pipes, outfile);
     }
 }
