@@ -61,7 +61,7 @@ char    *get_cmd_path(t_command *command, char **sub_paths)
     return (cmd_path);
 }
 
-static void    execute(t_command *command, char *outfile, char **argv, char *envp[2])
+static void    execute(t_command *command, char *outfile, char *infile, char **argv, char *envp[2])
 {
     char    *path;
     char    *cmd_path;
@@ -69,6 +69,8 @@ static void    execute(t_command *command, char *outfile, char **argv, char *env
 
     if (outfile != NULL)
         redirect_output(outfile, command->operator);
+    if (infile != NULL)
+        redirect_input(infile, command->operator);
     path = getenv("PATH");
     sub_paths = ft_split(path, ':');
     cmd_path = get_cmd_path(command, sub_paths);
@@ -80,7 +82,7 @@ static void    execute(t_command *command, char *outfile, char **argv, char *env
     }
 }
 
-int execute_cmd(t_command *command, char *outfile)
+int execute_cmd(t_command *command, char *outfile, char *infile)
 {
     char    **argv;
 	char    *envp[2];
@@ -96,7 +98,7 @@ int execute_cmd(t_command *command, char *outfile)
         return (1);
     }
     else if (pid == 0)
-        execute(command, outfile, argv, envp);
+        execute(command, outfile, infile, argv, envp);
     else
     {
         waitpid(pid, NULL, 0);
@@ -131,7 +133,7 @@ void wait_processes(int num_pipes, int *pids)
     }
 }
 
-static t_list    *update_commands_list(t_list *commands_list, int num_pipes, char *outfile)
+static t_list    *update_commands_list(t_list *commands_list, int num_pipes, char *outfile, char *infile)
 {
     int i;
 
@@ -148,6 +150,8 @@ static t_list    *update_commands_list(t_list *commands_list, int num_pipes, cha
     }
     if (outfile != NULL)
         commands_list = commands_list->next;
+    if (infile != NULL)
+        commands_list = commands_list->next;
     return (commands_list);
 }
 
@@ -156,18 +160,18 @@ void    executor(t_list *commands_list)
     t_command   *command;
     int         num_pipes;
     char        *outfile;
+    char        *infile;
 
-    /*  Hypothetical scenario where command list is only a chain of pipes
-        and a final redirection. */
     num_pipes = get_num_pipes(commands_list);
     outfile = get_name_outfile(commands_list);
+    infile = get_name_infile(commands_list);
     while (commands_list != NULL)
     {
         command = commands_list->content;
         if (num_pipes == 0)
-            execute_cmd(command, outfile);
+            execute_cmd(command, outfile, infile);
         else
-            ft_pipe(commands_list, num_pipes, outfile);
-        commands_list = update_commands_list(commands_list, num_pipes, outfile);
+            ft_pipe(commands_list, num_pipes, outfile, infile);
+        commands_list = update_commands_list(commands_list, num_pipes, outfile, infile);
     }
 }

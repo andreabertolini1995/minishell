@@ -62,7 +62,7 @@ int get_num_pipes(t_list *commands_list)
     return (num_pipes);
 }
 
-static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i, char *outfile)
+static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i, char *outfile, char *infile)
 {
     if (i == 0)
         dup2(pipe_fd[i][1], STDOUT_FILENO);
@@ -74,14 +74,15 @@ static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int 
     else if (i == num_pipes)
         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
     close_fds(num_pipes, pipe_fd);
-    if (i == num_pipes && outfile != NULL)
-        execute_cmd(command, outfile);
-    else
-        execute_cmd(command, false);
+    // if (i == num_pipes && outfile != NULL)
+    //     execute_cmd(command, outfile);
+    // else
+    //     execute_cmd(command, false);
+    execute_cmd(command, outfile, infile);
     exit(1);
 }
 
-static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids, char *outfile)
+static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids, char *outfile, char *infile)
 {
     int         i;
     t_command   *command;
@@ -94,14 +95,14 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pid
         if (pids[i] < 0 )
             return (1);
         else if (pids[i] == 0)
-            set_up_fds(command, pipe_fd, num_pipes, i, outfile);
+            set_up_fds(command, pipe_fd, num_pipes, i, outfile, infile);
         i++;
         commands_list = commands_list->next;
     }
     return (0);
 }
 
-int ft_pipe(t_list *commands_list, int num_pipes, char *outfile)
+int ft_pipe(t_list *commands_list, int num_pipes, char *outfile, char *infile)
 {
     int **pipe_fd;
     int *pids;
@@ -111,7 +112,7 @@ int ft_pipe(t_list *commands_list, int num_pipes, char *outfile)
     if (pids == NULL)
         return (1);
     create_pipes(num_pipes, pipe_fd);
-    ft_fork(commands_list, pipe_fd, num_pipes, pids, outfile);
+    ft_fork(commands_list, pipe_fd, num_pipes, pids, outfile, infile);
     close_fds(num_pipes, pipe_fd);
     wait_processes(num_pipes, pids);
     return (0);
