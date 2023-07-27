@@ -63,13 +63,12 @@ char    *get_cmd_path(t_command *command, char **sub_paths)
 
 static void    execute(t_command *command, char *outfile, char **argv, char *envp[2])
 {
-    int     file;
     char    *path;
     char    *cmd_path;
     char    **sub_paths;
 
     if (outfile != NULL)
-        file = redirect_output(outfile);
+        redirect_output(outfile, command->operator);
     path = getenv("PATH");
     sub_paths = ft_split(path, ':');
     cmd_path = get_cmd_path(command, sub_paths);

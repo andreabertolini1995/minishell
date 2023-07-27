@@ -12,6 +12,14 @@
 
 #include "minishell.h"
 
+bool    is_operator(char *op1, char *op2)
+{
+    if (!ft_strncmp(op1, op2, ft_strlen(op1)))
+        return (true);
+    else
+        return (false);
+}
+
 char *get_name_outfile(t_list *commands_list)
 {
     t_command   *command;
@@ -22,8 +30,9 @@ char *get_name_outfile(t_list *commands_list)
         command = commands_list->content;
         if (command->operator != NULL)
         {
-            // Assuming there is only one redirection at the end 
-            if (!ft_strncmp(command->operator, ">", ft_strlen(command->operator)))
+            // Assuming there is only one single or double redirection at the end 
+            if (is_operator(command->operator, ">")
+                || is_operator(command->operator, ">>"))
             {
                 next_command = commands_list->next->content;
                 return (next_command->cmd);
@@ -34,13 +43,15 @@ char *get_name_outfile(t_list *commands_list)
     return (NULL);
 }
 
-int    redirect_output(char *file_name)
+void    redirect_output(char *file_name, char *operator)
 {
     int file;
     int file2;
     
-    file = open(file_name, O_WRONLY | O_CREAT, 0777); // change the name of the file accordingly
+    if (is_operator(operator, ">"))
+        file = open(file_name, O_WRONLY | O_CREAT, 0777);
+    else
+        file = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0777);
     file2 = dup2(file, STDOUT_FILENO);
     close(file);
-    return (file2);
 }

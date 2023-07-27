@@ -73,7 +73,7 @@ void        wait_processes(int num_pipes, int *pids);
 
 // Redirections
 char        *get_name_outfile(t_list *commands_list);
-int         redirect_output(char *file_name);
+void        redirect_output(char *file_name, char *operator);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);
