@@ -61,16 +61,16 @@ char    *get_cmd_path(t_command *command, char **sub_paths)
     return (cmd_path);
 }
 
-static void    execute(t_command *command, char *outfile, char *infile, char **argv, char *envp[2])
+static void    execute(t_command *command, char **argv, char *envp[2])
 {
     char    *path;
     char    *cmd_path;
     char    **sub_paths;
 
-    if (outfile != NULL)
-        redirect_output(outfile, command->operator);
-    if (infile != NULL)
-        redirect_input(infile, command->operator);
+    if (command->outfile != NULL)
+        redirect_output(command);
+    if (command->infile != NULL)
+        redirect_input(command);
     path = getenv("PATH");
     sub_paths = ft_split(path, ':');
     cmd_path = get_cmd_path(command, sub_paths);
@@ -82,7 +82,7 @@ static void    execute(t_command *command, char *outfile, char *infile, char **a
     }
 }
 
-int execute_cmd(t_command *command, char *outfile, char *infile)
+int execute_cmd(t_command *command)
 {
     char    **argv;
 	char    *envp[2];
@@ -98,7 +98,7 @@ int execute_cmd(t_command *command, char *outfile, char *infile)
         return (1);
     }
     else if (pid == 0)
-        execute(command, outfile, infile, argv, envp);
+        execute(command, argv, envp);
     else
     {
         waitpid(pid, NULL, 0);
@@ -133,7 +133,7 @@ void wait_processes(int num_pipes, int *pids)
     }
 }
 
-static t_list    *update_commands_list(t_list *commands_list, int num_pipes, char *outfile, char *infile)
+static t_list    *update_commands_list(t_list *commands_list, t_command *command, int num_pipes)
 {
     int i;
 
@@ -148,9 +148,9 @@ static t_list    *update_commands_list(t_list *commands_list, int num_pipes, cha
             i++;
         }
     }
-    if (outfile != NULL)
+    if (command->outfile != NULL)
         commands_list = commands_list->next;
-    if (infile != NULL)
+    if (command->infile != NULL)
         commands_list = commands_list->next;
     return (commands_list);
 }
@@ -159,19 +159,15 @@ void    executor(t_list *commands_list)
 {
     t_command   *command;
     int         num_pipes;
-    char        *outfile;
-    char        *infile;
 
     num_pipes = get_num_pipes(commands_list);
-    outfile = get_name_outfile(commands_list);
-    infile = get_name_infile(commands_list);
     while (commands_list != NULL)
     {
         command = commands_list->content;
         if (num_pipes == 0)
-            execute_cmd(command, outfile, infile);
+            execute_cmd(command);
         else
-            ft_pipe(commands_list, num_pipes, outfile, infile);
-        commands_list = update_commands_list(commands_list, num_pipes, outfile, infile);
+            ft_pipe(commands_list, num_pipes);
+        commands_list = update_commands_list(commands_list, command, num_pipes);
     }
 }

@@ -36,5 +36,7 @@ void    print_command(void *content)
         i++;
     }
     printf("Operator: %s\n", command->operator);
+    printf("Infile: %s\n", command->infile);
+    printf("Outfile: %s\n", command->outfile);
     printf("\n");
 }

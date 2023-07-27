@@ -33,6 +33,8 @@ typedef struct s_command
     int                 num_args;
     char                **args;
     char                *operator;
+    char                *infile;
+    char                *outfile;
 }   t_command;
 
 
@@ -63,19 +65,20 @@ t_list      *lexer(char *cmd);
 
 // Executor
 void        executor(t_list *commands_list);
-int         execute_cmd(t_command *command, char *outfile, char *infile);
+int         execute_cmd(t_command *command);
 int         **initialize_pipe_fds(int num_pipes);
 void        create_pipes(int num_pipes, int **pipe_fd);
 int         get_num_pipes(t_list *commands_list);
-int         ft_pipe(t_list *commands_list, int num_pipes, char *outfile, char *infile);
+int         ft_pipe(t_list *commands_list, int num_pipes);
 void        close_fds(int num_pipes, int **pipe_fd);
 void        wait_processes(int num_pipes, int *pids);
 
 // Redirections
 char        *get_name_outfile(t_list *commands_list);
 char        *get_name_infile(t_list *commands_list);
-void        redirect_output(char *file_name, char *operator);
-void        redirect_input(char *file_name, char *operator);
+void        redirect_output(t_command *command);
+void        redirect_input(t_command *command);
+bool        is_operator(char *op1, char *op2);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);

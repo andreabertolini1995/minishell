@@ -66,15 +66,15 @@ char *get_name_infile(t_list *commands_list)
     return (NULL);
 }
 
-void    redirect_output(char *file_name, char *operator)
+void    redirect_output(t_command *command)
 {
     int file;
     int file2;
     
-    if (is_operator(operator, ">"))
-        file = open(file_name, O_WRONLY | O_CREAT, 0777);
+    if (is_operator(command->operator, ">"))
+        file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
     else
-        file = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0777);
+        file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
     file2 = dup2(file, STDOUT_FILENO);
     close(file);
 }
@@ -89,28 +89,28 @@ static void    infile_redirect(char *file_name)
     close(file);
 }
 
-void    redirect_input(char *file_name, char *operator)
+void    redirect_input(t_command *command)
 {
     int     file;
     char    *line;
     
-    if (is_operator(operator, "<"))
-        infile_redirect(file_name);
+    if (is_operator(command->operator, "<"))
+        infile_redirect(command->infile);
     else
     {
-        file = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0777);
+        file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
         while (42)
         {
             line = readline("> ");
-            if (strncmp(line, file_name, ft_strlen(line)))
+            if (strncmp(line, command->infile, ft_strlen(line)))
             {
                 write(file, line, ft_strlen(line));
                 write(file, "\n", 1);
             }
             else
             {
-                infile_redirect(file_name);
-                unlink(file_name);
+                infile_redirect(command->infile);
+                unlink(command->infile);
                 break;
             }
         }

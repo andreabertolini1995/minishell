@@ -20,7 +20,7 @@ bool    is_cmd(char *path_cmd)
         return false;
 }
 
-static bool    is_operator(char *str)
+static bool    is_pipe_or_redirect(char *str)
 {
     if (!ft_strncmp(str, ">", ft_strlen(str))
         || !ft_strncmp(str, "<", ft_strlen(str))
@@ -42,7 +42,11 @@ static t_command *create_command(int num_args)
     command->cmd = NULL;
     command->num_args = num_args;
     command->args = (char**) malloc (sizeof(char*) * num_args);
+    if (command->args == NULL)
+        return (NULL);
     command->operator = NULL;
+    command->infile = NULL;
+    command->outfile = NULL;
     return (command);
 }
 
@@ -68,6 +72,7 @@ t_list  *parser(t_list *tokens_list)
 {
     t_list          *commands_list;
     t_token         *token;
+    t_token         *next_token;
     t_command       *command;
     int             num_args;
     int             arg_index;
@@ -92,8 +97,15 @@ t_list  *parser(t_list *tokens_list)
             if (tokens_list != NULL)
                 token = tokens_list->content;
         }
-        if (is_operator(token->content))
+        if (is_pipe_or_redirect(token->content))
         {
+            if (is_operator(token->content, "<")
+                || is_operator(token->content, "<<"))
+            {
+                next_token = tokens_list->next->content;
+                command->infile = next_token->content;
+                tokens_list = tokens_list->next;
+            }
             command->operator = token->content;
             tokens_list = tokens_list->next;
         }

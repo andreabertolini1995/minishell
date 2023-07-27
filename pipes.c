@@ -81,8 +81,11 @@ int get_num_pipes(t_list *commands_list)
 //     exit(1);
 // }
 
-static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i, char *outfile, char *infile)
+static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
+    // print_command(command);
+    if (i == 0 && command->infile != NULL)
+        execute_cmd(command);
     if (i == 0)
         dup2(pipe_fd[i][1], STDOUT_FILENO);
     else if (i > 0 && i < num_pipes)
@@ -93,14 +96,14 @@ static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int 
     else if (i == num_pipes)
         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
     close_fds(num_pipes, pipe_fd);
-    if (i == num_pipes && outfile != NULL)
-        execute_cmd(command, outfile, infile);
+    if (i == num_pipes && command->outfile != NULL) // possibly to solve again the appending problem
+        execute_cmd(command);
     else
-        execute_cmd(command, NULL, infile);
+        execute_cmd(command);
     exit(1);
 }
 
-static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids, char *outfile, char *infile)
+static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pids)
 {
     int         i;
     t_command   *command;
@@ -113,14 +116,14 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pid
         if (pids[i] < 0 )
             return (1);
         else if (pids[i] == 0)
-            set_up_fds(command, pipe_fd, num_pipes, i, outfile, infile);
+            set_up_fds(command, pipe_fd, num_pipes, i);
         i++;
         commands_list = commands_list->next;
     }
     return (0);
 }
 
-int ft_pipe(t_list *commands_list, int num_pipes, char *outfile, char *infile)
+int ft_pipe(t_list *commands_list, int num_pipes)
 {
     int **pipe_fd;
     int *pids;
@@ -130,7 +133,7 @@ int ft_pipe(t_list *commands_list, int num_pipes, char *outfile, char *infile)
     if (pids == NULL)
         return (1);
     create_pipes(num_pipes, pipe_fd);
-    ft_fork(commands_list, pipe_fd, num_pipes, pids, outfile, infile);
+    ft_fork(commands_list, pipe_fd, num_pipes, pids);
     close_fds(num_pipes, pipe_fd);
     wait_processes(num_pipes, pids);
     return (0);

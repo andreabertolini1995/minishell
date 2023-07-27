@@ -28,7 +28,7 @@ void init_shell()
     printf("\n\n");
     printf("         by abertoli & shurlebu\n\n");
     sleep(2);
-    // clear();
+    clear();
 }
 
 int main()
@@ -40,7 +40,7 @@ int main()
     init_shell();
     while (42)
     {
-        cmd = readline("*** ");
+        cmd = readline("minishell: ");
         add_history(cmd);
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list);
