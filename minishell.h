@@ -56,6 +56,7 @@ typedef struct s_token
 
 // Parser
 t_list      *parser(t_list *tokens_list);
+bool        is_cmd(char *path_cmd);
 
 // Lexer
 t_list      *lexer(char *cmd);

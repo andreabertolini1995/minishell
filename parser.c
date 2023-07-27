@@ -12,17 +12,13 @@
 
 #include "minishell.h"
 
-/* Currently not used */
-// bool    is_cmd(char *str)
-// {
-//     char *path_cmd;
-
-//     path_cmd = combine_path_cmd(str);
-//     if (access(path_cmd, F_OK) == 0)
-//         return true;
-//     else
-//         return false;
-// }
+bool    is_cmd(char *path_cmd)
+{
+    if (access(path_cmd, F_OK) == 0)
+        return true;
+    else
+        return false;
+}
 
 static bool    is_operator(char *str)
 {
@@ -46,7 +42,6 @@ static t_command *create_command(int num_args)
     command->cmd = NULL;
     command->num_args = num_args;
     command->args = (char**) malloc (sizeof(char*) * num_args);
-    // command->args = NULL;
     command->operator = NULL;
     return (command);
 }

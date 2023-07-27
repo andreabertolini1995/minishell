@@ -12,17 +12,17 @@
 
 #include "minishell.h"
 
-static char	*combine_path_cmd(char *cmd, char *path)
+static char	*combine_cmd_path(char *cmd, char *path)
 {
-	char *path_cmd;
+	char *cmd_path;
     
-    path_cmd = (char*) malloc (sizeof(char) * (ft_strlen(path) + 1 + ft_strlen(cmd)));
-    if (path_cmd == NULL)
+    cmd_path = (char*) malloc (sizeof(char) * (ft_strlen(path) + 1 + ft_strlen(cmd)));
+    if (cmd_path == NULL)
         return (NULL);
-	path_cmd = ft_strncpy(path_cmd, path, ft_strlen(path));
-    path_cmd = ft_strcat(path_cmd, "/");
-	path_cmd = ft_strcat(path_cmd, cmd);
-	return (path_cmd);
+    cmd_path = ft_strncpy(cmd_path, path, ft_strlen(path));
+    cmd_path = ft_strcat(cmd_path, "/");
+	cmd_path = ft_strcat(cmd_path, cmd);
+	return (cmd_path);
 }
 
 static char **fill_argv(t_command *command)
@@ -44,30 +44,40 @@ static char **fill_argv(t_command *command)
     return (argv);
 }
 
+char    *get_cmd_path(t_command *command, char **sub_paths)
+{
+    int     i;
+    char    *cmd_path;
+
+    i = 0;
+    while (sub_paths[i] != NULL)
+    {
+        cmd_path = combine_cmd_path(command->cmd, sub_paths[i]);
+        if (is_cmd(cmd_path))
+            return (cmd_path);
+        else
+            i++;
+    }
+    return (cmd_path);
+}
+
 static void    execute(t_command *command, char *outfile, char **argv, char *envp[2])
 {
     int     file;
     char    *path;
-    char    *path_cmd;
+    char    *cmd_path;
     char    **sub_paths;
-    int     i;
 
     if (outfile != NULL)
         file = redirect_output(outfile);
     path = getenv("PATH");
     sub_paths = ft_split(path, ':');
-    i = 0;
-    while (ft_strncmp(sub_paths[i],  "\0", ft_strlen(sub_paths[i])))
+    cmd_path = get_cmd_path(command, sub_paths);
+    if (execve(cmd_path, argv, envp) < 0)
     {
-        path_cmd = combine_path_cmd(command->cmd, sub_paths[i]);
-        if (execve(path_cmd, argv, envp) == -1)
-        {
-            i++;
-            continue;
-            // perror(command->cmd); // error handling to be kept
-            // free(argv);
-            // exit(1);
-        }
+        perror(command->cmd);
+        free(argv);
+        exit(1);
     }
 }
 
