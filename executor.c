@@ -53,7 +53,7 @@ char    *get_cmd_path(t_command *command, char **sub_paths)
     while (sub_paths[i] != NULL)
     {
         cmd_path = combine_cmd_path(command->cmd, sub_paths[i]);
-        if (is_cmd(cmd_path))
+        if (is_file(cmd_path))
             return (cmd_path);
         else
             i++;
@@ -98,7 +98,20 @@ int execute_cmd(t_command *command)
         return (1);
     }
     else if (pid == 0)
-        execute(command, argv, envp);
+    {
+        if (is_token(command->cmd, "echo"))
+            ft_echo(command);
+        else if (is_token(command->cmd, "cd"))
+            ft_cd(command);
+        else if (is_token(command->cmd, "pwd"))
+            ft_pwd();
+        else if (is_token(command->cmd, "env"))
+            ft_env();
+        // else if (is_token(command->cmd, "export"))
+        //     ft_export(command);
+        else
+            execute(command, argv, envp);
+    }
     else
     {
         waitpid(pid, NULL, 0);
@@ -163,7 +176,7 @@ void    executor(t_list *commands_list)
     num_pipes = get_num_pipes(commands_list);
     while (commands_list != NULL)
     {
-        command = commands_list->content;
+        command = commands_list->content;            
         if (num_pipes == 0)
             execute_cmd(command);
         else

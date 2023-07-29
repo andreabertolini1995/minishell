@@ -27,7 +27,7 @@ void init_shell()
     printf("\n|_| |_| |_|_|_| |_|_|___/_| |_|\\___|_|_|");
     printf("\n\n");
     printf("         by abertoli & shurlebu\n\n");
-    sleep(2);
+    sleep(1);
     clear();
 }
 

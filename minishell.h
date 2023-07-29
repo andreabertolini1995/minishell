@@ -58,7 +58,7 @@ typedef struct s_token
 
 // Parser
 t_list      *parser(t_list *tokens_list);
-bool        is_cmd(char *path_cmd);
+bool        is_file(char *path_cmd);
 
 // Lexer
 t_list      *lexer(char *cmd);
@@ -78,11 +78,19 @@ char        *get_name_outfile(t_list *commands_list);
 char        *get_name_infile(t_list *commands_list);
 void        redirect_output(t_command *command);
 void        redirect_input(t_command *command);
-bool        is_operator(char *op1, char *op2);
+bool        is_token(char *op1, char *op2);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);
 char	    *ft_strncpy(char *dest, char *src, unsigned int n);
+
+// Builtins
+void        ft_echo(t_command *command);
+void        ft_cd(t_command *command);
+void        ft_pwd();
+void        ft_env();
+// void        ft_export(t_command *command);
+
 
 // Prints
 void        print_token(void *content);

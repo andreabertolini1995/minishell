@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool    is_cmd(char *path_cmd)
+bool    is_file(char *path_cmd)
 {
     if (access(path_cmd, F_OK) == 0)
         return true;
@@ -99,8 +99,8 @@ t_list  *parser(t_list *tokens_list)
         }
         if (is_pipe_or_redirect(token->content))
         {
-            if (is_operator(token->content, "<")
-                || is_operator(token->content, "<<"))
+            if (is_token(token->content, "<")
+                || is_token(token->content, "<<"))
             {
                 next_token = tokens_list->next->content;
                 command->infile = next_token->content;

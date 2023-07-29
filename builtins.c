@@ -12,32 +12,55 @@
 
 #include "minishell.h"
 
-void    print_token(void *content)
+extern char** environ;
+
+void    ft_echo(t_command *command)
 {
-    t_token *token;
+    int     i;
+    bool    new_line;    
 
-    token = (t_token*) content;
-    printf("Content: %s\n", token->content);
-    printf("Type: %d\n", token->type);
-    printf("\n");
-}
-
-void    print_command(void *content)
-{
-    t_command   *command;
-    int         i;
-
-    command = (t_command*) content;
-    printf("Command: %s\n", command->cmd);
     i = 0;
+    if (is_token(command->args[i], "-n"))
+    {
+        new_line = false;
+        i++;
+    } 
     while (i < command->num_args)
     {
-        printf("Arg %d: %s\n", i + 1, command->args[i]);
+        printf("%s", command->args[i]);
         i++;
     }
-    printf("Num args: %d\n", command->num_args);
-    printf("Operator: %s\n", command->operator);
-    printf("Infile: %s\n", command->infile);
-    printf("Outfile: %s\n", command->outfile);
-    printf("\n");
+    if (new_line == true)
+        printf("\n");
 }
+
+void    ft_cd(t_command *command)
+{
+    if (is_file(command->args[0]))
+        chdir(command->args[0]);
+    else
+        printf("minishell: cd: %s: No such file or directory\n", command->args[0]);
+}
+
+void    ft_pwd()
+{
+    char    buffer[1024];
+
+    printf("%s\n", getcwd(buffer, sizeof(buffer)));
+}
+
+void    ft_env()
+{
+    char** env;
+    
+    env = environ;
+    while (*env != NULL) {
+        printf("%s\n", *env);
+        env++;
+    }
+}
+
+// void    ft_export(t_command *command)
+// {
+    
+// }

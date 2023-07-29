@@ -12,9 +12,9 @@
 
 #include "minishell.h"
 
-bool    is_operator(char *op1, char *op2)
+bool    is_token(char *token1, char *token2)
 {
-    if (!ft_strncmp(op1, op2, ft_strlen(op1)))
+    if (!ft_strncmp(token1, token2, ft_strlen(token1)))
         return (true);
     else
         return (false);
@@ -31,8 +31,8 @@ char *get_name_outfile(t_list *commands_list)
         if (command->operator != NULL)
         {
             // Assuming there is only one single or double redirection at the end 
-            if (is_operator(command->operator, ">")
-                || is_operator(command->operator, ">>"))
+            if (is_token(command->operator, ">")
+                || is_token(command->operator, ">>"))
             {
                 next_command = commands_list->next->content;
                 return (next_command->cmd);
@@ -54,8 +54,8 @@ char *get_name_infile(t_list *commands_list)
         if (command->operator != NULL)
         {
             // Assuming there is only one single or double redirection at the beginning 
-            if (is_operator(command->operator, "<")
-                || is_operator(command->operator, "<<"))
+            if (is_token(command->operator, "<")
+                || is_token(command->operator, "<<"))
             {
                 next_command = commands_list->next->content;
                 return (next_command->cmd);
@@ -71,7 +71,7 @@ void    redirect_output(t_command *command)
     int file;
     int file2;
     
-    if (is_operator(command->operator, ">"))
+    if (is_token(command->operator, ">"))
         file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
     else
         file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
@@ -94,7 +94,7 @@ void    redirect_input(t_command *command)
     int     file;
     char    *line;
     
-    if (is_operator(command->operator, "<"))
+    if (is_token(command->operator, "<"))
         infile_redirect(command->infile);
     else
     {
