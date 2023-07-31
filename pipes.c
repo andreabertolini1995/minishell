@@ -62,28 +62,8 @@ int get_num_pipes(t_list *commands_list)
     return (num_pipes);
 }
 
-// static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i, char *outfile, char *infile)
-// {
-//     if (i == 0 && infile == NULL)
-//         dup2(pipe_fd[i][1], STDOUT_FILENO);
-//     else if (i == 0 && infile != NULL)
-//         execute_cmd(command, NULL, infile);
-//     else if (i > 0 && i < num_pipes)
-//     {
-//         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-//         dup2(pipe_fd[i][1], STDOUT_FILENO);
-//     }
-//     else if (i == num_pipes)
-//         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-//     close_fds(num_pipes, pipe_fd);
-//     if (i == num_pipes && outfile != NULL)
-//         execute_cmd(command, outfile, NULL);
-//     exit(1);
-// }
-
 static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
-    // print_command(command);
     if (i == 0 && command->infile != NULL)
         execute_cmd(command);
     if (i == 0)

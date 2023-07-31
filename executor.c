@@ -87,7 +87,13 @@ int execute_cmd(t_command *command)
     char    **argv;
 	char    *envp[2];
     pid_t   pid;
+    int     pid_pipe[2]; // File descriptors for the pipe
+    int     parent_pid;
 
+    if (pipe(pid_pipe) == -1) {
+        perror("pipe");
+        return 1;
+    }
     argv = fill_argv(command);
     envp[0] = NULL;
     pid = fork();
@@ -99,6 +105,7 @@ int execute_cmd(t_command *command)
     }
     else if (pid == 0)
     {
+        close(pid_pipe[1]);
         if (is_token(command->cmd, "echo"))
             ft_echo(command);
         else if (is_token(command->cmd, "cd"))
@@ -109,13 +116,24 @@ int execute_cmd(t_command *command)
             ft_env();
         // else if (is_token(command->cmd, "export"))
         //     ft_export(command);
+        else if (is_token(command->cmd, "exit"))
+        {
+            close(pid_pipe[0]);
+            read(pid_pipe[0], &parent_pid, sizeof(int)); // Read the parent's PID from the pipe
+            close(pid_pipe[0]);
+            // printf("Parent pid: %d\n", parent_pid);
+            kill(parent_pid, SIGINT);
+        }
         else
             execute(command, argv, envp);
+        close(pid_pipe[0]);
     }
     else
     {
         waitpid(pid, NULL, 0);
         free(argv);
+        close(pid_pipe[1]);
+        close(pid_pipe[0]);
         return (0);
     }
     return (0);

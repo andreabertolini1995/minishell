@@ -24,6 +24,7 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <fcntl.h>
+#include <signal.h>
 # include "libft/libft.h"
 
 // Command struct
