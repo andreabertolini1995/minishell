@@ -67,7 +67,6 @@ static int ft_num_args(t_list *tokens_list)
     return (num_args - 1);
 }
 
-/* Function to get a list of tokens as input and organize its data into a Command Table. */
 t_list  *parser(t_list *tokens_list)
 {
     t_list          *commands_list;

@@ -12,12 +12,6 @@
 
 #include "minishell.h"
 
-void clear()
-{
-    // Clearing the shell using escape sequences
-    printf("\033[H\033[J");
-}
-
 void init_shell()
 {
     printf("\n           _       _     _          _ _");
@@ -28,7 +22,7 @@ void init_shell()
     printf("\n\n");
     printf("         by abertoli & shurlebu\n\n");
     sleep(1);
-    clear();
+    printf("\033[H\033[J");
 }
 
 int main()
