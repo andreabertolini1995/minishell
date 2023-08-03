@@ -56,7 +56,7 @@ int get_num_pipes(t_list *commands_list)
         command = commands_list->content;
         if (command->operator != NULL)
         {
-            if (is_string(command->operator, "|"))
+            if (is_same_string(command->operator, "|"))
                 num_pipes++;
         }
         commands_list = commands_list->next;

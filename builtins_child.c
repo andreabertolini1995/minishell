@@ -21,7 +21,7 @@ void    ft_echo(t_command *command)
 
     i = 0;
     new_line = true;
-    if (is_string(command->args[i], "-n"))
+    if (is_same_string(command->args[i], "-n"))
     {
         new_line = false;
         i++;
@@ -35,14 +35,6 @@ void    ft_echo(t_command *command)
         printf("\n");
 }
 
-void    ft_cd(t_command *command)
-{
-    if (is_file(command->args[0]))
-        chdir(command->args[0]);
-    else
-        printf("minishell: cd: %s: No such file or directory\n", command->args[0]);
-}
-
 void    ft_pwd()
 {
     char    buffer[1024];
@@ -52,16 +44,13 @@ void    ft_pwd()
 
 void    ft_env()
 {
-    char** env;
+    char**  env;
+    int     i;
     
     env = environ;
-    while (*env != NULL) {
-        printf("%s\n", *env);
-        env++;
+    i = 0;
+    while (env[i] != NULL) {
+        printf("%s\n", env[i]);
+        i++;
     }
 }
-
-// void    ft_export(t_command *command)
-// {
-    
-// }

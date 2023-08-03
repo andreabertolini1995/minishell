@@ -79,22 +79,18 @@ char        *get_name_outfile(t_list *commands_list);
 char        *get_name_infile(t_list *commands_list);
 void        redirect_output(t_command *command);
 void        redirect_input(t_command *command);
-bool        is_string(char *op1, char *op2);
-
-// Utils
-char        *ft_strcat(char *dest, char *src);
-char	    *ft_strncpy(char *dest, char *src, unsigned int n);
+bool        is_same_string(char *op1, char *op2);
 
 // Builtins
 void        ft_echo(t_command *command);
 void        ft_cd(t_command *command);
 void        ft_pwd();
 void        ft_env();
-// void        ft_export(t_command *command);
+void        *ft_export(t_command *command);
+void        *ft_unset(t_command *command);
 
 // Error handling
 int         return_with_error(char *error_msg);
-
 
 // Prints
 void        print_token(void *content);

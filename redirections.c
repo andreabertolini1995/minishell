@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-bool    is_string(char *str1, char *str2)
+bool    is_same_string(char *str1, char *str2)
 {
     if (!ft_strncmp(str1, str2, ft_strlen(str1)))
         return (true);
@@ -31,8 +31,8 @@ char *get_name_outfile(t_list *commands_list)
         if (command->operator != NULL)
         {
             // Assuming there is only one single or double redirection at the end 
-            if (is_string(command->operator, ">")
-                || is_string(command->operator, ">>"))
+            if (is_same_string(command->operator, ">")
+                || is_same_string(command->operator, ">>"))
             {
                 next_command = commands_list->next->content;
                 return (next_command->cmd);
@@ -54,8 +54,8 @@ char *get_name_infile(t_list *commands_list)
         if (command->operator != NULL)
         {
             // Assuming there is only one single or double redirection at the beginning 
-            if (is_string(command->operator, "<")
-                || is_string(command->operator, "<<"))
+            if (is_same_string(command->operator, "<")
+                || is_same_string(command->operator, "<<"))
             {
                 next_command = commands_list->next->content;
                 return (next_command->cmd);
@@ -71,7 +71,7 @@ void    redirect_output(t_command *command)
     int file;
     int file2;
     
-    if (is_string(command->operator, ">"))
+    if (is_same_string(command->operator, ">"))
         file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
     else
         file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
@@ -94,7 +94,7 @@ void    redirect_input(t_command *command)
     int     file;
     char    *line;
     
-    if (is_string(command->operator, "<"))
+    if (is_same_string(command->operator, "<"))
         infile_redirect(command->infile);
     else
     {

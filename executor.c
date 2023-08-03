@@ -83,11 +83,13 @@ static void    execute_cmd(t_command *command, char **argv, char *envp[2])
 
 bool    is_builtin(char *cmd)
 {
-    if (is_string(cmd, "pwd")
-        || is_string(cmd, "env")
-        || is_string(cmd, "echo")
-        || is_string(cmd, "exit")
-        || is_string(cmd, "cd"))
+    if (is_same_string(cmd, "pwd")
+        || is_same_string(cmd, "env")
+        || is_same_string(cmd, "echo")
+        || is_same_string(cmd, "exit")
+        || is_same_string(cmd, "cd")
+        || is_same_string(cmd, "export")
+        || is_same_string(cmd, "unset"))
         return (true);
     else
         return (false);
@@ -97,13 +99,13 @@ void    execute_builtin_child(t_command *command, int *pipe_fd)
 {
     int     signal_to_send;
 
-    if (is_string(command->cmd, "pwd"))
-        ft_pwd();
-    else if (is_string(command->cmd, "env"))
-        ft_env();
-    else if (is_string(command->cmd, "echo"))
+    if (is_same_string(command->cmd, "echo"))
         ft_echo(command);
-    else if (is_string(command->cmd, "exit"))
+    else if (is_same_string(command->cmd, "pwd"))
+        ft_pwd();
+    else if (is_same_string(command->cmd, "env"))
+        ft_env();
+    else if (is_same_string(command->cmd, "exit"))
     {
         signal_to_send = SIGINT;
         write(pipe_fd[1], &signal_to_send, sizeof(int));
@@ -115,9 +117,13 @@ void    execute_builtin_parent(t_command *command, int *pipe_fd)
 {
     int signal_from_child;
 
-    if (is_string(command->cmd, "cd"))
+    if (is_same_string(command->cmd, "cd"))
         ft_cd(command);
-    else if (is_string(command->cmd, "exit"))
+    else if (is_same_string(command->cmd, "export"))
+        ft_export(command);
+    else if (is_same_string(command->cmd, "unset"))
+        ft_unset(command);
+    else if (is_same_string(command->cmd, "exit"))
     {
         close(pipe_fd[1]);
         read(pipe_fd[0], &signal_from_child, sizeof(int));
