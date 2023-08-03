@@ -86,10 +86,10 @@ int execute_cmd(t_command *command)
     char    **argv;
 	char    *envp[2];
     pid_t   pid;
-    int     pid_pipe[2]; // File descriptors for the pipe
-    int     parent_pid;
+    int     pipe_fd[2]; // File descriptors for the pipe
+    int     signal_to_send;
 
-    if (pipe(pid_pipe) == -1) {
+    if (pipe(pipe_fd) == -1) {
         perror("pipe");
         return 1;
     }
@@ -104,36 +104,47 @@ int execute_cmd(t_command *command)
     }
     else if (pid == 0)
     {
-        close(pid_pipe[1]);
-        if (is_token(command->cmd, "echo"))
-            ft_echo(command);
-        else if (is_token(command->cmd, "cd"))
-            ft_cd(command);
-        else if (is_token(command->cmd, "pwd"))
+        close(pipe_fd[0]);
+        if (is_token(command->cmd, "pwd"))
             ft_pwd();
         else if (is_token(command->cmd, "env"))
             ft_env();
-        // else if (is_token(command->cmd, "export"))
-        //     ft_export(command);
+        else if (is_token(command->cmd, "echo"))
+            ft_echo(command);
         else if (is_token(command->cmd, "exit"))
         {
-            close(pid_pipe[0]);
-            read(pid_pipe[0], &parent_pid, sizeof(int)); // Read the parent's PID from the pipe
-            close(pid_pipe[0]);
-            // printf("Parent pid: %d\n", parent_pid);
-            kill(parent_pid, SIGINT);
+            signal_to_send = SIGINT;
+            write(pipe_fd[1], &signal_to_send, sizeof(int)); // "Send" the signal to the parent
+            close(pipe_fd[1]);
         }
         else
             execute(command, argv, envp);
-        close(pid_pipe[0]);
+        close(pipe_fd[1]);
+        exit(1);
     }
     else
     {
-        waitpid(pid, NULL, 0);
-        free(argv);
-        close(pid_pipe[1]);
-        close(pid_pipe[0]);
-        return (0);
+        if (is_token(command->cmd, "cd"))
+            ft_cd(command);
+        else if (is_token(command->cmd, "exit"))
+        {
+            close(pipe_fd[1]);
+            int signal_from_child;
+            read(pipe_fd[0], &signal_from_child, sizeof(int)); // Read the signal from the child
+            if (signal_from_child == SIGINT)
+            {
+                free(argv);
+                close(pipe_fd[0]);
+                exit(0);
+            }
+        }
+        else 
+        {
+            waitpid(pid, NULL, 0);
+            free(argv);
+            close(pipe_fd[0]);
+            return (0);
+        }
     }
     return (0);
 }

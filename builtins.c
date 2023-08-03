@@ -20,6 +20,7 @@ void    ft_echo(t_command *command)
     bool    new_line;    
 
     i = 0;
+    new_line = true;
     if (is_token(command->args[i], "-n"))
     {
         new_line = false;
