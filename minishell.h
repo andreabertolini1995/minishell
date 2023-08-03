@@ -66,9 +66,9 @@ t_list      *lexer(char *cmd);
 
 // Executor
 void        executor(t_list *commands_list);
-int         execute_cmd(t_command *command);
+int         execute(t_command *command);
 int         **initialize_pipe_fds(int num_pipes);
-void        create_pipes(int num_pipes, int **pipe_fd);
+int         create_pipes(int num_pipes, int **pipe_fd);
 int         get_num_pipes(t_list *commands_list);
 int         ft_pipe(t_list *commands_list, int num_pipes);
 void        close_fds(int num_pipes, int **pipe_fd);
@@ -79,7 +79,7 @@ char        *get_name_outfile(t_list *commands_list);
 char        *get_name_infile(t_list *commands_list);
 void        redirect_output(t_command *command);
 void        redirect_input(t_command *command);
-bool        is_token(char *op1, char *op2);
+bool        is_string(char *op1, char *op2);
 
 // Utils
 char        *ft_strcat(char *dest, char *src);
@@ -91,6 +91,9 @@ void        ft_cd(t_command *command);
 void        ft_pwd();
 void        ft_env();
 // void        ft_export(t_command *command);
+
+// Error handling
+int         return_with_error(char *error_msg);
 
 
 // Prints

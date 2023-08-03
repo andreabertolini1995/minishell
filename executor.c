@@ -60,7 +60,7 @@ char    *get_cmd_path(t_command *command, char **sub_paths)
     return (cmd_path);
 }
 
-static void    execute(t_command *command, char **argv, char *envp[2])
+static void    execute_cmd(t_command *command, char **argv, char *envp[2])
 {
     char    *path;
     char    *cmd_path;
@@ -81,70 +81,89 @@ static void    execute(t_command *command, char **argv, char *envp[2])
     }
 }
 
-int execute_cmd(t_command *command)
+bool    is_builtin(char *cmd)
+{
+    if (is_string(cmd, "pwd")
+        || is_string(cmd, "env")
+        || is_string(cmd, "echo")
+        || is_string(cmd, "exit")
+        || is_string(cmd, "cd"))
+        return (true);
+    else
+        return (false);
+}
+
+void    execute_builtin_child(t_command *command, int *pipe_fd)
+{
+    int     signal_to_send;
+
+    if (is_string(command->cmd, "pwd"))
+        ft_pwd();
+    else if (is_string(command->cmd, "env"))
+        ft_env();
+    else if (is_string(command->cmd, "echo"))
+        ft_echo(command);
+    else if (is_string(command->cmd, "exit"))
+    {
+        signal_to_send = SIGINT;
+        write(pipe_fd[1], &signal_to_send, sizeof(int));
+        close(pipe_fd[1]);
+    }
+}
+
+void    execute_builtin_parent(t_command *command, int *pipe_fd)
+{
+    int signal_from_child;
+
+    if (is_string(command->cmd, "cd"))
+        ft_cd(command);
+    else if (is_string(command->cmd, "exit"))
+    {
+        close(pipe_fd[1]);
+        read(pipe_fd[0], &signal_from_child, sizeof(int));
+        if (signal_from_child == SIGINT)
+        {
+            close(pipe_fd[0]);
+            exit(0);
+        }
+    }
+}
+
+void    child_process(t_command *command, int *pipe_fd)
 {
     char    **argv;
 	char    *envp[2];
-    pid_t   pid;
-    int     pipe_fd[2]; // File descriptors for the pipe
-    int     signal_to_send;
 
-    if (pipe(pipe_fd) == -1) {
-        perror("pipe");
-        return 1;
-    }
     argv = fill_argv(command);
     envp[0] = NULL;
+    close(pipe_fd[0]);
+    if (is_builtin(command->cmd))
+        execute_builtin_child(command, pipe_fd);
+    else
+        execute_cmd(command, argv, envp);
+    close(pipe_fd[1]);
+    free(argv);
+    exit(1);
+}
+
+int execute(t_command *command)
+{
+    int     pipe_fd[2];
+    pid_t   pid;
+
+    if (pipe(pipe_fd) == -1)
+        return (return_with_error("Pipe failed."));
     pid = fork();
     if (pid < 0)
-    {
-        perror("Fork failed");
-        free(argv);
-        return (1);
-    }
+        return (return_with_error("Fork failed."));
     else if (pid == 0)
-    {
-        close(pipe_fd[0]);
-        if (is_token(command->cmd, "pwd"))
-            ft_pwd();
-        else if (is_token(command->cmd, "env"))
-            ft_env();
-        else if (is_token(command->cmd, "echo"))
-            ft_echo(command);
-        else if (is_token(command->cmd, "exit"))
-        {
-            signal_to_send = SIGINT;
-            write(pipe_fd[1], &signal_to_send, sizeof(int)); // "Send" the signal to the parent
-            close(pipe_fd[1]);
-        }
-        else
-            execute(command, argv, envp);
-        close(pipe_fd[1]);
-        exit(1);
-    }
+        child_process(command, pipe_fd);
     else
     {
-        if (is_token(command->cmd, "cd"))
-            ft_cd(command);
-        else if (is_token(command->cmd, "exit"))
-        {
-            close(pipe_fd[1]);
-            int signal_from_child;
-            read(pipe_fd[0], &signal_from_child, sizeof(int)); // Read the signal from the child
-            if (signal_from_child == SIGINT)
-            {
-                free(argv);
-                close(pipe_fd[0]);
-                exit(0);
-            }
-        }
-        else 
-        {
-            waitpid(pid, NULL, 0);
-            free(argv);
-            close(pipe_fd[0]);
-            return (0);
-        }
+        if (is_builtin(command->cmd))
+            execute_builtin_parent(command, pipe_fd);
+        waitpid(pid, NULL, 0);
+        close(pipe_fd[0]);
     }
     return (0);
 }
@@ -206,7 +225,7 @@ void    executor(t_list *commands_list)
     {
         command = commands_list->content;            
         if (num_pipes == 0)
-            execute_cmd(command);
+            execute(command);
         else
             ft_pipe(commands_list, num_pipes);
         commands_list = update_commands_list(commands_list, command, num_pipes);

@@ -31,16 +31,18 @@ int **initialize_pipe_fds(int num_pipes)
     return (pipe_fd);
 }
 
-void create_pipes(int num_pipes, int **pipe_fd)
+int create_pipes(int num_pipes, int **pipe_fd)
 {
     int i;
 
     i = 0;
     while (i < num_pipes)
     {
-        pipe(pipe_fd[i]);
+        if (pipe(pipe_fd[i]) == -1)
+            return (return_with_error("Pipe failed."));
         i++;
     }
+    return (0);
 }
 
 int get_num_pipes(t_list *commands_list)
@@ -54,7 +56,7 @@ int get_num_pipes(t_list *commands_list)
         command = commands_list->content;
         if (command->operator != NULL)
         {
-            if (!ft_strncmp(command->operator, "|", ft_strlen(command->operator)))
+            if (is_string(command->operator, "|"))
                 num_pipes++;
         }
         commands_list = commands_list->next;
@@ -65,7 +67,7 @@ int get_num_pipes(t_list *commands_list)
 static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
     if (i == 0 && command->infile != NULL)
-        execute_cmd(command);
+        execute(command);
     if (i == 0)
         dup2(pipe_fd[i][1], STDOUT_FILENO);
     else if (i > 0 && i < num_pipes)
@@ -77,9 +79,9 @@ static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int 
         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
     close_fds(num_pipes, pipe_fd);
     if (i == num_pipes && command->outfile != NULL) // possibly to solve again the appending problem
-        execute_cmd(command);
+        execute(command);
     else
-        execute_cmd(command);
+        execute(command);
     exit(1);
 }
 
@@ -94,7 +96,7 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pid
         command = commands_list->content;
         pids[i] = fork();
         if (pids[i] < 0 )
-            return (1);
+            return (return_with_error("Fork failed."));
         else if (pids[i] == 0)
             set_up_fds(command, pipe_fd, num_pipes, i);
         i++;
