@@ -27,7 +27,7 @@
 # include <signal.h>
 # include "libft/libft.h"
 
-extern char** environ;
+extern char**   environ;
 
 typedef struct s_command
 {
@@ -37,7 +37,7 @@ typedef struct s_command
     char                *operator;
     char                *infile;
     char                *outfile;
-    int                 exit_code;
+    // int                 exit_code;
 }   t_command;
 
 
@@ -60,7 +60,7 @@ typedef struct s_token
 
 
 // Parser
-t_list      *parser(t_list *tokens_list, int status_code);
+t_list      *parser(t_list *tokens_list);
 bool        is_file(char *path_cmd);
 
 // Lexer

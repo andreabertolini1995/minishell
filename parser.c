@@ -32,7 +32,7 @@ static bool    is_pipe_or_redirect(char *str)
         return false;
 }
 
-static t_command *create_command(int num_args, int status_code)
+static t_command *create_command(int num_args)
 {
     t_command *command;
 
@@ -47,7 +47,7 @@ static t_command *create_command(int num_args, int status_code)
     command->operator = NULL;
     command->infile = NULL;
     command->outfile = NULL;
-    command->exit_code = status_code;
+    // command->exit_code = status_code;
     return (command);
 }
 
@@ -68,7 +68,7 @@ static int ft_num_args(t_list *tokens_list)
     return (num_args - 1);
 }
 
-t_list  *parser(t_list *tokens_list, int status_code)
+t_list  *parser(t_list *tokens_list)
 {
     t_list          *commands_list;
     t_token         *token;
@@ -82,7 +82,7 @@ t_list  *parser(t_list *tokens_list, int status_code)
     {
         token = tokens_list->content;
         num_args = ft_num_args(tokens_list);
-        command = create_command(num_args, status_code);
+        command = create_command(num_args);
         arg_index = 0;
         while (token->type == WORD && tokens_list != NULL)
         {

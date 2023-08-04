@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+extern int  g_exit_code;
+
 static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char *cmd_path;
@@ -157,9 +159,7 @@ int execute(t_command *command)
     int     pipe_fd[2];
     pid_t   pid;
     int     wstatus;
-    int     status_code;
 
-    status_code = 0;
     if (pipe(pipe_fd) == -1)
         return (return_with_error("Pipe failed."));
     pid = fork();
@@ -173,10 +173,10 @@ int execute(t_command *command)
             execute_builtin_parent(command, pipe_fd);
         waitpid(pid, &wstatus, 0);
         if (WIFEXITED(wstatus))
-            status_code = WEXITSTATUS(wstatus);
+            g_exit_code = WEXITSTATUS(wstatus);
         close(pipe_fd[0]);
     }
-    return (status_code);
+    return (0);
 }
 
 void close_fds(int num_pipes, int **pipe_fd)
