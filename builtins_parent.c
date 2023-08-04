@@ -12,8 +12,6 @@
 
 #include "minishell.h"
 
-extern char** environ;
-
 void    ft_cd(t_command *command)
 {
     if (is_file(command->args[0]))

@@ -27,6 +27,8 @@
 # include <signal.h>
 # include "libft/libft.h"
 
+extern char** environ;
+
 typedef struct s_command
 {
     char                *cmd;
@@ -35,7 +37,7 @@ typedef struct s_command
     char                *operator;
     char                *infile;
     char                *outfile;
-    int                 exit_code; // previous command
+    int                 exit_code;
 }   t_command;
 
 
