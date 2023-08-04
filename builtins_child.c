@@ -12,7 +12,8 @@
 
 #include "minishell.h"
 
-extern char** environ;
+extern char**   environ;
+extern int      g_exit_code;
 
 void    ft_echo(t_command *command)
 {
@@ -25,7 +26,9 @@ void    ft_echo(t_command *command)
     {
         new_line = false;
         i++;
-    } 
+    }
+    if (is_same_string(command->args[i], "$?"))
+        printf("%d\n", g_exit_code);
     while (i < command->num_args)
     {
         printf("%s", command->args[i]);

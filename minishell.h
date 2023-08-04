@@ -24,10 +24,9 @@
 # include <readline/history.h>
 # include <sys/wait.h>
 # include <fcntl.h>
-#include <signal.h>
+# include <signal.h>
 # include "libft/libft.h"
 
-// Command struct
 typedef struct s_command
 {
     char                *cmd;
