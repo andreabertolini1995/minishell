@@ -208,9 +208,7 @@ static t_list    *update_commands_list(t_list *commands_list, t_command *command
 {
     int i;
 
-    if (num_pipes == 0)
-        commands_list = commands_list->next;
-    else
+    if (num_pipes > 0)
     {
         i = 0;
         while (i < (num_pipes + 1))
@@ -223,24 +221,24 @@ static t_list    *update_commands_list(t_list *commands_list, t_command *command
         commands_list = commands_list->next;
     if (command->infile != NULL)
         commands_list = commands_list->next;
+    else
+        commands_list = commands_list->next;
     return (commands_list);
 }
 
-int    executor(t_list *commands_list)
+void    executor(t_list *commands_list)
 {
     t_command   *command;
     int         num_pipes;
-    int         status_code;
 
     num_pipes = get_num_pipes(commands_list);
     while (commands_list != NULL)
     {
         command = commands_list->content;            
         if (num_pipes == 0)
-            status_code = execute(command);
+            execute(command);
         else
             ft_pipe(commands_list, num_pipes);
         commands_list = update_commands_list(commands_list, command, num_pipes);
     }
-    return (status_code);
 }

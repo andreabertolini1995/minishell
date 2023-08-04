@@ -67,7 +67,7 @@ bool        is_file(char *path_cmd);
 t_list      *lexer(char *cmd);
 
 // Executor
-int         executor(t_list *commands_list);
+void        executor(t_list *commands_list);
 int         execute(t_command *command);
 int         **initialize_pipe_fds(int num_pipes);
 int         create_pipes(int num_pipes, int **pipe_fd);

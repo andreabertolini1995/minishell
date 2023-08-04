@@ -1,0 +1,19 @@
+total 96
+-rw-r--r-- 1 abertoli 2022_berlin  1672 Aug  4 15:38 builtins_child.c
+-rw-r--r-- 1 abertoli 2022_berlin  2594 Aug  4 15:38 builtins_parent.c
+-rw-r--r-- 1 abertoli 2022_berlin   998 Aug  4 15:38 error_handling.c
+-rw-r--r-- 1 abertoli 2022_berlin  6283 Aug  4 15:38 executor.c
+-rw-r--r-- 1 abertoli 2022_berlin  3662 Aug  4 15:38 lexer.c
+drwxr-xr-x 4 abertoli 2022_berlin  4096 Aug  4 15:39 libft
+-rw-r--r-- 1 abertoli 2022_berlin  1802 Aug  4 15:40 main.c
+-rw-r--r-- 1 abertoli 2022_berlin   758 Aug  4 15:38 Makefile
+-rwxr-xr-x 1 abertoli 2022_berlin 28136 Aug  4 15:40 minishell
+-rw-r--r-- 1 abertoli 2022_berlin  3063 Aug  4 15:38 minishell.h
+drwxr-xr-x 2 abertoli 2022_berlin  4096 Aug  4 15:40 obj
+-rw-r--r-- 1 abertoli 2022_berlin  3697 Aug  4 15:38 parser.c
+-rw-r--r-- 1 abertoli 2022_berlin  3507 Aug  4 15:38 pipes.c
+-rw-r--r-- 1 abertoli 2022_berlin  1612 Aug  4 15:38 prints.c
+-rw-r--r-- 1 abertoli 2022_berlin    50 Jul 18 10:19 README.md
+-rw-r--r-- 1 abertoli 2022_berlin  3585 Aug  4 15:38 redirections.c
+-rw-r--r-- 1 abertoli 2022_berlin     0 Aug  4 15:42 simon
+drwxr-xr-x 2 abertoli 2022_berlin  4096 Aug  4 15:38 tests

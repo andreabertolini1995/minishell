@@ -20,17 +20,17 @@ bool    is_file(char *path_cmd)
         return false;
 }
 
-static bool    is_pipe_or_redirect(char *str)
-{
-    if (!ft_strncmp(str, ">", ft_strlen(str))
-        || !ft_strncmp(str, "<", ft_strlen(str))
-        || !ft_strncmp(str, ">>", ft_strlen(str))
-        || !ft_strncmp(str, "<<", ft_strlen(str))
-        || !ft_strncmp(str, "|", ft_strlen(str)))
-        return true;
-    else
-        return false;
-}
+// static bool    is_pipe_or_redirect(char *str)
+// {
+//     if (!ft_strncmp(str, ">", ft_strlen(str))
+//         || !ft_strncmp(str, "<", ft_strlen(str))
+//         || !ft_strncmp(str, ">>", ft_strlen(str))
+//         || !ft_strncmp(str, "<<", ft_strlen(str))
+//         || !ft_strncmp(str, "|", ft_strlen(str)))
+//         return true;
+//     else
+//         return false;
+// }
 
 static t_command *create_command(int num_args)
 {
@@ -65,6 +65,7 @@ static int ft_num_args(t_list *tokens_list)
         if (tokens_list != NULL)
             token = tokens_list->content;
     }
+    
     return (num_args - 1);
 }
 
@@ -82,7 +83,10 @@ t_list  *parser(t_list *tokens_list)
     {
         token = tokens_list->content;
         num_args = ft_num_args(tokens_list);
+        printf("Num args: %d\n", num_args);
         command = create_command(num_args);
+        // if (command == NULL)
+        //     write(1, "yo\n", 3);
         arg_index = 0;
         while (token->type == WORD && tokens_list != NULL)
         {
@@ -97,15 +101,16 @@ t_list  *parser(t_list *tokens_list)
             if (tokens_list != NULL)
                 token = tokens_list->content;
         }
-        if (is_pipe_or_redirect(token->content))
-        {
-            if (is_same_string(token->content, "<")
+        if (is_same_string(token->content, "<")
                 || is_same_string(token->content, "<<"))
-            {
-                next_token = tokens_list->next->content;
-                command->infile = next_token->content;
-                tokens_list = tokens_list->next;
-            }
+        {
+            next_token = tokens_list->next->content;
+            command->infile = next_token->content;
+            command->operator = token->content;
+            tokens_list = tokens_list->next->next;
+        }
+        else if (is_same_string(token->content, "|"))
+        {
             command->operator = token->content;
             tokens_list = tokens_list->next;
         }
