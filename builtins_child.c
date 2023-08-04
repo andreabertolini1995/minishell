@@ -28,7 +28,10 @@ void    ft_echo(t_command *command)
         i++;
     }
     if (is_same_string(command->args[i], "$?"))
-        printf("%d\n", g_exit_code);
+    {
+        printf("%d", g_exit_code);
+        i++;
+    }
     while (i < command->num_args)
     {
         printf("%s", command->args[i]);
