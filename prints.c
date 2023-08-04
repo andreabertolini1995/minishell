@@ -37,6 +37,7 @@ void    print_command(void *content)
     }
     printf("Num args: %d\n", command->num_args);
     printf("Operator: %s\n", command->operator);
+    printf("Redirection: %s\n", command->redirection);
     printf("Infile: %s\n", command->infile);
     printf("Outfile: %s\n", command->outfile);
     printf("\n");

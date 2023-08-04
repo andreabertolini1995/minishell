@@ -94,7 +94,7 @@ void    redirect_input(t_command *command)
     int     file;
     char    *line;
     
-    if (is_same_string(command->operator, "<"))
+    if (is_same_string(command->redirection, "<"))
         infile_redirect(command->infile);
     else
     {

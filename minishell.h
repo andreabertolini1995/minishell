@@ -35,10 +35,10 @@ typedef struct s_command
     int                 num_args;
     char                **args;
     char                *operator;
+    char                *redirection;
     char                *infile;
     char                *outfile;
-    // int                 exit_code;
-}   t_command;
+    }   t_command;
 
 
 typedef enum e_token_type

@@ -44,10 +44,11 @@ static t_command *create_command(int num_args)
     command->args = (char**) malloc (sizeof(char*) * num_args);
     if (command->args == NULL)
         return (NULL);
+    // command->pipe = false;
     command->operator = NULL;
+    command->redirection = NULL;
     command->infile = NULL;
     command->outfile = NULL;
-    // command->exit_code = status_code;
     return (command);
 }
 
@@ -69,6 +70,23 @@ static int ft_num_args(t_list *tokens_list)
     return (num_args - 1);
 }
 
+bool    is_infile_redirection(char *cmd)
+{
+    if (is_same_string(cmd, "<")
+        || is_same_string(cmd, "<<"))
+        return (true);
+    else
+        return (false);
+}
+
+bool    is_pipe(char *cmd)
+{
+    if (is_same_string(cmd, "|"))
+        return (true);
+    else
+        return (false);
+}
+
 t_list  *parser(t_list *tokens_list)
 {
     t_list          *commands_list;
@@ -83,10 +101,7 @@ t_list  *parser(t_list *tokens_list)
     {
         token = tokens_list->content;
         num_args = ft_num_args(tokens_list);
-        printf("Num args: %d\n", num_args);
         command = create_command(num_args);
-        // if (command == NULL)
-        //     write(1, "yo\n", 3);
         arg_index = 0;
         while (token->type == WORD && tokens_list != NULL)
         {
@@ -96,23 +111,29 @@ t_list  *parser(t_list *tokens_list)
             {
                 command->args[arg_index] = token->content;
                 arg_index++;
-            }  
+            }
             tokens_list = tokens_list->next;
             if (tokens_list != NULL)
                 token = tokens_list->content;
         }
-        if (is_same_string(token->content, "<")
-                || is_same_string(token->content, "<<"))
+        if (tokens_list != NULL)
         {
-            next_token = tokens_list->next->content;
-            command->infile = next_token->content;
-            command->operator = token->content;
-            tokens_list = tokens_list->next->next;
-        }
-        else if (is_same_string(token->content, "|"))
-        {
-            command->operator = token->content;
-            tokens_list = tokens_list->next;
+            if (is_infile_redirection(token->content))
+            {
+                command->redirection = token->content;
+                next_token = tokens_list->next->content;
+                command->infile = next_token->content;
+                tokens_list = tokens_list->next->next;
+            }
+            if (tokens_list != NULL)
+            {
+                token = tokens_list->content;
+                if (is_pipe(token->content))
+                    command->operator = token->content;
+                /* Same to do with outfile redirections. */
+                if (token != NULL)
+                    tokens_list = tokens_list->next;
+            }
         }
         ft_lstadd_back(&commands_list, ft_lstnew(command));
     }
