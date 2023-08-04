@@ -30,15 +30,17 @@ int main()
     char* cmd;
     t_list  *tokens_list;
     t_list  *commands_list;
+    int     status_code;
 
     init_shell();
+    status_code = 0;
     while (42)
     {
         cmd = readline("minishell: ");
         add_history(cmd);
         tokens_list = lexer(cmd);
-        commands_list = parser(tokens_list);
-        executor(commands_list);
+        commands_list = parser(tokens_list, status_code);
+        status_code = executor(commands_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);
         // Parser test

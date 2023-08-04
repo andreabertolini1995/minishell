@@ -35,6 +35,7 @@ typedef struct s_command
     char                *operator;
     char                *infile;
     char                *outfile;
+    int                 exit_code; // previous command
 }   t_command;
 
 
@@ -57,14 +58,14 @@ typedef struct s_token
 
 
 // Parser
-t_list      *parser(t_list *tokens_list);
+t_list      *parser(t_list *tokens_list, int status_code);
 bool        is_file(char *path_cmd);
 
 // Lexer
 t_list      *lexer(char *cmd);
 
 // Executor
-void        executor(t_list *commands_list);
+int         executor(t_list *commands_list);
 int         execute(t_command *command);
 int         **initialize_pipe_fds(int num_pipes);
 int         create_pipes(int num_pipes, int **pipe_fd);

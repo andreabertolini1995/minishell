@@ -13,7 +13,6 @@
 #include "minishell.h"
 
 extern char**   environ;
-extern int      g_exit_code;
 
 void    ft_echo(t_command *command)
 {
@@ -29,7 +28,7 @@ void    ft_echo(t_command *command)
     }
     if (is_same_string(command->args[i], "$?"))
     {
-        printf("%d", g_exit_code);
+        printf("%d", command->exit_code);
         i++;
     }
     while (i < command->num_args)
