@@ -59,3 +59,8 @@ void    ft_env()
         i++;
     }
 }
+
+void    clear()
+{
+    printf("\033[H\033[J");
+}

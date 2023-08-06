@@ -77,8 +77,6 @@ void        close_fds(int num_pipes, int **pipe_fd);
 void        wait_processes(int num_pipes, int *pids);
 
 // Redirections
-char        *get_name_outfile(t_list *commands_list);
-char        *get_name_infile(t_list *commands_list);
 void        redirect_output(t_command *command);
 void        redirect_input(t_command *command);
 bool        is_same_string(char *op1, char *op2);
@@ -90,6 +88,7 @@ void        ft_pwd();
 void        ft_env();
 void        *ft_export(t_command *command);
 void        *ft_unset(t_command *command);
+void        clear();
 
 // Error handling
 int         return_with_error(char *error_msg);

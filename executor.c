@@ -91,7 +91,8 @@ bool    is_builtin(char *cmd)
         || is_same_string(cmd, "exit")
         || is_same_string(cmd, "cd")
         || is_same_string(cmd, "export")
-        || is_same_string(cmd, "unset"))
+        || is_same_string(cmd, "unset")
+        || is_same_string(cmd, "clear"))
         return (true);
     else
         return (false);
@@ -113,6 +114,8 @@ void    execute_builtin_child(t_command *command, int *pipe_fd)
         write(pipe_fd[1], &signal_to_send, sizeof(int));
         close(pipe_fd[1]);
     }
+    else if (is_same_string(command->cmd, "clear"))
+        clear();
 }
 
 void    execute_builtin_parent(t_command *command, int *pipe_fd)

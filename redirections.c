@@ -20,52 +20,6 @@ bool    is_same_string(char *str1, char *str2)
         return (false);
 }
 
-char *get_name_outfile(t_list *commands_list)
-{
-    t_command   *command;
-    t_command   *next_command;
-
-    while (commands_list != NULL)
-    {
-        command = commands_list->content;
-        if (command->operator != NULL)
-        {
-            // Assuming there is only one single or double redirection at the end 
-            if (is_same_string(command->operator, ">")
-                || is_same_string(command->operator, ">>"))
-            {
-                next_command = commands_list->next->content;
-                return (next_command->cmd);
-            }
-        }
-        commands_list = commands_list->next;
-    }
-    return (NULL);
-}
-
-char *get_name_infile(t_list *commands_list)
-{
-    t_command   *command;
-    t_command   *next_command;
-
-    while (commands_list != NULL)
-    {
-        command = commands_list->content;
-        if (command->operator != NULL)
-        {
-            // Assuming there is only one single or double redirection at the beginning 
-            if (is_same_string(command->operator, "<")
-                || is_same_string(command->operator, "<<"))
-            {
-                next_command = commands_list->next->content;
-                return (next_command->cmd);
-            }
-        }
-        commands_list = commands_list->next;
-    }
-    return (NULL);
-}
-
 void    redirect_output(t_command *command)
 {
     int file;

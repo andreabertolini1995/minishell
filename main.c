@@ -22,7 +22,7 @@ void init_shell()
     printf("\n\n");
     printf("         by abertoli & shurlebu\n\n");
     sleep(1);
-    printf("\033[H\033[J");
+    clear();
 }
 
 int main()

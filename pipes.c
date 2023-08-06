@@ -66,7 +66,7 @@ int get_num_pipes(t_list *commands_list)
 
 static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
-    if (i == 0)
+    if (i == 0 && command->redirection == NULL)
         dup2(pipe_fd[i][1], STDOUT_FILENO);
     else if (i > 0 && i < num_pipes)
     {

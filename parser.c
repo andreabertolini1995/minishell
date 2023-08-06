@@ -125,14 +125,18 @@ t_list  *parser(t_list *tokens_list)
             if (tokens_list != NULL)
             {
                 token = tokens_list->content;
-                if (is_pipe(token->content))
-                    command->operator = token->content;
                 if (is_outfile_redirection(token->content))
                 {
                     command->redirection = token->content;
                     next_token = tokens_list->next->content;
                     command->outfile = next_token->content;
                     tokens_list = tokens_list->next->next;
+                }
+                if (tokens_list != NULL)
+                {
+                    token = tokens_list->content;
+                    if (is_pipe(token->content))
+                        command->operator = token->content;
                 }
                 if (tokens_list != NULL)
                     tokens_list = tokens_list->next;
