@@ -66,8 +66,6 @@ int get_num_pipes(t_list *commands_list)
 
 static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
-    if (i == 0 && command->infile != NULL)
-        execute(command);
     if (i == 0)
         dup2(pipe_fd[i][1], STDOUT_FILENO);
     else if (i > 0 && i < num_pipes)
@@ -78,10 +76,7 @@ static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int 
     else if (i == num_pipes)
         dup2(pipe_fd[i - 1][0], STDIN_FILENO);
     close_fds(num_pipes, pipe_fd);
-    if (i == num_pipes && command->outfile != NULL) // possibly to solve again the appending problem
-        execute(command);
-    else
-        execute(command);
+    execute(command);
     exit(1);
 }
 

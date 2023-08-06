@@ -71,7 +71,7 @@ void    redirect_output(t_command *command)
     int file;
     int file2;
     
-    if (is_same_string(command->operator, ">"))
+    if (is_same_string(command->redirection, ">"))
         file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
     else
         file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);

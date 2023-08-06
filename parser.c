@@ -20,18 +20,6 @@ bool    is_file(char *path_cmd)
         return false;
 }
 
-// static bool    is_pipe_or_redirect(char *str)
-// {
-//     if (!ft_strncmp(str, ">", ft_strlen(str))
-//         || !ft_strncmp(str, "<", ft_strlen(str))
-//         || !ft_strncmp(str, ">>", ft_strlen(str))
-//         || !ft_strncmp(str, "<<", ft_strlen(str))
-//         || !ft_strncmp(str, "|", ft_strlen(str)))
-//         return true;
-//     else
-//         return false;
-// }
-
 static t_command *create_command(int num_args)
 {
     t_command *command;
@@ -87,6 +75,15 @@ bool    is_pipe(char *cmd)
         return (false);
 }
 
+bool    is_outfile_redirection(char *cmd)
+{
+    if (is_same_string(cmd, ">")
+        || is_same_string(cmd, ">>"))
+        return (true);
+    else
+        return (false);
+}
+
 t_list  *parser(t_list *tokens_list)
 {
     t_list          *commands_list;
@@ -130,8 +127,14 @@ t_list  *parser(t_list *tokens_list)
                 token = tokens_list->content;
                 if (is_pipe(token->content))
                     command->operator = token->content;
-                /* Same to do with outfile redirections. */
-                if (token != NULL)
+                if (is_outfile_redirection(token->content))
+                {
+                    command->redirection = token->content;
+                    next_token = tokens_list->next->content;
+                    command->outfile = next_token->content;
+                    tokens_list = tokens_list->next->next;
+                }
+                if (tokens_list != NULL)
                     tokens_list = tokens_list->next;
             }
         }

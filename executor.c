@@ -204,21 +204,20 @@ void wait_processes(int num_pipes, int *pids)
     }
 }
 
-static t_list    *update_commands_list(t_list *commands_list, t_command *command, int num_pipes)
+static t_list    *update_commands_list(t_list *commands_list, int num_pipes)
 {
     int i;
 
     if (num_pipes > 0)
     {
         i = 0;
-        while (i < num_pipes)
+        while (i < (num_pipes + 1))
         {
             commands_list = commands_list->next;
             i++;
         }
     }
-    else if (command->outfile != NULL
-            || command->infile != NULL)
+    else
         commands_list = commands_list->next;
     return (commands_list);
 }
@@ -236,6 +235,6 @@ void    executor(t_list *commands_list)
             execute(command);
         else
             ft_pipe(commands_list, num_pipes);
-        commands_list = update_commands_list(commands_list, command, num_pipes);
+        commands_list = update_commands_list(commands_list, num_pipes);
     }
 }
