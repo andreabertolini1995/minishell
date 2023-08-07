@@ -77,11 +77,17 @@ static char *create_word(char *cmd, int length, int i)
 
 static char *check_if_env(char *word)
 {   
-    
-    if(word[0] == '$' && word[1] != '?')
+    int i;
+
+    i = 0;
+    while (word[i + 1] != '\0')
     {
-        word += 1;    
-        return (getenv(word));
+        if(word[i] == '$' && word[i + 1] != '?')
+        {
+            word += (i + 1);
+            return (getenv(word));
+        }
+        i++;
     }
     return(word);
 }
@@ -91,6 +97,17 @@ static bool is_there_second_single_quote(char *cmd, int i)
     while (cmd[i] != '\0')
     {
         if (cmd[i] == '\'')
+            return (true);
+        i++;
+    }
+    return (false);
+}
+
+static bool is_there_second_double_quote(char *cmd, int i)
+{
+    while (cmd[i] != '\0')
+    {
+        if (cmd[i] == '"')
             return (true);
         i++;
     }
@@ -111,6 +128,26 @@ int   check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list)
     if (length > 0)
     {
         word = create_word(cmd, length, i);
+        ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
+    }
+    return (i);
+}
+
+int   check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
+{
+    int     length;
+    char    *word;
+
+    length = 0;
+    while (cmd[i] != '"' && cmd[i] != '\0')
+    {
+        length++;
+        i++;
+    }
+    if (length > 0)
+    {
+        word = create_word(cmd, length, i);
+        word = check_if_env(word); // only a part of the word is the environment variable
         ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
     }
     return (i);
@@ -150,6 +187,11 @@ t_list  *lexer(char *cmd)
         if (cmd[i] == '\'')
             if (is_there_second_single_quote(cmd, i))
                 i = check_for_word_in_single_quotes(cmd, i + 1, &tokens_list);
+            else
+                i = check_for_word_without_quotes(cmd, i, &tokens_list);
+        else if (cmd[i] == '"')
+            if (is_there_second_double_quote(cmd, i))
+                i = check_for_word_in_double_quotes(cmd, i + 1, &tokens_list);
             else
                 i = check_for_word_without_quotes(cmd, i, &tokens_list);
         else
