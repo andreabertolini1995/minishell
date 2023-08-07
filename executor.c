@@ -69,7 +69,11 @@ static void    execute_cmd(t_command *command, char **argv, char *envp[2])
     char    **sub_paths;
 
     if (command->outfile != NULL)
+    {
         redirect_output(command);
+        // if (command->operator != NULL)
+        //     redirect_input(command);    
+    }
     if (command->infile != NULL)
         redirect_input(command);
     path = getenv("PATH");

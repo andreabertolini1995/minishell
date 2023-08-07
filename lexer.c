@@ -86,11 +86,60 @@ static char *check_if_env(char *word)
     return(word);
 }
 
+static bool is_there_second_single_quote(char *cmd, int i)
+{
+    while (cmd[i] != '\0')
+    {
+        if (cmd[i] == '\'')
+            return (true);
+        i++;
+    }
+    return (false);
+}
+
+int   check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list)
+{
+    int     length;
+    char    *word;
+
+    length = 0;
+    while (cmd[i] != '\'' && cmd[i] != '\0')
+    {
+        length++;
+        i++;
+    }
+    if (length > 0)
+    {
+        word = create_word(cmd, length, i);
+        ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
+    }
+    return (i);
+}
+
+int    check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list)
+{
+    int     length;
+    char    *word;
+
+    length = 0;
+    while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
+        && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\0')
+    {
+        length++;
+        i++;
+    }
+    if (length > 0)
+    {
+        word = create_word(cmd, length, i);
+        word = check_if_env(word);
+        ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
+    }
+    return (i);
+}
+
 t_list  *lexer(char *cmd)
 {
     size_t  i;
-    int     length;
-    char    *word;
     t_list  *tokens_list;
 
     i = 0;
@@ -98,22 +147,14 @@ t_list  *lexer(char *cmd)
     while (cmd[i] != '\0')
     {
         i = check_for_operators(cmd, i, &tokens_list);
-        length = 0;
-        // if case for "" and ' look for the 2nd parenthesis, if 2 are there, dont include them in the WORD.
-        // but include operators like "|" as chars.For " -> $ specifications. if there is only one bash calls some quote shit, where u can right in.
-        // (maybe) if (cmd[i] " or ')  while (cmd[i]!= ' or "){ length++;i++} call word_create(cmd, length, i); what to do when only open parenthesis without closing?
-        while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
-            && cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\0')
-        {
-            length++;
-            i++;
-        }
-        if (length > 0)
-        {
-            word = create_word(cmd, length, i);
-            word = check_if_env(word);
-            ft_lstadd_back(&tokens_list, ft_lstnew(create_token(word, WORD)));
-        }
+        if (cmd[i] == '\'')
+            if (is_there_second_single_quote(cmd, i))
+                i = check_for_word_in_single_quotes(cmd, i + 1, &tokens_list);
+            else
+                i = check_for_word_without_quotes(cmd, i, &tokens_list);
+        else
+            i = check_for_word_without_quotes(cmd, i, &tokens_list);
+        i++;
         while (cmd[i] == ' ' || cmd[i] == '\t')
             i++;
     }

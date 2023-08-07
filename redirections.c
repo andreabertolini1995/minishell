@@ -50,6 +50,9 @@ void    redirect_input(t_command *command)
     
     if (is_same_string(command->redirection, "<"))
         infile_redirect(command->infile);
+    /* Maybe we don't want to read anything, instead write to the pipe what we also write to the file. */
+    // else if (is_same_string(command->redirection, ">") && command->operator != NULL)
+    //     infile_redirect(command->outfile);
     else
     {
         file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
