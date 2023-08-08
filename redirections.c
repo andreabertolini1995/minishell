@@ -25,7 +25,7 @@ void    redirect_output(t_command *command)
     int file;
     int file2;
     
-    if (is_same_string(command->redirection, ">"))
+    if (is_same_string(command->outfile_redirect, ">"))
         file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
     else
         file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
@@ -48,7 +48,7 @@ void    redirect_input(t_command *command)
     int     file;
     char    *line;
     
-    if (is_same_string(command->redirection, "<"))
+    if (is_same_string(command->infile_redirect, "<"))
         infile_redirect(command->infile);
     /* Maybe we don't want to read anything, instead write to the pipe what we also write to the file. */
     // else if (is_same_string(command->redirection, ">") && command->operator != NULL)

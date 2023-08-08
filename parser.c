@@ -33,7 +33,8 @@ static t_command *create_command(int num_args, t_env *env)
     if (command->args == NULL)
         return (NULL);
     command->operator = NULL;
-    command->redirection = NULL;
+    command->infile_redirect = NULL;
+    command->outfile_redirect = NULL;
     command->infile = NULL;
     command->outfile = NULL;
     command->env = env;
@@ -117,7 +118,7 @@ t_list  *parser(t_list *tokens_list, t_env *env)
         {
             if (is_infile_redirection(token->content))
             {
-                command->redirection = token->content;
+                command->infile_redirect = token->content;
                 next_token = tokens_list->next->content;
                 command->infile = next_token->content;
                 tokens_list = tokens_list->next->next;
@@ -127,7 +128,7 @@ t_list  *parser(t_list *tokens_list, t_env *env)
                 token = tokens_list->content;
                 if (is_outfile_redirection(token->content))
                 {
-                    command->redirection = token->content;
+                    command->outfile_redirect = token->content;
                     next_token = tokens_list->next->content;
                     command->outfile = next_token->content;
                     tokens_list = tokens_list->next->next;

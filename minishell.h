@@ -40,7 +40,8 @@ typedef struct s_command
     int                 num_args;
     char                **args;
     char                *operator;
-    char                *redirection;
+    char                *outfile_redirect;
+    char                *infile_redirect;
     char                *infile;
     char                *outfile;
     t_env               *env;
