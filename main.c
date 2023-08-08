@@ -27,13 +27,35 @@ void init_shell()
 
 static t_env    *store_env(char **envp)
 {
-    t_env   *envs;
+    t_env   *env;
 
-    envs = (t_env*) malloc (sizeof(t_env));
-    if (envs == NULL)
+    env = (t_env*) malloc (sizeof(t_env));
+    if (env == NULL)
         return (NULL);
-    envs->envp = envp;
-    return (envs);
+    env->envp = envp;
+    return (env);
+}
+
+void    free_tokens(t_list *tokens_list)
+{
+    while (tokens_list != NULL)
+    {
+        free(tokens_list->content);
+        tokens_list = tokens_list->next;
+    }
+}
+
+void    free_commands(t_list *commands_list)
+{   
+    t_command *command;
+
+    while (commands_list != NULL)
+    {
+        command = commands_list->content;
+        free(command->args);
+        free(command);
+        commands_list = commands_list->next;
+    }
 }
 
 void minishell(t_env *env)
@@ -54,11 +76,12 @@ void minishell(t_env *env)
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list, env);
         executor(commands_list);
+        free_tokens(tokens_list);
+        free_commands(commands_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);
         // Parser test
         // ft_lstiter(commands_list, print_command);
-        free(cmd);
     }
 }
 
@@ -82,4 +105,5 @@ int main(int argc, char **argv, char **envp)
     signal(SIGQUIT, SIG_IGN);
     init_shell();
     minishell(env);
+    free(env);
 }

@@ -43,6 +43,7 @@ void    *ft_export(t_command *command)
     new_env[i] = command->args[0];
     new_env[i + 1] = NULL;
     command->env->envp = new_env;
+    free(new_env);
     return (NULL);
 }
 
@@ -85,6 +86,7 @@ void    *ft_unset(t_command *command)
             if (is_same_string(var_tmp, var_name))
             {
                 env[i] = NULL;
+                free(var_tmp);
                 return (NULL);
             }
             else
@@ -93,5 +95,6 @@ void    *ft_unset(t_command *command)
         i++;
     }
     command->env->envp = env;
+    free(var_tmp);
     return (NULL);
 }

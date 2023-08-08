@@ -18,9 +18,6 @@ static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char *cmd_path;
     
-    cmd_path = (char*) malloc (sizeof(char) * (ft_strlen(path) + 1 + ft_strlen(cmd)));
-    if (cmd_path == NULL)
-        return (NULL);
     cmd_path = ft_strjoin(path, "/");
     cmd_path = ft_strjoin(cmd_path, cmd);
 	return (cmd_path);
@@ -69,11 +66,7 @@ static void    execute_cmd(t_command *command, char **argv, char *envp[2])
     char    **sub_paths;
 
     if (command->outfile != NULL)
-    {
         redirect_output(command);
-        // if (command->operator != NULL)
-        //     redirect_input(command);    
-    }
     if (command->infile != NULL)
         redirect_input(command);
     path = getenv("PATH");
@@ -83,8 +76,10 @@ static void    execute_cmd(t_command *command, char **argv, char *envp[2])
     {
         perror(command->cmd);
         free(argv);
+        free(cmd_path);
         exit(1);
     }
+    free(cmd_path);
 }
 
 bool    is_builtin(char *cmd)

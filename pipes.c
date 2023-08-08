@@ -100,6 +100,18 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, int *pid
     return (0);
 }
 
+void    free_pipe_fd(int **pipe_fd, int num_pipes)
+{
+    int i;
+
+    i = 0;
+    while (i < num_pipes)
+    {
+        free(pipe_fd[i]);
+        i++;
+    }
+}
+
 int ft_pipe(t_list *commands_list, int num_pipes)
 {
     int **pipe_fd;
@@ -113,5 +125,7 @@ int ft_pipe(t_list *commands_list, int num_pipes)
     ft_fork(commands_list, pipe_fd, num_pipes, pids);
     close_fds(num_pipes, pipe_fd);
     wait_processes(num_pipes, pids);
+    free_pipe_fd(pipe_fd, num_pipes);
+    free(pids);
     return (0);
 }

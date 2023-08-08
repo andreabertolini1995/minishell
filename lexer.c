@@ -158,6 +158,8 @@ int   check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
         i++;     
     }
     ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
+    // free(tmp_word);
+    // free(final_word);
     return (i);
 }
 
