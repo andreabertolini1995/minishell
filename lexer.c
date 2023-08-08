@@ -204,7 +204,8 @@ t_list  *lexer(char *cmd)
                 i = check_for_word_without_quotes(cmd, i, &tokens_list);
         else
             i = check_for_word_without_quotes(cmd, i, &tokens_list);
-        i++;
+        if (cmd[i] != '\0')
+            i++;
         while (cmd[i] == ' ' || cmd[i] == '\t')
             i++;
     }

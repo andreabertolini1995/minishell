@@ -115,6 +115,7 @@ void    execute_builtin_child(t_command *command, int *pipe_fd)
     else if (is_same_string(command->cmd, "exit"))
     {
         signal_to_send = SIGINT;
+        printf("exit\n");
         write(pipe_fd[1], &signal_to_send, sizeof(int));
         close(pipe_fd[1]);
     }

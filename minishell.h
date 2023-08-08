@@ -103,4 +103,6 @@ int         return_with_error(char *error_msg);
 void        print_token(void *content);
 void        print_command(void *content);
 
+// Signals
+
 #endif

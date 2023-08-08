@@ -36,20 +36,20 @@ static t_env    *store_env(char **envp)
     return (envs);
 }
 
-int main(int argc, char **argv, char **envp)
+void minishell(t_env *env)
 {
-    char* cmd;
+    char    *cmd;
     t_list  *tokens_list;
     t_list  *commands_list;
-    t_env   *env;
 
-    (void)argc;
-    (void)argv;
-    env = store_env(envp);
-    init_shell();
     while (42)
     {
         cmd = readline("***: ");
+        if (cmd == NULL)
+        {
+            printf("exit\n");
+            exit(0);
+        }
         add_history(cmd);
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list, env);
@@ -58,5 +58,28 @@ int main(int argc, char **argv, char **envp)
         // ft_lstiter(tokens_list, print_token);
         // Parser test
         // ft_lstiter(commands_list, print_command);
+        free(cmd);
     }
+}
+
+void signal_handler(int signum)
+{    
+    if (signum == SIGINT)
+    {
+        rl_replace_line("", 0);
+        printf("\n***: ");
+    }
+}
+
+int main(int argc, char **argv, char **envp)
+{
+    t_env   *env;
+
+    (void)argc;
+    (void)argv;
+    env = store_env(envp);
+    signal(SIGINT, signal_handler);
+    signal(SIGQUIT, SIG_IGN);
+    init_shell();
+    minishell(env);
 }
