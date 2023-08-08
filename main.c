@@ -25,19 +25,34 @@ void init_shell()
     clear();
 }
 
-int main()
+static t_env    *store_env(char **envp)
+{
+    t_env   *envs;
+
+    envs = (t_env*) malloc (sizeof(t_env));
+    if (envs == NULL)
+        return (NULL);
+    envs->envp = envp;
+    return (envs);
+}
+
+int main(int argc, char **argv, char **envp)
 {
     char* cmd;
     t_list  *tokens_list;
     t_list  *commands_list;
+    t_env   *env;
 
+    (void)argc;
+    (void)argv;
+    env = store_env(envp);
     init_shell();
     while (42)
     {
         cmd = readline("***: ");
         add_history(cmd);
         tokens_list = lexer(cmd);
-        commands_list = parser(tokens_list);
+        commands_list = parser(tokens_list, env);
         executor(commands_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);

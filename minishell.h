@@ -27,7 +27,12 @@
 # include <signal.h>
 # include "libft/libft.h"
 
-extern char**   environ;
+extern int g_exit_code;
+
+typedef struct s_env
+{
+    char **envp;
+}   t_env;
 
 typedef struct s_command
 {
@@ -38,7 +43,8 @@ typedef struct s_command
     char                *redirection;
     char                *infile;
     char                *outfile;
-    }   t_command;
+    t_env               *env;
+}   t_command;
 
 
 typedef enum e_token_type
@@ -60,7 +66,7 @@ typedef struct s_token
 
 
 // Parser
-t_list      *parser(t_list *tokens_list);
+t_list      *parser(t_list *tokens_list, t_env *env);
 bool        is_file(char *path_cmd);
 
 // Lexer
@@ -85,7 +91,7 @@ bool        is_same_string(char *op1, char *op2);
 void        ft_echo(t_command *command);
 void        ft_cd(t_command *command);
 void        ft_pwd();
-void        ft_env();
+void        ft_env(t_command *command);
 void        *ft_export(t_command *command);
 void        *ft_unset(t_command *command);
 void        clear();

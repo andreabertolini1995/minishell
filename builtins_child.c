@@ -49,12 +49,12 @@ void    ft_pwd()
     printf("%s\n", getcwd(buffer, sizeof(buffer)));
 }
 
-void    ft_env()
+void    ft_env(t_command *command)
 {
     char**  env;
     int     i;
     
-    env = environ;
+    env = command->env->envp;
     i = 0;
     while (env[i] != NULL) {
         printf("%s\n", env[i]);

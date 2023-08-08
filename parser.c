@@ -20,7 +20,7 @@ bool    is_file(char *path_cmd)
         return false;
 }
 
-static t_command *create_command(int num_args)
+static t_command *create_command(int num_args, t_env *env)
 {
     t_command *command;
 
@@ -32,11 +32,11 @@ static t_command *create_command(int num_args)
     command->args = (char**) malloc (sizeof(char*) * num_args);
     if (command->args == NULL)
         return (NULL);
-    // command->pipe = false;
     command->operator = NULL;
     command->redirection = NULL;
     command->infile = NULL;
     command->outfile = NULL;
+    command->env = env;
     return (command);
 }
 
@@ -84,7 +84,7 @@ bool    is_outfile_redirection(char *cmd)
         return (false);
 }
 
-t_list  *parser(t_list *tokens_list)
+t_list  *parser(t_list *tokens_list, t_env *env)
 {
     t_list          *commands_list;
     t_token         *token;
@@ -98,7 +98,7 @@ t_list  *parser(t_list *tokens_list)
     {
         token = tokens_list->content;
         num_args = ft_num_args(tokens_list);
-        command = create_command(num_args);
+        command = create_command(num_args, env);
         arg_index = 0;
         while (token->type == WORD && tokens_list != NULL)
         {

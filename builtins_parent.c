@@ -27,7 +27,7 @@ void    *ft_export(t_command *command)
     int     length;
     int     i;
     
-    env = environ;
+    env = command->env->envp;
     length = 0;
     while (env[length] != NULL)
         length++;
@@ -42,7 +42,7 @@ void    *ft_export(t_command *command)
     }
     new_env[i] = command->args[0];
     new_env[i + 1] = NULL;
-    environ = new_env;
+    command->env->envp = new_env;
     return (NULL);
 }
 
@@ -74,7 +74,7 @@ void    *ft_unset(t_command *command)
     int     j;
     
     var_name = command->args[0];
-    env = environ;
+    env = command->env->envp;
     i = 0;
     while (env[i] != NULL)
     {
@@ -92,6 +92,6 @@ void    *ft_unset(t_command *command)
         }
         i++;
     }
-    environ = env;
+    command->env->envp = env;
     return (NULL);
 }
