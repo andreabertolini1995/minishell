@@ -12,14 +12,6 @@
 
 #include "../include/minishell.h"
 
-bool    is_same_string(char *str1, char *str2)
-{
-    if (!ft_strncmp(str1, str2, ft_strlen(str1)))
-        return (true);
-    else
-        return (false);
-}
-
 void    redirect_output(t_command *command)
 {
     int file;
@@ -50,9 +42,6 @@ void    redirect_input(t_command *command)
     
     if (is_same_string(command->infile_redirect, "<"))
         infile_redirect(command->infile);
-    /* Maybe we don't want to read anything, instead write to the pipe what we also write to the file. */
-    // else if (is_same_string(command->redirection, ">") && command->operator != NULL)
-    //     infile_redirect(command->outfile);
     else
     {
         file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);

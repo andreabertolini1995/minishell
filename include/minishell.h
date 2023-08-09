@@ -86,7 +86,6 @@ void        wait_processes(int num_pipes, int *pids);
 // Redirections
 void        redirect_output(t_command *command);
 void        redirect_input(t_command *command);
-bool        is_same_string(char *op1, char *op2);
 
 // Builtins
 void        ft_echo(t_command *command);
@@ -97,12 +96,15 @@ void        *ft_export(t_command *command);
 void        *ft_unset(t_command *command);
 void        clear();
 
-// Error handling
+// Utils
 int         return_with_error(char *error_msg);
-
-// Prints
 void        print_token(void *content);
 void        print_command(void *content);
+bool        is_file(char *path_cmd);
+bool        is_same_string(char *op1, char *op2);
+bool        is_infile_redirection(char *cmd);
+bool        is_pipe(char *cmd);
+bool        is_outfile_redirection(char *cmd);
 
 // Signals
 
