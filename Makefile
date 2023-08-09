@@ -14,7 +14,7 @@ READLINE_FLAGS = -lreadline
 all: $(NAME)	
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(LEAKS_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
 
 $(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

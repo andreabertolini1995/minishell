@@ -17,7 +17,7 @@ extern int  g_exit_code;
 static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char *cmd_path;
-    
+
     cmd_path = ft_strjoin(path, "/");
     cmd_path = ft_strjoin(cmd_path, cmd);
 	return (cmd_path);
@@ -140,6 +140,19 @@ void    execute_builtin_parent(t_command *command, int *pipe_fd)
     }
 }
 
+void    free_argv(char **argv)
+{
+    int i;
+
+    i = 1;
+    while (argv[i] != NULL)
+    {
+        free(argv[i]);
+        i++;
+    }
+    free(argv);
+}
+
 void    child_process(t_command *command, int *pipe_fd)
 {
     char    **argv;
@@ -153,7 +166,7 @@ void    child_process(t_command *command, int *pipe_fd)
     else
         execute_cmd(command, argv, envp);
     close(pipe_fd[1]);
-    free(argv);
+    free_argv(argv);
     exit(1);
 }
 

@@ -104,10 +104,10 @@ t_list  *parser(t_list *tokens_list, t_env *env)
         while (token->type == WORD && tokens_list != NULL)
         {
             if (command->cmd == NULL)
-                command->cmd = token->content;
+                command->cmd = ft_strdup(token->content);
             else
             {
-                command->args[arg_index] = token->content;
+                command->args[arg_index] = ft_strdup(token->content);
                 arg_index++;
             }
             tokens_list = tokens_list->next;
@@ -118,9 +118,9 @@ t_list  *parser(t_list *tokens_list, t_env *env)
         {
             if (is_infile_redirection(token->content))
             {
-                command->infile_redirect = token->content;
+                command->infile_redirect = ft_strdup(token->content);
                 next_token = tokens_list->next->content;
-                command->infile = next_token->content;
+                command->infile = ft_strdup(next_token->content);
                 tokens_list = tokens_list->next->next;
             }
             if (tokens_list != NULL)
@@ -128,16 +128,16 @@ t_list  *parser(t_list *tokens_list, t_env *env)
                 token = tokens_list->content;
                 if (is_outfile_redirection(token->content))
                 {
-                    command->outfile_redirect = token->content;
+                    command->outfile_redirect = ft_strdup(token->content);
                     next_token = tokens_list->next->content;
-                    command->outfile = next_token->content;
+                    command->outfile = ft_strdup(next_token->content);
                     tokens_list = tokens_list->next->next;
                 }
                 if (tokens_list != NULL)
                 {
                     token = tokens_list->content;
                     if (is_pipe(token->content))
-                        command->operator = token->content;
+                        command->operator = ft_strdup(token->content);
                 }
                 if (tokens_list != NULL)
                     tokens_list = tokens_list->next;

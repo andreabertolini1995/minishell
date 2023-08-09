@@ -110,6 +110,7 @@ void    free_pipe_fd(int **pipe_fd, int num_pipes)
         free(pipe_fd[i]);
         i++;
     }
+    free(pipe_fd);
 }
 
 int ft_pipe(t_list *commands_list, int num_pipes)

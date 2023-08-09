@@ -89,7 +89,7 @@ static char *check_if_env(char *word)
         }
         i++;
     }
-    return(word);
+    return (word);
 }
 
 static bool is_there_second_single_quote(char *cmd, int i)
@@ -155,11 +155,10 @@ int   check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
         if ((i - length) > start)
             final_word = ft_strjoin(final_word, " ");
         final_word = ft_strjoin(final_word, tmp_word);
+        free(tmp_word);
         i++;     
     }
     ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
-    // free(tmp_word);
-    // free(final_word);
     return (i);
 }
 

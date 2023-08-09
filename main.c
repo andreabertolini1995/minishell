@@ -38,23 +38,61 @@ static t_env    *store_env(char **envp)
 
 void    free_tokens(t_list *tokens_list)
 {
+    t_list  *tmp;
+    t_token *token;
+
     while (tokens_list != NULL)
     {
-        free(tokens_list->content);
-        tokens_list = tokens_list->next;
+        tmp = tokens_list->next;
+        token = tokens_list->content;
+        if (token->type == WORD)
+            free(token->content);
+        free(token);
+        free(tokens_list);
+        tokens_list = tmp;
     }
+}
+
+void free_env(t_env *env)
+{
+    int i;
+
+    i = 0;
+    while (env->envp[i] != NULL)
+    {
+        free(env->envp[i]);
+        i++;
+    }
+    free(env->envp);
+    free(env);
 }
 
 void    free_commands(t_list *commands_list)
 {   
-    t_command *command;
+    t_list      *tmp;
+    t_command   *command;
+    int         i;
 
     while (commands_list != NULL)
     {
+        tmp = commands_list->next;
         command = commands_list->content;
+        i = 0;
+        while (i < command->num_args)
+        {
+            free(command->args[i]);
+            i++;
+        }
         free(command->args);
+        free(command->cmd);
+        free(command->infile);
+        free(command->outfile);
+        free(command->infile_redirect);
+        free(command->outfile_redirect);
+        free(command->operator);
         free(command);
-        commands_list = commands_list->next;
+        free(commands_list);
+        commands_list = tmp;
     }
 }
 
@@ -75,8 +113,8 @@ void minishell(t_env *env)
         add_history(cmd);
         tokens_list = lexer(cmd);
         commands_list = parser(tokens_list, env);
-        executor(commands_list);
         free_tokens(tokens_list);
+        executor(commands_list);
         free_commands(commands_list);
         // Lexer test
         // ft_lstiter(tokens_list, print_token);
@@ -105,5 +143,5 @@ int main(int argc, char **argv, char **envp)
     signal(SIGQUIT, SIG_IGN);
     init_shell();
     minishell(env);
-    free(env);
+    // free_env(env);
 }
