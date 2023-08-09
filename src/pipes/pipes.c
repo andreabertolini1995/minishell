@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../include/minishell.h"
 
 int **initialize_pipe_fds(int num_pipes)
 {
@@ -67,7 +67,7 @@ int get_num_pipes(t_list *commands_list)
 static void    set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 {
     if (i == 0)
-        dup2(pipe_fd[i][1], STDOUT_FILENO); // maybe the problem is here
+        dup2(pipe_fd[i][1], STDOUT_FILENO);
     else if (i > 0 && i < num_pipes)
     {
         dup2(pipe_fd[i - 1][0], STDIN_FILENO);

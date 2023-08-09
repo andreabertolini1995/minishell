@@ -1,9 +1,10 @@
 NAME = minishell
-SOURCES = main.c parser.c lexer.c prints.c executor.c pipes.c redirections.c error_handling.c builtins_child.c builtins_parent.c signals.c
+SRCDIR = src
+SOURCES = $(wildcard $(SRCDIR)/**/*.c $(SRCDIR)/*.c)
 OBJ_DIR = obj
-OBJS = $(addprefix $(OBJ_DIR)/, $(SOURCES:.c=.o))
+OBJS = $(patsubst $(SOURCES)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 LIBFT = libft/libft.a
-INCLUDES = -I libft/includes
+INCLUDES = -I libft/includes -I include
 
 CC = cc
 RM = rm -f
@@ -11,12 +12,12 @@ CFLAGS = -Wall -Wextra -Werror
 LEAKS_FLAGS = -fsanitize=address -fno-omit-frame-pointer
 READLINE_FLAGS = -lreadline
 
-all: $(NAME)	
+all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(LEAKS_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(READLINE_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
 
-$(OBJ_DIR)/%.o: %.c | $(OBJ_DIR)
+$(OBJ_DIR)/%.o: $(SRCDIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(LIBFT):

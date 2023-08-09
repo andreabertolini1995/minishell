@@ -1,9 +1,0 @@
-total 44
--rwxr-xr-x 1 abertoli 2022_berlin 16112 Jul 26 14:31 a.out
--rw-r--r-- 1 abertoli 2022_berlin   508 Jul 26 14:31 create_file.c
--rwxr-xr-x 1 abertoli 2022_berlin     0 Jul 26 14:31 example.txt
--rw-r--r-- 1 abertoli 2022_berlin   163 Jul 24 11:54 file_exists.c
--rw-r--r-- 1 abertoli 2022_berlin  1294 Jul 18 11:46 minishell.h
--rw-r--r-- 1 abertoli 2022_berlin  1444 Jul 18 11:58 pipe_example.c
--rw-r--r-- 1 abertoli 2022_berlin  4297 Jul 25 19:14 pipex.c
--rw-r--r-- 1 abertoli 2022_berlin  1051 Jul 24 11:54 test.c

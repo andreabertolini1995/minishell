@@ -25,7 +25,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <signal.h>
-# include "libft/libft.h"
+# include "../libft/libft.h"
 
 extern int g_exit_code;
 

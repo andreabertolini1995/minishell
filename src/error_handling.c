@@ -10,5 +10,10 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../include/minishell.h"
 
+int return_with_error(char *error_msg)
+{
+    perror(error_msg);
+    return (1);
+}
