@@ -72,6 +72,9 @@ bool        is_file(char *path_cmd);
 
 // Lexer
 t_list      *lexer(char *cmd);
+int         check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list);
+int         check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list);
+int         check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list);
 
 // Executor
 void        executor(t_list *commands_list);
@@ -105,6 +108,8 @@ bool        is_same_string(char *op1, char *op2);
 bool        is_infile_redirection(char *cmd);
 bool        is_pipe(char *cmd);
 bool        is_outfile_redirection(char *cmd);
+t_token     *create_token(char *str, int type);
+t_command   *create_command(int num_args, t_env *env);
 
 // Signals
 

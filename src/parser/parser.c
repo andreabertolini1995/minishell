@@ -12,114 +12,95 @@
 
 #include "../include/minishell.h"
 
-static t_command *create_command(int num_args, t_env *env)
+static int	ft_num_args(t_list *tokens_list)
 {
-    t_command *command;
+	int		num_args;
+	t_token	*token;
 
-    command = (t_command *) malloc (sizeof(t_command));
-    if (command == NULL)
-        return (NULL);
-    command->cmd = NULL;
-    command->num_args = num_args;
-    command->args = (char**) malloc (sizeof(char*) * num_args);
-    if (command->args == NULL)
-        return (NULL);
-    command->operator = NULL;
-    command->infile_redirect = NULL;
-    command->outfile_redirect = NULL;
-    command->infile = NULL;
-    command->outfile = NULL;
-    command->env = env;
-    return (command);
+	num_args = 0;
+	token = tokens_list->content;
+	while (token->type == WORD && tokens_list != NULL)
+	{
+		num_args++;
+		tokens_list = tokens_list->next;
+		if (tokens_list != NULL)
+			token = tokens_list->content;
+	}
+	return (num_args - 1);
 }
 
-static int ft_num_args(t_list *tokens_list)
+static void	add_redirection(t_command *command,
+			t_token *token, t_list **tokens_list)
 {
-    int     num_args;
-    t_token *token;
+	t_token	*next_token;
 
-    num_args = 0;
-    token = tokens_list->content;
-    while (token->type == WORD && tokens_list != NULL)
-    {
-        num_args++;
-        tokens_list = tokens_list->next;
-        if (tokens_list != NULL)
-            token = tokens_list->content;
-    }
-    
-    return (num_args - 1);
+	command->infile_redirect = ft_strdup(token->content);
+	next_token = (*tokens_list)->next->content;
+	command->infile = ft_strdup(next_token->content);
+	*tokens_list = (*tokens_list)->next->next;
 }
 
-static void    add_redirection(t_command *command, t_token *token, t_list **tokens_list)
+static void	parse_cmd_args(t_command *command,
+			t_list **tokens_list, t_token **token)
 {
-    t_token *next_token;
+	int	arg_index;
 
-    command->infile_redirect = ft_strdup(token->content);
-    next_token = (*tokens_list)->next->content;
-    command->infile = ft_strdup(next_token->content);
-    *tokens_list = (*tokens_list)->next->next;
+	arg_index = 0;
+	while ((*token)->type == WORD && (*tokens_list) != NULL)
+	{
+		if (command->cmd == NULL)
+			command->cmd = ft_strdup((*token)->content);
+		else
+		{
+			command->args[arg_index] = ft_strdup((*token)->content);
+			arg_index++;
+		}
+		(*tokens_list) = (*tokens_list)->next;
+		if ((*tokens_list) != NULL)
+			(*token) = (*tokens_list)->content;
+	}
 }
 
-static void    parse_cmd_args(t_command *command, t_list **tokens_list, t_token **token)
+static void	parse_redirections_pipes(t_command *command,
+			t_list **tokens_list, t_token **token)
 {
-    int     arg_index;
-
-    arg_index = 0;
-    while ((*token)->type == WORD && (*tokens_list) != NULL)
-    {
-        if (command->cmd == NULL)
-            command->cmd = ft_strdup((*token)->content);
-        else
-        {
-            command->args[arg_index] = ft_strdup((*token)->content);
-            arg_index++;
-        }
-        (*tokens_list) = (*tokens_list)->next;
-        if ((*tokens_list) != NULL)
-            (*token) = (*tokens_list)->content;
-    }
+	if (tokens_list != NULL)
+	{
+		if (is_infile_redirection((*token)->content))
+			add_redirection(command, *token, tokens_list);
+		if ((*tokens_list) != NULL)
+		{
+			(*token) = (*tokens_list)->content;
+			if (is_outfile_redirection((*token)->content))
+				add_redirection(command, *token, tokens_list);
+			if (tokens_list != NULL)
+			{
+				(*token) = (*tokens_list)->content;
+				if (is_pipe((*token)->content))
+					command->operator = ft_strdup((*token)->content);
+			}
+			if ((*tokens_list) != NULL)
+				(*tokens_list) = (*tokens_list)->next;
+		}
+	}
 }
 
-static void    parse_redirections_pipes(t_command *command, t_list **tokens_list, t_token **token)
+t_list	*parser(t_list *tokens_list, t_env *env)
 {
-    if (tokens_list != NULL)
-    {
-        if (is_infile_redirection((*token)->content))
-            add_redirection(command, *token, tokens_list);
-        if ((*tokens_list) != NULL)
-        {
-            (*token) = (*tokens_list)->content;
-            if (is_outfile_redirection((*token)->content))
-                add_redirection(command, *token, tokens_list);
-            if (tokens_list != NULL)
-            {
-                (*token) = (*tokens_list)->content;
-                if (is_pipe((*token)->content))
-                    command->operator = ft_strdup((*token)->content);
-            }
-            if ((*tokens_list) != NULL)
-                (*tokens_list) = (*tokens_list)->next;
-        }
-    }
-}
+	t_list		*commands_list;
+	t_token		*token;
+	t_command	*command;
+	int			num_args;
 
-t_list  *parser(t_list *tokens_list, t_env *env)
-{
-    t_list          *commands_list;
-    t_token         *token;
-    t_command       *command;
-    int             num_args;
-
-    commands_list = NULL;
-    while (tokens_list != NULL)
-    {
-        token = tokens_list->content;
-        num_args = ft_num_args(tokens_list);
-        command = create_command(num_args, env);
-        parse_cmd_args(command, &tokens_list, &token);
-        parse_redirections_pipes(command, &tokens_list, &token);
-        ft_lstadd_back(&commands_list, ft_lstnew(command));
-    }
-    return (commands_list);
+	commands_list = NULL;
+	while (tokens_list != NULL)
+	{
+		token = tokens_list->content;
+		num_args = ft_num_args(tokens_list);
+		command = create_command(num_args, env);
+		parse_cmd_args(command, &tokens_list, &token);
+		parse_redirections_pipes(command, &tokens_list, &token);
+		ft_lstadd_back(&commands_list, ft_lstnew(command));
+	}
+	return (commands_list);
 }
