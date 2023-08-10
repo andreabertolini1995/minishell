@@ -12,35 +12,62 @@
 
 #include "../include/minishell.h"
 
-t_token	*create_token(char *str, int type)
+void	free_tokens(t_list *tokens_list)
 {
+	t_list	*tmp;
 	t_token	*token;
 
-	token = (t_token *) malloc (sizeof(t_token));
-	if (token == NULL)
-		return (NULL);
-	token->content = str;
-	token->type = type;
-	return (token);
+	while (tokens_list != NULL)
+	{
+		tmp = tokens_list->next;
+		token = tokens_list->content;
+		if (token->type == WORD)
+			free(token->content);
+		free(token);
+		free(tokens_list);
+		tokens_list = tmp;
+	}
 }
 
-t_command	*create_command(int num_args, t_env *env)
+void	free_env(t_env *env)
 {
-	t_command	*command;
+	int	i;
 
-	command = (t_command *) malloc (sizeof(t_command));
-	if (command == NULL)
-		return (NULL);
-	command->cmd = NULL;
-	command->num_args = num_args;
-	command->args = (char **) malloc (sizeof(char *) * num_args);
-	if (command->args == NULL)
-		return (NULL);
-	command->operator = NULL;
-	command->infile_redirect = NULL;
-	command->outfile_redirect = NULL;
-	command->infile = NULL;
-	command->outfile = NULL;
-	command->env = env;
-	return (command);
+	i = 0;
+	while (env->envp[i] != NULL)
+	{
+		free(env->envp[i]);
+		i++;
+	}
+	free(env->envp);
+	free(env);
+}
+
+void	free_commands(t_list *commands_list)
+{
+	t_list		*tmp;
+	t_command	*command;
+	int			i;
+
+	while (commands_list != NULL)
+	{
+		tmp = commands_list->next;
+		command = commands_list->content;
+		i = 0;
+		while (i < command->num_args)
+		{
+			free(command->args[i]);
+			i++;
+		}
+		free(command->args);
+		free(command->cmd);
+		free(command->infile);
+		free(command->outfile);
+		free(command->infile_redirect);
+		free(command->outfile_redirect);
+		free(command->operator);
+		free(command);
+		free(commands_list);
+		commands_list = tmp;
+	}
 }

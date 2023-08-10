@@ -36,7 +36,7 @@ int	ft_calc_trim_size(char const *s1, char const *set)
 	chars_back = 0;
 	i = 0;
 	while (ft_is_in_set(set, s1[i]))
-	{	
+	{
 		chars_front++;
 		i++;
 	}
