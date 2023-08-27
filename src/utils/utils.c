@@ -12,44 +12,44 @@
 
 #include "../include/minishell.h"
 
-bool    is_file(char *path_cmd)
+bool	is_file(char *path_cmd)
 {
-    if (access(path_cmd, F_OK) == 0)
-        return true;
-    else
-        return false;
+	if (access(path_cmd, F_OK) == 0)
+		return (true);
+	else
+		return (false);
 }
 
-bool    is_same_string(char *str1, char *str2)
+bool	is_same_string(char *str1, char *str2)
 {
-    if (!ft_strncmp(str1, str2, ft_strlen(str1)))
-        return (true);
-    else
-        return (false);
+	if (!ft_strncmp(str1, str2, ft_strlen(str1)))
+		return (true);
+	else
+		return (false);
 }
 
-bool    is_infile_redirection(char *cmd)
+bool	is_infile_redirection(char *cmd)
 {
-    if (is_same_string(cmd, "<")
-        || is_same_string(cmd, "<<"))
-        return (true);
-    else
-        return (false);
+	if (is_same_string(cmd, "<")
+		|| is_same_string(cmd, "<<"))
+		return (true);
+	else
+		return (false);
 }
 
-bool    is_pipe(char *cmd)
+bool	is_pipe(char *cmd)
 {
-    if (is_same_string(cmd, "|"))
-        return (true);
-    else
-        return (false);
+	if (is_same_string(cmd, "|"))
+		return (true);
+	else
+		return (false);
 }
 
-bool    is_outfile_redirection(char *cmd)
+bool	is_outfile_redirection(char *cmd)
 {
-    if (is_same_string(cmd, ">")
-        || is_same_string(cmd, ">>"))
-        return (true);
-    else
-        return (false);
+	if (is_same_string(cmd, ">")
+		|| is_same_string(cmd, ">>"))
+		return (true);
+	else
+		return (false);
 }
