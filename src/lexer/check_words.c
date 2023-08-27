@@ -89,7 +89,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
 		if ((i - length) > start)
 			final_word = ft_strjoin("", " ");
 		final_word = ft_strjoin(final_word, tmp_word);
-		free(tmp_word);
+		// free(tmp_word);
 		i++;
 	}
 	ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
