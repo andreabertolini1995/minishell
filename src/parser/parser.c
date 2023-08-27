@@ -30,14 +30,23 @@ static int	ft_num_args(t_list *tokens_list)
 }
 
 static void	add_redirection(t_command *command,
-			t_token *token, t_list **tokens_list)
+			t_token *token, t_list **tokens_list, char *str)
 {
 	t_token	*next_token;
 
-	command->infile_redirect = ft_strdup(token->content);
-	next_token = (*tokens_list)->next->content;
-	command->infile = ft_strdup(next_token->content);
-	*tokens_list = (*tokens_list)->next->next;
+    if (is_same_string(str, "infile"))
+    {
+        command->infile_redirect = token->content;
+        next_token = (*tokens_list)->next->content;
+        command->infile = ft_strdup(next_token->content);
+    }
+    else
+    {
+        command->outfile_redirect = token->content;
+        next_token = (*tokens_list)->next->content;
+        command->outfile = ft_strdup(next_token->content);
+    }
+    *tokens_list = (*tokens_list)->next->next;
 }
 
 static void	parse_cmd_args(t_command *command,
@@ -72,13 +81,13 @@ static void	parse_redirections_pipes(t_command *command,
 	if (tokens_list != NULL && (*token)->content != NULL)
 	{
 		if (is_infile_redirection((*token)->content))
-			add_redirection(command, *token, tokens_list);
+			add_redirection(command, *token, tokens_list, "infile");
 		if ((*tokens_list) != NULL)
 		{
 			(*token) = (*tokens_list)->content;
 			if (is_outfile_redirection((*token)->content))
-				add_redirection(command, *token, tokens_list);
-			if (tokens_list != NULL)
+				add_redirection(command, *token, tokens_list, "outfile");
+			if ((*tokens_list) != NULL)
 			{
 				(*token) = (*tokens_list)->content;
 				if (is_pipe((*token)->content))
