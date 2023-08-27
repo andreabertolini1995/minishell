@@ -69,31 +69,32 @@ int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list)
 
 int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
 {
-	int		length;
-	char	*tmp_word;
-	char	*final_word;
-	int		start;
+    int     length;
+    char    *tmp_word;
+    char    *final_word;
+    int     start;
 
-	start = i;
-	while (cmd[i] != '"' && cmd[i] != '\0')
-	{
-		length = 0;
-		while (cmd[i] != '"' && cmd[i] != ' '
+    start = i;
+    final_word = "";
+    while (cmd[i] != '"' && cmd[i] != '\0')
+    {
+        length = 0;
+        while (cmd[i] != '"' && cmd[i] != ' '
 			&& cmd[i] != '\t' && cmd[i] != '\0')
-		{
-			length++;
-			i++;
-		}
-		tmp_word = create_word(cmd, length, i);
-		tmp_word = check_if_env(tmp_word);
-		if ((i - length) > start)
-			final_word = ft_strjoin("", " ");
-		final_word = ft_strjoin(final_word, tmp_word);
+        {
+            length++;
+            i++;
+        }
+        tmp_word = create_word(cmd, length, i);
+        tmp_word = check_if_env(tmp_word);
+        if ((i - length) > start)
+            final_word = ft_strjoin(final_word, " ");
+        final_word = ft_strjoin(final_word, tmp_word);
 		// free(tmp_word);
-		i++;
-	}
-	ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
-	return (i);
+        i++;     
+    }
+    ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
+    return (i);
 }
 
 int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list)
