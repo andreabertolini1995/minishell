@@ -22,7 +22,7 @@ void	free_tokens(t_list *tokens_list)
 		tmp = tokens_list->next;
 		token = tokens_list->content;
 		if (token->type == WORD)
-			free(token->content);
+			free(token->content); // to check if the word belongs to the env
 		free(token);
 		free(tokens_list);
 		tokens_list = tmp;

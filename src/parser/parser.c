@@ -49,7 +49,12 @@ static void	parse_cmd_args(t_command *command,
 	while ((*token)->type == WORD && (*tokens_list) != NULL)
 	{
 		if (command->cmd == NULL)
-			command->cmd = ft_strdup((*token)->content);
+		{
+			if ((*token)->content == NULL) // in case $(not-env-variable)
+				command->cmd = NULL;
+			else
+				command->cmd = ft_strdup((*token)->content);
+		}
 		else
 		{
 			command->args[arg_index] = ft_strdup((*token)->content);
@@ -64,7 +69,7 @@ static void	parse_cmd_args(t_command *command,
 static void	parse_redirections_pipes(t_command *command,
 			t_list **tokens_list, t_token **token)
 {
-	if (tokens_list != NULL)
+	if (tokens_list != NULL && (*token)->content != NULL)
 	{
 		if (is_infile_redirection((*token)->content))
 			add_redirection(command, *token, tokens_list);

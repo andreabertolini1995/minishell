@@ -27,7 +27,9 @@ void	free_argv(char **argv)
 
 bool	is_builtin(char *cmd)
 {
-	if (is_same_string(cmd, "pwd")
+	if (cmd != NULL)
+	{
+		if (is_same_string(cmd, "pwd")
 		|| is_same_string(cmd, "env")
 		|| is_same_string(cmd, "echo")
 		|| is_same_string(cmd, "exit")
@@ -36,8 +38,10 @@ bool	is_builtin(char *cmd)
 		|| is_same_string(cmd, "unset")
 		|| is_same_string(cmd, "clear"))
 		return (true);
-	else
-		return (false);
+		else
+			return (false);
+	}
+	return (false);
 }
 
 t_list	*update_commands_list(t_list *commands_list, int num_pipes)

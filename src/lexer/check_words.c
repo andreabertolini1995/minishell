@@ -48,7 +48,7 @@ static char	*check_if_env(char *word)
 	return (word);
 }
 
-int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list)
+int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
 {
 	int		length;
 	char	*word;
@@ -62,12 +62,12 @@ int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list)
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
-		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
+		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
 	return (i);
 }
 
-int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
+int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
 {
     int     length;
     char    *tmp_word;
@@ -93,11 +93,11 @@ int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list)
 		// free(tmp_word);
         i++;     
     }
-    ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD)));
+    ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD, env)));
     return (i);
 }
 
-int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list)
+int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
 {
 	int		length;
 	char	*word;
@@ -113,7 +113,7 @@ int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list)
 	{
 		word = create_word(cmd, length, i);
 		word = check_if_env(word);
-		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD)));
+		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
 	return (i);
 }

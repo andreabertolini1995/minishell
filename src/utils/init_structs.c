@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-t_token	*create_token(char *str, int type)
+t_token	*create_token(char *str, int type, t_env *env)
 {
 	t_token	*token;
 
@@ -21,6 +21,7 @@ t_token	*create_token(char *str, int type)
 		return (NULL);
 	token->content = str;
 	token->type = type;
+	token->env = env;
 	return (token);
 }
 

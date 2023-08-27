@@ -51,7 +51,7 @@ void	minishell(t_env *env)
 			exit(0);
 		}
 		add_history(cmd);
-		tokens_list = lexer(cmd);
+		tokens_list = lexer(cmd, env);
 		commands_list = parser(tokens_list, env);
 		free_tokens(tokens_list);
 		executor(commands_list);
@@ -67,7 +67,7 @@ void	signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		rl_replace_line("", 0);
+		// rl_replace_line("", 0);
 		printf("\n***: ");
 	}
 }
