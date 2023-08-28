@@ -30,7 +30,7 @@ char	**fill_new_env(t_command *command, char **env)
 	length = 0;
 	while (env[length] != NULL)
 		length++;
-	new_env = (char **) malloc (sizeof(char *) * (length + 1));
+	new_env = (char **) malloc (sizeof(char *) * (length + 2));
 	if (new_env == NULL)
 		return (NULL);
 	i = 0;
