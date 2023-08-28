@@ -14,18 +14,35 @@
 
 int	g_exit_code;
 
+static bool	check_new_line(char *option)
+{
+	size_t i;
+
+	i = 0;
+
+	if (option[i] != '-' && option[i + 1] != 'n')
+		return (true);
+	while (option[i] != '\0')
+	{
+		if (option[i] == '-')
+			i++;
+		while(option[i] == 'n')
+			i++;
+	}
+	if (i == ft_strlen(option))
+		return (false);
+	return (true);
+}
+
 void	ft_echo(t_command *command)
 {
 	int		i;
 	bool	new_line;
 
 	i = 0;
-	new_line = true;
-	if (is_same_string(command->args[i], "-n"))
-	{
-		new_line = false;
+	new_line = check_new_line(command->args[i]);
+	if (new_line == false)
 		i++;
-	}
 	if (is_same_string(command->args[i], "$?"))
 	{
 		printf("%d", g_exit_code);
