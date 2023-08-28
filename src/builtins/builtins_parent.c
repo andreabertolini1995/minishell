@@ -50,6 +50,8 @@ void	*ft_export(t_command *command)
 	char	**new_env;
 	int		i;
 
+	if (command->num_args == 0)
+		ft_env(command, "export");
 	env = command->env->envp;
 	new_env = fill_new_env(command, env);
 	i = 0;

@@ -109,7 +109,7 @@ void		redirect_input(t_command *command);
 void		ft_echo(t_command *command);
 void		ft_cd(t_command *command);
 void		ft_pwd(void);
-void		ft_env(t_command *command);
+void		ft_env(t_command *command, char *cmd);
 void		*ft_export(t_command *command);
 void		*ft_unset(t_command *command);
 void		clear(void);

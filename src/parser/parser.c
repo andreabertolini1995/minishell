@@ -16,7 +16,9 @@ static int	ft_num_args(t_list *tokens_list)
 {
 	int		num_args;
 	t_token	*token;
+	int		list_size;
 
+	list_size = ft_lstsize(tokens_list);
 	num_args = 0;
 	token = tokens_list->content;
     if (token->type != WORD)
@@ -28,7 +30,10 @@ static int	ft_num_args(t_list *tokens_list)
 		if (tokens_list != NULL)
 			token = tokens_list->content;
 	}
-	return (num_args - 2); // skipping the space after the operator
+	if (list_size == 1)
+		return (num_args - 1);
+	else
+		return (num_args - 2); // skipping the space after the operator
 }
 
 static void	add_redirection(t_command *command,
@@ -55,9 +60,12 @@ static void	parse_cmd_args(t_command *command,
 			t_list **tokens_list, t_token **token)
 {
 	int	arg_index;
+	int	list_size;
 
 	arg_index = 0;
-	(*tokens_list) = (*tokens_list)->next; // skipping the first space
+	list_size = ft_lstsize((*tokens_list));
+	if (list_size > 1)
+		(*tokens_list) = (*tokens_list)->next; // skipping the first space
 	while (((*token)->type == WORD || (*token)->type == SPACE) && (*tokens_list) != NULL)
 	{
 		if (command->cmd == NULL)

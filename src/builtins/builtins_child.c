@@ -64,7 +64,7 @@ void	ft_pwd(void)
 	printf("%s\n", getcwd(buffer, sizeof(buffer)));
 }
 
-void	ft_env(t_command *command)
+void	ft_env(t_command *command, char *cmd)
 {
 	char	**env;
 	int		i;
@@ -73,7 +73,10 @@ void	ft_env(t_command *command)
 	i = 0;
 	while (env[i] != NULL)
 	{
-		printf("%s\n", env[i]);
+		if (is_same_string(cmd, "export"))
+			printf("declare -x %s\n", env[i]);
+		else
+			printf("%s\n", env[i]);
 		i++;
 	}
 }

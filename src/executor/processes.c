@@ -21,7 +21,7 @@ void	execute_builtin_child(t_command *command, int *pipe_fd)
 	else if (is_same_string(command->cmd, "pwd"))
 		ft_pwd();
 	else if (is_same_string(command->cmd, "env"))
-		ft_env(command);
+		ft_env(command, "env");
 	else if (is_same_string(command->cmd, "exit"))
 	{
 		signal_to_send = SIGINT;
