@@ -48,9 +48,10 @@ void	redirect_input(t_command *command)
 		while (42)
 		{
 			line = readline("> ");
-			if (strncmp(line, command->infile, ft_strlen(line)))
+			// if (strncmp(line, command->infile, ft_strlen(line)))
+			if (!is_same_string(line, command->infile))
 			{
-				write(file, line, ft_strlen(line));
+				write(file, line, ft_strlen(line)); // this looks wrong - double check with the previous version
 				write(file, "\n", 1);
 			}
 			else

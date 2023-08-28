@@ -19,6 +19,8 @@ static int	ft_num_args(t_list *tokens_list)
 
 	num_args = 0;
 	token = tokens_list->content;
+    if (token->type != WORD)
+        return (0); // hardcoded for << 
 	while (token->type == WORD && tokens_list != NULL)
 	{
 		num_args++;
