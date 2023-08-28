@@ -51,8 +51,6 @@ void	ft_echo(t_command *command)
 	while (i < command->num_args)
 	{
 		printf("%s", command->args[i]);
-		if (i < command->num_args - 1)
-			printf(" ");
 		i++;
 	}
 	if (new_line == true)

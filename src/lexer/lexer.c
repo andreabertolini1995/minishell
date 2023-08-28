@@ -100,9 +100,13 @@ t_list	*lexer(char *cmd, t_env *env)
 		}
 		i = check_for_redirections(cmd, i, &tokens_list, env);
 		i = check_for_word(cmd, i, &tokens_list, env);
-		if (cmd[i] != '\0')
+		if (cmd[i] == ' ')
+			ft_lstadd_back(&tokens_list, ft_lstnew(create_token(" ", SPACE, env)));
+		else if (cmd[i] == '\t')
+			ft_lstadd_back(&tokens_list, ft_lstnew(create_token("\t", SPACE, env)));
+		if (cmd[i] != '\0' && cmd[i] != '\'' && cmd[i] != '"' && cmd[i] != ' ' && cmd[i] != '\t')
 			i++;
-		while (cmd[i] == ' ' || cmd[i] == '\t')
+		while (cmd[i] == ' ' || cmd[i] == '\t') // extra spaces and tabs
 			i++;
 	}
 	return (tokens_list);

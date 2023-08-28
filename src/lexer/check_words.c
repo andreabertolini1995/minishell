@@ -64,6 +64,7 @@ int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list, t_en
 		word = create_word(cmd, length, i);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
+	i++; // added recently
 	return (i);
 }
 
@@ -91,7 +92,9 @@ int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list, t_en
             final_word = ft_strjoin(final_word, " ");
         final_word = ft_strjoin(final_word, tmp_word);
 		// free(tmp_word);
-        i++;     
+		i++;
+		if (cmd[i] == '\'' || cmd[i] == '"')
+			break ;   
     }
     ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD, env)));
     return (i);
