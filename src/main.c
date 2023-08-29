@@ -71,15 +71,6 @@ void	minishell(t_list *env)
 	}
 }
 
-void	signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		// rl_replace_line("", 0);
-		printf("\n***: ");
-	}
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	t_list  *env;

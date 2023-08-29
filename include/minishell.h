@@ -123,6 +123,9 @@ void		ft_unset(t_command *command);
 void		clear(void);
 bool		is_env_var(t_list *env_list, char *var_name);
 
+// Signals
+void	signal_handler(int signum);
+
 // Utils
 int			return_with_error(char *error_msg);
 void		print_token(void *content);
