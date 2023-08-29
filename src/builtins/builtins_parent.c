@@ -73,7 +73,8 @@ void	ft_export(t_command *command)
 		while (arg_index < command->num_args)
 		{
 			env_list = command->env;
-			if (!is_same_string(command->args[arg_index], " "))
+			if (!is_same_string(command->args[arg_index], " ") &&
+				!is_same_string(command->args[arg_index], "\t"))
 			{
 				input_var = ft_split(command->args[arg_index], '=');
 				if (is_env_var(env_list, input_var[0]))
@@ -89,6 +90,8 @@ void	ft_export(t_command *command)
 						env_list = env_list->next;
 					}
 				}
+				else if (!is_str_alpha(input_var[0]))
+					printf("minishell: export: '%s': not a valid identifier\n", command->args[arg_index]);
 				else
 					ft_lstadd_back(&env_list, ft_lstnew(create_env_var(input_var[0], input_var[1])));
 			}
@@ -126,7 +129,10 @@ void	ft_unset(t_command *command)
 	arg_index = 0;
 	while (arg_index < command->num_args)
 	{
-		if (!is_same_string(command->args[arg_index], " "))
+		if (!is_str_alpha(command->args[arg_index]))
+					printf("minishell: export: '%s': not a valid identifier\n", command->args[arg_index]);
+		else if (!is_same_string(command->args[arg_index], " ") &&
+			!is_same_string(command->args[arg_index], "\t"))
 		{
 			env_list = command->env;
 			prev_list = NULL;
