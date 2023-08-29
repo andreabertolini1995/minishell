@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-t_token	*create_token(char *str, int type, t_env *env)
+t_token	*create_token(char *str, int type, t_list *env)
 {
 	t_token	*token;
 
@@ -25,7 +25,7 @@ t_token	*create_token(char *str, int type, t_env *env)
 	return (token);
 }
 
-t_command	*create_command(int num_args, t_env *env)
+t_command	*create_command(int num_args, t_list *env)
 {
 	t_command	*command;
 
@@ -44,4 +44,16 @@ t_command	*create_command(int num_args, t_env *env)
 	command->outfile = NULL;
 	command->env = env;
 	return (command);
+}
+
+t_env	*create_env_var(char *name, char *value)
+{
+	t_env	*env_var;
+
+	env_var = (t_env *) malloc (sizeof(t_env));
+	if (env_var == NULL)
+		return (NULL);
+	env_var->name = name;
+	env_var->value = value;
+	return (env_var);
 }

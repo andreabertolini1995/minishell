@@ -66,18 +66,18 @@ void	ft_pwd(void)
 
 void	ft_env(t_command *command, char *cmd)
 {
-	char	**env;
-	int		i;
+	t_list	*env_list;
+	t_env	*env_var;
 
-	env = command->env->envp;
-	i = 0;
-	while (env[i] != NULL)
+	env_list = command->env;
+	while (env_list != NULL)
 	{
+		env_var = env_list->content;
 		if (is_same_string(cmd, "export"))
-			printf("declare -x %s\n", env[i]);
+			printf("declare -x %s=%s\n", env_var->name, env_var->value);
 		else
-			printf("%s\n", env[i]);
-		i++;
+			printf("%s=%s\n", env_var->name, env_var->value);
+		env_list = env_list->next;
 	}
 }
 

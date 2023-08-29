@@ -110,7 +110,7 @@ static void	parse_redirections_pipes(t_command *command,
 	}
 }
 
-t_list	*parser(t_list *tokens_list, t_env *env)
+t_list	*parser(t_list *tokens_list, t_list *env)
 {
 	t_list		*commands_list;
 	t_token		*token;

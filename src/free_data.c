@@ -29,19 +29,19 @@ void	free_tokens(t_list *tokens_list)
 	}
 }
 
-void	free_env(t_env *env)
-{
-	int	i;
+// void	free_env(t_env *env)
+// {
+// 	int	i;
 
-	i = 0;
-	while (env->envp[i] != NULL)
-	{
-		free(env->envp[i]);
-		i++;
-	}
-	free(env->envp);
-	free(env);
-}
+// 	i = 0;
+// 	while (env->envp[i] != NULL)
+// 	{
+// 		free(env->envp[i]);
+// 		i++;
+// 	}
+// 	free(env->envp);
+// 	free(env);
+// }
 
 void	free_commands(t_list *commands_list)
 {

@@ -25,18 +25,26 @@ void	init_shell(void)
 	clear();
 }
 
-static t_env	*store_env(char **envp)
+static t_list	*store_env(char **envp)
 {
-	t_env	*env;
+    t_list	*env;
+    char    **env_var;
+    int     i;
 
-	env = (t_env *) malloc (sizeof(t_env));
-	if (env == NULL)
-		return (NULL);
-	env->envp = envp;
+    /*  Storing in a linked list the environment so that it is 
+        easier to manipulate with export and unset. */
+    env = NULL;
+    i = 0;
+    while ((envp[i]) != NULL)
+    {
+        env_var = ft_split(envp[i], '=');
+        ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
+        i++;
+    }
 	return (env);
 }
 
-void	minishell(t_env *env)
+void	minishell(t_list *env)
 {
 	char	*cmd;
 	t_list	*tokens_list;
@@ -74,7 +82,7 @@ void	signal_handler(int signum)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_env	*env;
+	t_list  *env;
 
 	(void)argc;
 	(void)argv;

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static int	check_for_redirections(char *cmd, int i, t_list **tokens_list, t_env *env)
+static int	check_for_redirections(char *cmd, int i, t_list **tokens_list, t_list *env)
 {
 	if (cmd[i] == '>')
 	{
@@ -63,7 +63,7 @@ static bool	is_there_second_double_quote(char *cmd, int i)
 	return (false);
 }
 
-static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_env *env)
+static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_list *env)
 {
 	if (cmd[i] == '\'')
 	{
@@ -84,7 +84,7 @@ static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_env *env)
 	return (i);
 }
 
-t_list	*lexer(char *cmd, t_env *env)
+t_list	*lexer(char *cmd, t_list *env)
 {
 	size_t	i;
 	t_list	*tokens_list;

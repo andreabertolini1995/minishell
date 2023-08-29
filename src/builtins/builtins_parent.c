@@ -44,25 +44,48 @@ char	**fill_new_env(t_command *command, char **env)
 	return (new_env);
 }
 
-void	*ft_export(t_command *command)
+static bool	is_env_var(t_list *env_list, char *var_name)
 {
-	char	**env;
-	char	**new_env;
-	int		i;
+	t_env	*env_var;
 
+	while (env_list != NULL)
+	{
+		env_var = env_list->content;
+		if (is_same_string(env_var->name, var_name))
+			return (true);
+		env_list = env_list->next;
+	}
+	return (false);
+}
+
+void	ft_export(t_command *command)
+{
+	t_list	*env_list;
+	t_env	*env_var;
+	char	**input_var;
+	
 	if (command->num_args == 0)
 		ft_env(command, "export");
-	env = command->env->envp;
-	new_env = fill_new_env(command, env);
-	i = 0;
-	while (new_env[i] != NULL)
+	else
 	{
-		command->env->envp[i] = ft_strdup(new_env[i]);
-		i++;
+		env_list = command->env;
+		input_var = ft_split(command->args[0], '='); // to modify to allow multiple arguments
+		if (is_env_var(env_list, input_var[0]))
+		{
+			while (env_list != NULL)
+			{
+				env_var = env_list->content;
+				if (is_same_string(env_var->name, input_var[0]))
+				{
+					env_var->value = input_var[1];
+					return ;
+				}
+				env_list = env_list->next;
+			}
+		}
+		else
+			ft_lstadd_back(&env_list, ft_lstnew(create_env_var(input_var[0], input_var[1])));
 	}
-	command->env->envp[i] = NULL;
-	free(new_env);
-	return (NULL);
 }
 
 char	*next_env_var(char **env, int i, int j)
@@ -84,39 +107,28 @@ char	*next_env_var(char **env, int i, int j)
 	return (var_tmp);
 }
 
-void	*ft_unset(t_command *command)
+void	ft_unset(t_command *command)
 {
-	char	**env;
-	char	*var_name;
-	char	*var_tmp;
-	int		i;
-	int		j;
+	t_list	*env_list;
+	t_env	*env_var;
+	t_list	*prev_list;
 
-	var_name = command->args[0];
-	env = command->env->envp;
-	i = 0;
-	while (env[i] != NULL)
+	env_list = command->env;
+	prev_list = NULL;
+	while (env_list != NULL)
 	{
-		j = 0;
-		while (env[i][j] != '\n')
+		env_var = env_list->content;
+		if (is_same_string(env_var->name, command->args[0])) // to modify to allow multiple arguments
 		{
-			var_tmp = next_env_var(env, i, j);
-			if (is_same_string(var_tmp, var_name))
-			{
-				free(env[i]);
-				env[i] = NULL;
-				free(var_tmp);
-				return (NULL);
-			}
+			if (prev_list == NULL)
+				prev_list = env_list->next;
 			else
-			{
-				// free(var_tmp);
-				break ;
-			}
+				prev_list->next = env_list->next;
+			free(env_var);
+			free(env_list);
+			return ;
 		}
-		i++;
+		prev_list = env_list;
+		env_list = env_list->next;
 	}
-	free(var_tmp);
-	command->env->envp = env;
-	return (NULL);
 }

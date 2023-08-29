@@ -48,7 +48,7 @@ static char	*check_if_env(char *word)
 	return (word);
 }
 
-int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
+int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list, t_list *env)
 {
 	int		length;
 	char	*word;
@@ -68,7 +68,7 @@ int	check_for_word_in_single_quotes(char *cmd, int i, t_list **tokens_list, t_en
 	return (i);
 }
 
-int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
+int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list, t_list *env)
 {
     int     length;
     char    *tmp_word;
@@ -100,7 +100,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i, t_list **tokens_list, t_en
     return (i);
 }
 
-int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list, t_env *env)
+int	check_for_word_without_quotes(char *cmd, int i, t_list **tokens_list, t_list *env)
 {
 	int		length;
 	char	*word;
