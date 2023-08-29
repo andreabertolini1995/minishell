@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-static bool	is_env_var(t_list *env_list, char *var_name)
+bool	is_env_var(t_list *env_list, char *var_name)
 {
 	t_env	*env_var;
 

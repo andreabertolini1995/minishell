@@ -121,6 +121,7 @@ void		ft_env(t_command *command, char *cmd);
 void		ft_export(t_command *command);
 void		ft_unset(t_command *command);
 void		clear(void);
+bool		is_env_var(t_list *env_list, char *var_name);
 
 // Utils
 int			return_with_error(char *error_msg);
