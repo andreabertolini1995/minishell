@@ -75,7 +75,6 @@ void	ft_export(t_command *command)
 			env_list = command->env;
 			if (!is_same_string(command->args[arg_index], " "))
 			{
-				/* Assuming that there is an equal sign, but it's not always the case */
 				input_var = ft_split(command->args[arg_index], '=');
 				if (is_env_var(env_list, input_var[0]))
 				{

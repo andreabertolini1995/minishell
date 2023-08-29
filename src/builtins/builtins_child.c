@@ -74,9 +74,17 @@ void	ft_env(t_command *command, char *cmd)
 	{
 		env_var = env_list->content;
 		if (is_same_string(cmd, "export"))
-			printf("declare -x %s=%s\n", env_var->name, env_var->value);
+		{
+			if (env_var->value == NULL)
+				printf("declare -x %s\n", env_var->name);
+			else
+				printf("declare -x %s=%s\n", env_var->name, env_var->value);
+		}
 		else
-			printf("%s=%s\n", env_var->name, env_var->value);
+		{
+			if (env_var->value != NULL)
+				printf("%s=%s\n", env_var->name, env_var->value);
+		}
 		env_list = env_list->next;
 	}
 }
