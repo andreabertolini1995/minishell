@@ -53,17 +53,3 @@ bool	is_outfile_redirection(char *cmd)
 	else
 		return (false);
 }
-
-bool	is_str_alpha(char *str)
-{
-	int i;
-
-	i = 0;
-	while (str[i] != '\0')
-	{
-		if (!ft_isalpha(str[i]))
-			return (false);
-		i++;
-	}
-	return (true);
-}

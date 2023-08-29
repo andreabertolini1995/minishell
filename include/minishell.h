@@ -131,7 +131,7 @@ bool		is_same_string(char *op1, char *op2);
 bool		is_infile_redirection(char *cmd);
 bool		is_pipe(char *cmd);
 bool		is_outfile_redirection(char *cmd);
-bool		is_str_alpha(char *str);
+bool		is_valid_identifier(char *str);
 
 // Free data
 void		free_tokens(t_list *tokens_list);
