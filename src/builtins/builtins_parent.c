@@ -63,28 +63,38 @@ void	ft_export(t_command *command)
 	t_list	*env_list;
 	t_env	*env_var;
 	char	**input_var;
+	int		arg_index;
 	
 	if (command->num_args == 0)
 		ft_env(command, "export");
 	else
 	{
-		env_list = command->env;
-		input_var = ft_split(command->args[0], '='); // to modify to allow multiple arguments
-		if (is_env_var(env_list, input_var[0]))
+		arg_index = 0;
+		while (arg_index < command->num_args)
 		{
-			while (env_list != NULL)
+			env_list = command->env;
+			if (!is_same_string(command->args[arg_index], " "))
 			{
-				env_var = env_list->content;
-				if (is_same_string(env_var->name, input_var[0]))
+				/* Assuming that there is an equal sign, but it's not always the case */
+				input_var = ft_split(command->args[arg_index], '=');
+				if (is_env_var(env_list, input_var[0]))
 				{
-					env_var->value = input_var[1];
-					return ;
+					while (env_list != NULL)
+					{
+						env_var = env_list->content;
+						if (is_same_string(env_var->name, input_var[0]))
+						{
+							env_var->value = input_var[1];
+							return ;
+						}
+						env_list = env_list->next;
+					}
 				}
-				env_list = env_list->next;
+				else
+					ft_lstadd_back(&env_list, ft_lstnew(create_env_var(input_var[0], input_var[1])));
 			}
+			arg_index++;
 		}
-		else
-			ft_lstadd_back(&env_list, ft_lstnew(create_env_var(input_var[0], input_var[1])));
 	}
 }
 
@@ -112,23 +122,31 @@ void	ft_unset(t_command *command)
 	t_list	*env_list;
 	t_env	*env_var;
 	t_list	*prev_list;
+	int		arg_index;
 
-	env_list = command->env;
-	prev_list = NULL;
-	while (env_list != NULL)
+	arg_index = 0;
+	while (arg_index < command->num_args)
 	{
-		env_var = env_list->content;
-		if (is_same_string(env_var->name, command->args[0])) // to modify to allow multiple arguments
+		if (!is_same_string(command->args[arg_index], " "))
 		{
-			if (prev_list == NULL)
-				prev_list = env_list->next;
-			else
-				prev_list->next = env_list->next;
-			free(env_var);
-			free(env_list);
-			return ;
+			env_list = command->env;
+			prev_list = NULL;
+			while (env_list != NULL)
+			{
+				env_var = env_list->content;
+				if (is_same_string(env_var->name, command->args[arg_index]))
+				{
+					if (prev_list == NULL)
+						prev_list = env_list->next;
+					else
+						prev_list->next = env_list->next;
+					free(env_var);
+					free(env_list);
+				}
+				prev_list = env_list;
+				env_list = env_list->next;
+			}
 		}
-		prev_list = env_list;
-		env_list = env_list->next;
+		arg_index++;
 	}
 }
