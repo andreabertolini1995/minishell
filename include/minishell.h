@@ -31,7 +31,6 @@ extern int	g_exit_code;
 
 typedef struct s_env
 {
-	// char	**envp;
 	char	*name;
 	char	*value;
 }	t_env;
@@ -46,7 +45,6 @@ typedef struct s_command
 	char		*infile_redirect;
 	char		*infile;
 	char		*outfile;
-	// t_env		*env;
 	t_list		*env;
 }	t_command;
 
@@ -87,6 +85,12 @@ int			check_for_word_in_double_quotes(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 int			check_for_word_without_quotes(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
+int			check_for_outfile_redirection(char *cmd, int i,
+				t_list **tokens_list, t_list *env);
+int			check_for_infile_redirection(char *cmd, int i,
+				t_list **tokens_list, t_list *env);
+int			check_for_redirections(char *cmd, int i,
+				t_list **tokens_list, t_list *env);
 
 // Executor
 void		executor(t_list *commands_list);
@@ -126,7 +130,7 @@ void		clear(void);
 bool		is_env_var(t_list *env_list, char *var_name);
 
 // Signals
-void	signal_handler(int signum);
+void		signal_handler(int signum);
 
 // Utils
 int			return_with_error(char *error_msg);

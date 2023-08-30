@@ -12,52 +12,44 @@
 
 #include "../include/minishell.h"
 
-void	free_argv(char **argv)
+int	check_for_outfile_redirection(char *cmd, int i,
+				t_list **tokens_list, t_list *env)
 {
-	int	i;
-
-	i = 1;
-	while (argv[i] != NULL)
+	if (cmd[i + 1] == '>')
 	{
-		free(argv[i]);
+		ft_lstadd_back(tokens_list,
+			ft_lstnew(create_token(">>", R_D_RDIR, env)));
 		i++;
 	}
-	free(argv);
+	else
+		ft_lstadd_back(tokens_list,
+			ft_lstnew(create_token(">", R_S_RDIR, env)));
+	i++;
+	return (i);
 }
 
-bool	is_builtin(char *cmd)
+int	check_for_infile_redirection(char *cmd, int i,
+				t_list **tokens_list, t_list *env)
 {
-	if (cmd != NULL)
+	if (cmd[i + 1] == '<')
 	{
-		if (is_same_string(cmd, "pwd")
-			|| is_same_string(cmd, "env")
-			|| is_same_string(cmd, "echo")
-			|| is_same_string(cmd, "exit")
-			|| is_same_string(cmd, "cd")
-			|| is_same_string(cmd, "export")
-			|| is_same_string(cmd, "unset")
-			|| is_same_string(cmd, "clear"))
-			return (true);
-		else
-			return (false);
-	}
-	return (false);
-}
-
-t_list	*update_commands_list(t_list *commands_list, int num_pipes)
-{
-	int	i;
-
-	if (num_pipes > 0)
-	{
-		i = 0;
-		while (i < (num_pipes + 1))
-		{
-			commands_list = commands_list->next;
-			i++;
-		}
+		ft_lstadd_back(tokens_list,
+			ft_lstnew(create_token("<<", L_D_RDIR, env)));
+		i++;
 	}
 	else
-		commands_list = commands_list->next;
-	return (commands_list);
+		ft_lstadd_back(tokens_list,
+			ft_lstnew(create_token("<", L_S_RDIR, env)));
+	i++;
+	return (i);
+}
+
+int	check_for_redirections(char *cmd, int i,
+				t_list **tokens_list, t_list *env)
+{
+	if (cmd[i] == '>')
+		i = check_for_outfile_redirection(cmd, i, tokens_list, env);
+	else if (cmd[i] == '<')
+		i = check_for_infile_redirection(cmd, i, tokens_list, env);
+	return (i);
 }

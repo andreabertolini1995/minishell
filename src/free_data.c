@@ -63,8 +63,6 @@ void	free_commands(t_list *commands_list)
 		free(command->cmd);
 		free(command->infile);
 		free(command->outfile);
-		// free(command->infile_redirect);
-		// free(command->outfile_redirect);
 		free(command->operator);
 		free(command);
 		free(commands_list);

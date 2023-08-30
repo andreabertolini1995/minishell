@@ -27,20 +27,18 @@ void	init_shell(void)
 
 static t_list	*store_env(char **envp)
 {
-    t_list	*env;
-    char    **env_var;
-    int     i;
+	t_list	*env;
+	char	**env_var;
+	int		i;
 
-    /*  Storing in a linked list the environment so that it is 
-        easier to manipulate with export and unset. */
-    env = NULL;
-    i = 0;
-    while ((envp[i]) != NULL)
-    {
-        env_var = ft_split(envp[i], '=');
-        ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
-        i++;
-    }
+	env = NULL;
+	i = 0;
+	while ((envp[i]) != NULL)
+	{
+		env_var = ft_split(envp[i], '=');
+		ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
+		i++;
+	}
 	return (env);
 }
 
@@ -73,7 +71,7 @@ void	minishell(t_list *env)
 
 int	main(int argc, char **argv, char **envp)
 {
-	t_list  *env;
+	t_list	*env;
 
 	(void)argc;
 	(void)argv;

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-extern int g_exit_code;
+extern int	g_exit_code;
 
 static char	*get_old_pwd(t_command *command)
 {

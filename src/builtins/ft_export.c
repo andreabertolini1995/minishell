@@ -63,7 +63,7 @@ static void	add_env_var(t_command *command, int arg_index)
 		ft_lstadd_back(&env_list,
 			ft_lstnew(create_env_var(input_var[0], input_var[1])));
 		g_exit_code = EXIT_SUCCESS;
-	}	
+	}
 }
 
 void	ft_export(t_command *command)
