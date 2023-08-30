@@ -44,7 +44,7 @@ void	set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 		dup2(pipe_fd[i - 1][0], STDIN_FILENO);
 	close_fds(num_pipes, pipe_fd);
 	execute(command);
-	exit(1);
+	exit(EXIT_SUCCESS);
 }
 
 void	free_pipe_fds(int **pipe_fd, int num_pipes)
