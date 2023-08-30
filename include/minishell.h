@@ -52,11 +52,8 @@ typedef enum e_token_type
 {
 	WORD = 0,
 	PIPE = 1,
-	R_S_RDIR = 2,
-	R_D_RDIR = 3,
-	L_S_RDIR = 4,
-	L_D_RDIR = 5,
-	SPACE = 6,
+	REDIRECTION = 2,
+	SPACE = 3,
 }	t_token_type;
 
 typedef struct s_token

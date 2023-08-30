@@ -18,12 +18,12 @@ int	check_for_outfile_redirection(char *cmd, int i,
 	if (cmd[i + 1] == '>')
 	{
 		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token(">>", R_D_RDIR, env)));
+			ft_lstnew(create_token(">>", REDIRECTION, env)));
 		i++;
 	}
 	else
 		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token(">", R_S_RDIR, env)));
+			ft_lstnew(create_token(">", REDIRECTION, env)));
 	i++;
 	return (i);
 }
@@ -34,12 +34,12 @@ int	check_for_infile_redirection(char *cmd, int i,
 	if (cmd[i + 1] == '<')
 	{
 		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token("<<", L_D_RDIR, env)));
+			ft_lstnew(create_token("<<", REDIRECTION, env)));
 		i++;
 	}
 	else
 		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token("<", L_S_RDIR, env)));
+			ft_lstnew(create_token("<", REDIRECTION, env)));
 	i++;
 	return (i);
 }
