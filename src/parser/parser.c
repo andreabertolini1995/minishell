@@ -84,8 +84,12 @@ static void	parse_redirections_pipes(t_command *command,
 		if ((*tokens_list) != NULL)
 		{
 			(*token) = (*tokens_list)->content;
-			if (is_outfile_redirection((*token)->content))
+			while (is_outfile_redirection((*token)->content)
+				&& (*tokens_list) != NULL)
+			{
 				add_redirection(command, *token, tokens_list, "outfile");
+				open(command->outfile, O_WRONLY | O_CREAT, 0777);
+			}
 			if ((*tokens_list) != NULL)
 			{
 				(*token) = (*tokens_list)->content;
