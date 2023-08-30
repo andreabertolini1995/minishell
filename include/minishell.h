@@ -76,6 +76,8 @@ t_env		*create_env_var(char *name, char *value);
 // Parser
 t_list		*parser(t_list *tokens_list, t_list *env);
 bool		is_file(char *path_cmd);
+int			ft_num_args(t_list *tokens_list);
+t_token		*update_tokens_list(t_list **tokens_list, t_token *token);
 
 // Lexer
 t_list		*lexer(char *cmd, t_list *env);
