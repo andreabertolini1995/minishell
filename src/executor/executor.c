@@ -58,7 +58,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		perror(command->cmd);
 		free(argv);
 		free(cmd_path);
-		exit(1);
+		exit(EXIT_FAILURE);
 	}
 	free(cmd_path);
 }
@@ -81,8 +81,11 @@ int	execute(t_command *command)
 		if (is_builtin(command->cmd))
 			execute_builtin_parent(command, pipe_fd);
 		waitpid(pid, &wstatus, 0);
-		if (WIFEXITED(wstatus))
-			g_exit_code = WEXITSTATUS(wstatus);
+		if (!is_builtin(command->cmd))
+		{
+			if (WIFEXITED(wstatus))
+				g_exit_code = WEXITSTATUS(wstatus);
+		}
 		close(pipe_fd[0]);
 	}
 	return (0);

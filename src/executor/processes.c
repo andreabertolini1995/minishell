@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+extern int g_exit_code;
+
 void	execute_builtin_child(t_command *command, int *pipe_fd)
 {
 	int	signal_to_send;
@@ -50,7 +52,10 @@ void	execute_builtin_parent(t_command *command, int *pipe_fd)
 		if (signal_from_child == SIGINT)
 		{
 			close(pipe_fd[0]);
-			exit(0);
+			if (command->num_args == 1)
+				exit(ft_atoi(command->args[0]));
+			else
+				exit(EXIT_SUCCESS);
 		}
 	}
 }

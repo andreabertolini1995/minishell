@@ -54,6 +54,7 @@ void	ft_echo(t_command *command)
 	}
 	if (new_line == true)
 		printf("\n");
+	g_exit_code = EXIT_SUCCESS;
 }
 
 void	ft_pwd(void)
@@ -61,6 +62,7 @@ void	ft_pwd(void)
 	char	buffer[1024];
 
 	printf("%s\n", getcwd(buffer, sizeof(buffer)));
+	g_exit_code = EXIT_SUCCESS;
 }
 
 void	ft_env(t_command *command, char *cmd)
@@ -86,9 +88,11 @@ void	ft_env(t_command *command, char *cmd)
 		}
 		env_list = env_list->next;
 	}
+	g_exit_code = EXIT_SUCCESS;
 }
 
 void	clear(void)
 {
 	printf("\033[H\033[J");
+	g_exit_code = EXIT_SUCCESS;
 }

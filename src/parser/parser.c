@@ -12,48 +12,36 @@
 
 #include "../include/minishell.h"
 
-static int	ft_num_args(t_list *tokens_list)
-{
-	int		num_args;
-	t_token	*token;
-	int		list_size;
-
-	list_size = ft_lstsize(tokens_list);
-	num_args = 0;
-	token = tokens_list->content;
-    if (token->type != WORD)
-        return (0); // hardcoded for << 
-	while ((token->type == WORD || token->type == SPACE) && tokens_list != NULL)
-	{
-		num_args++;
-		tokens_list = tokens_list->next;
-		if (tokens_list != NULL)
-			token = tokens_list->content;
-	}
-	if (list_size == 1)
-		return (num_args - 1);
-	else
-		return (num_args - 2); // skipping the space after the operator
-}
-
 static void	add_redirection(t_command *command,
 			t_token *token, t_list **tokens_list, char *str)
 {
 	t_token	*next_token;
 
-    if (is_same_string(str, "infile"))
-    {
-        command->infile_redirect = token->content;
-        next_token = (*tokens_list)->next->content;
-        command->infile = ft_strdup(next_token->content);
-    }
-    else
-    {
-        command->outfile_redirect = token->content;
-        next_token = (*tokens_list)->next->content;
-        command->outfile = ft_strdup(next_token->content);
-    }
-    *tokens_list = (*tokens_list)->next->next;
+	if (is_same_string(str, "infile"))
+	{
+		command->infile_redirect = token->content;
+		next_token = update_tokens_list(tokens_list,
+				(*tokens_list)->next->content);
+		command->infile = ft_strdup(next_token->content);
+	}
+	else
+	{
+		command->outfile_redirect = token->content;
+		next_token = update_tokens_list(tokens_list,
+				(*tokens_list)->next->content);
+		command->outfile = ft_strdup(next_token->content);
+	}
+	(*tokens_list) = (*tokens_list)->next;
+	if ((*tokens_list) != NULL)
+		(*tokens_list) = (*tokens_list)->next;
+}
+
+static	void	update_cmd(t_command *command, t_token *token)
+{
+	if (token->content == NULL) // in case $(not-env-variable)
+		command->cmd = NULL;
+	else
+		command->cmd = ft_strdup(token->content);
 }
 
 static void	parse_cmd_args(t_command *command,
@@ -66,19 +54,19 @@ static void	parse_cmd_args(t_command *command,
 	list_size = ft_lstsize((*tokens_list));
 	if (list_size > 1)
 		(*tokens_list) = (*tokens_list)->next; // skipping the first space
-	while (((*token)->type == WORD || (*token)->type == SPACE) && (*tokens_list) != NULL)
+	while (((*token)->type == WORD
+			|| (*token)->type == SPACE) && (*tokens_list) != NULL)
 	{
 		if (command->cmd == NULL)
-		{
-			if ((*token)->content == NULL) // in case $(not-env-variable)
-				command->cmd = NULL;
-			else
-				command->cmd = ft_strdup((*token)->content);
-		}
+			update_cmd(command, (*token));
 		else
 		{
-			command->args[arg_index] = ft_strdup((*token)->content);
-			arg_index++;
+			if ((*token)->type == WORD
+				|| (is_same_string(command->cmd, "echo")))
+			{
+				command->args[arg_index] = ft_strdup((*token)->content);
+				arg_index++;
+			}
 		}
 		(*tokens_list) = (*tokens_list)->next;
 		if ((*tokens_list) != NULL)
@@ -120,7 +108,7 @@ t_list	*parser(t_list *tokens_list, t_list *env)
 	commands_list = NULL;
 	while (tokens_list != NULL)
 	{
-		token = tokens_list->content;
+		token = update_tokens_list(&tokens_list, tokens_list->content);
 		num_args = ft_num_args(tokens_list);
 		command = create_command(num_args, env);
 		parse_cmd_args(command, &tokens_list, &token);
