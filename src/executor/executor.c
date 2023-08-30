@@ -50,9 +50,14 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		redirect_output(command);
 	if (command->infile != NULL)
 		redirect_input(command);
-	path = getenv("PATH");
-	sub_paths = ft_split(path, ':');
-	cmd_path = get_cmd_path(command, sub_paths);
+	if (is_same_string("/bin/", command->cmd))
+		cmd_path = command->cmd;
+	else
+	{
+		path = getenv("PATH");
+		sub_paths = ft_split(path, ':');
+		cmd_path = get_cmd_path(command, sub_paths);
+	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{
 		perror(command->cmd);
