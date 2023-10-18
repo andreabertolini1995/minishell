@@ -41,7 +41,12 @@ void	ft_echo(t_command *command)
 	i = 0;
 	new_line = check_new_line(command->args[i]);
 	if (new_line == false)
+	{
 		i++;
+		while (!check_new_line(command->args[i])
+			|| is_same_string(command->args[i], " "))
+			i++;
+	}
 	if (is_same_string(command->args[i], "$?"))
 	{
 		printf("%d", g_exit_code);

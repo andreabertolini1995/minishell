@@ -73,32 +73,21 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
 {
 	int		length;
-	char	*tmp_word;
-	char	*final_word;
-	int		start;
+	char	*word;
 
-	start = i;
-	final_word = "";
+	length = 0;
 	while (cmd[i] != '"' && cmd[i] != '\0')
 	{
-		length = 0;
-		while (cmd[i] != '"' && cmd[i] != ' '
-			&& cmd[i] != '\t' && cmd[i] != '\0')
-		{
-			length++;
-			i++;
-		}
-		tmp_word = create_word(cmd, length, i);
-		tmp_word = check_if_env(tmp_word);
-		if ((i - length) > start)
-			final_word = ft_strjoin(final_word, " ");
-		final_word = ft_strjoin(final_word, tmp_word);
-		// free(tmp_word);
+		length++;
 		i++;
-		if (cmd[i] == '\'' || cmd[i] == '"')
-			break ;
 	}
-	ft_lstadd_back(tokens_list, ft_lstnew(create_token(final_word, WORD, env)));
+	if (length > 0)
+	{
+		word = create_word(cmd, length, i);
+		word = check_if_env(word);
+		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+	}
+	i++; // added recently
 	return (i);
 }
 

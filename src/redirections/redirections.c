@@ -15,23 +15,21 @@
 void	redirect_output(t_command *command)
 {
 	int	file;
-	int	file2;
 
 	if (is_same_string(command->outfile_redirect, ">"))
 		file = open(command->outfile, O_WRONLY | O_CREAT, 0777);
 	else
 		file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
-	file2 = dup2(file, STDOUT_FILENO);
+	dup2(file, STDOUT_FILENO);
 	close(file);
 }
 
 static void	infile_redirect(char *file_name)
 {
 	int	file;
-	int	file2;
 
 	file = open(file_name, O_RDONLY);
-	file2 = dup2(file, STDIN_FILENO);
+	dup2(file, STDIN_FILENO);
 	close(file);
 }
 
