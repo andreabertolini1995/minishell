@@ -41,10 +41,11 @@ int	ft_num_args(t_list *tokens_list)
 
 t_token	*update_tokens_list(t_list **tokens_list, t_token *token)
 {
-	while (token->type == SPACE)
+	while (token->type == SPACE && (*tokens_list) != NULL)
 	{
 		(*tokens_list) = (*tokens_list)->next;
-		token = (*tokens_list)->content;
+		if ((*tokens_list) != NULL)
+			token = (*tokens_list)->content;
 	}
 	return (token);
 }

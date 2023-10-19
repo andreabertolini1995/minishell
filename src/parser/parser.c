@@ -113,11 +113,14 @@ t_list	*parser(t_list *tokens_list, t_list *env)
 	while (tokens_list != NULL)
 	{
 		token = update_tokens_list(&tokens_list, tokens_list->content);
-		num_args = ft_num_args(tokens_list);
-		command = create_command(num_args, env);
-		parse_cmd_args(command, &tokens_list, &token);
-		parse_redirections_pipes(command, &tokens_list, &token);
-		ft_lstadd_back(&commands_list, ft_lstnew(command));
+		if (!is_same_string(token->content, " "))
+		{
+			num_args = ft_num_args(tokens_list);
+			command = create_command(num_args, env);
+			parse_cmd_args(command, &tokens_list, &token);
+			parse_redirections_pipes(command, &tokens_list, &token);
+			ft_lstadd_back(&commands_list, ft_lstnew(command));
+		}
 	}
 	return (commands_list);
 }
