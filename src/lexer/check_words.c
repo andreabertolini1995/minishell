@@ -31,7 +31,7 @@ static char	*create_word(char *cmd, int length, int i)
 	return (word);
 }
 
-static char	*check_if_env(char *word)
+static char	*check_if_env(char *word, t_list *env)
 {
 	int	i;
 
@@ -41,7 +41,7 @@ static char	*check_if_env(char *word)
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
 			word += (i + 1);
-			return (getenv(word));
+			return (ft_getenv(env, word));
 		}
 		i++;
 	}
@@ -84,7 +84,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
-		word = check_if_env(word);
+		word = check_if_env(word, env);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
 	i++; // added recently
@@ -107,7 +107,7 @@ int	check_for_word_without_quotes(char *cmd, int i,
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
-		word = check_if_env(word);
+		word = check_if_env(word, env);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
 	return (i);

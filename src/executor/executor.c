@@ -52,15 +52,18 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		cmd_path = command->cmd;
 	else
 	{
-		path = getenv("PATH");
+		path = ft_getenv(command->env, "PATH");
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
 	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{
-		fprintf(stderr, "%s: command not found\n", command->cmd);
-		free(argv);
-		free(cmd_path);
+		if (ft_strlen(command->cmd) > 0)
+		{
+			printf("%s: command not found\n", command->cmd);
+			// free(argv);
+			// free(cmd_path); --> causing free/malloc issues
+		}
 		exit(EXIT_CMD_NOT_FOUND);
 	}
 	free(cmd_path);

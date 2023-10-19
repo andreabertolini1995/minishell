@@ -42,7 +42,7 @@ static t_list	*store_env(char **envp)
 	return (env);
 }
 
-void	minishell(t_list *env)
+static void	minishell(t_list *env)
 {
 	char	*cmd;
 	t_list	*tokens_list;
@@ -61,7 +61,7 @@ void	minishell(t_list *env)
 		add_history(cmd);
 		tokens_list = lexer(cmd, env);
 		commands_list = parser(tokens_list, env);
-		free_tokens(tokens_list);
+		// free_tokens(tokens_list);
 		exit_code = executor(commands_list, exit_code);
 		// free_commands(commands_list);
 		// Lexer test

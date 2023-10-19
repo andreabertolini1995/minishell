@@ -128,6 +128,7 @@ int			ft_export(t_command *command);
 int			ft_unset(t_command *command);
 int			clear(void);
 bool		is_env_var(t_list *env_list, char *var_name);
+char		*ft_getenv(t_list *env_list, char *var_name);
 
 // Signals
 void		signal_handler(int signum);
