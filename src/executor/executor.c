@@ -58,10 +58,10 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{
-		perror(command->cmd);
+		fprintf(stderr, "%s: command not found\n", command->cmd);
 		free(argv);
 		free(cmd_path);
-		exit(EXIT_FAILURE);
+		exit(EXIT_CMD_NOT_FOUND);
 	}
 	free(cmd_path);
 }

@@ -27,6 +27,10 @@
 # include <signal.h>
 # include "../libft/libft.h"
 
+# define EXIT_SUCCESS 0
+# define EXIT_FAILURE 1
+# define EXIT_CMD_NOT_FOUND 127
+
 typedef struct s_env
 {
 	char	*name;
