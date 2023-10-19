@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-extern int	g_exit_code;
-
 static char	*get_old_pwd(t_command *command)
 {
 	t_list	*env_list;
@@ -64,33 +62,33 @@ static	t_command	*create_export_cmd(t_command *cd_cmd,
 	return (command);
 }
 
-static void	change_dir(t_command *command, char *pwd)
+static int	change_dir(t_command *command, char *pwd)
 {
 	char	buffer[1024];
 
 	ft_export(create_export_cmd(command, "OLDPWD",
 			getcwd(buffer, sizeof(buffer))));
-	chdir(pwd);
+	chdir(pwd); 
 	ft_export(create_export_cmd(command, "PWD",
 			getcwd(buffer, sizeof(buffer))));
-	g_exit_code = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
-void	ft_cd(t_command *command)
+int	ft_cd(t_command *command)
 {
 	if (command->num_args == 0
 		|| (command->num_args == 1
 			&& is_same_string(command->args[0], "~")))
-		change_dir(command, get_home_dir(command));
+		return (change_dir(command, get_home_dir(command)));
 	else if (command->num_args == 1
 		&& is_same_string(command->args[0], "-"))
-		change_dir(command, get_old_pwd(command));
+		return (change_dir(command, get_old_pwd(command)));
 	else if (is_file(command->args[0]))
-		change_dir(command, command->args[0]);
+		return (change_dir(command, command->args[0]));
 	else
 	{
 		printf("minishell: cd: %s: No such file or directory\n",
 			command->args[0]);
-		g_exit_code = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 }

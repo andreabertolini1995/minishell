@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-int	g_exit_code;
-
 static bool	check_new_line(char *option)
 {
 	size_t	i;
@@ -33,7 +31,7 @@ static bool	check_new_line(char *option)
 	return (true);
 }
 
-void	ft_echo(t_command *command)
+int	ft_echo(t_command *command)
 {
 	int		i;
 	bool	new_line;
@@ -49,7 +47,7 @@ void	ft_echo(t_command *command)
 	}
 	if (is_same_string(command->args[i], "$?"))
 	{
-		printf("%d", g_exit_code);
+		printf("%d", command->exit_code);
 		i++;
 	}
 	while (i < command->num_args)
@@ -59,18 +57,22 @@ void	ft_echo(t_command *command)
 	}
 	if (new_line == true)
 		printf("\n");
-	g_exit_code = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
-void	ft_pwd(void)
+int	ft_pwd(void)
 {
 	char	buffer[1024];
+	char	*pwd;
 
-	printf("%s\n", getcwd(buffer, sizeof(buffer)));
-	g_exit_code = EXIT_SUCCESS;
+	pwd = getcwd(buffer, sizeof(buffer));
+	if (pwd == NULL)
+		return (EXIT_FAILURE);
+	printf("%s\n", pwd);
+	return (EXIT_SUCCESS);
 }
 
-void	ft_env(t_command *command, char *cmd)
+int	ft_env(t_command *command, char *cmd)
 {
 	t_list	*env_list;
 	t_env	*env_var;
@@ -93,11 +95,11 @@ void	ft_env(t_command *command, char *cmd)
 		}
 		env_list = env_list->next;
 	}
-	g_exit_code = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }
 
-void	clear(void)
+int	clear(void)
 {
 	printf("\033[H\033[J");
-	g_exit_code = EXIT_SUCCESS;
+	return (EXIT_SUCCESS);
 }

@@ -27,8 +27,6 @@
 # include <signal.h>
 # include "../libft/libft.h"
 
-extern int	g_exit_code;
-
 typedef struct s_env
 {
 	char	*name;
@@ -46,6 +44,7 @@ typedef struct s_command
 	char		*infile;
 	char		*outfile;
 	t_list		*env;
+	int			exit_code;
 }	t_command;
 
 typedef enum e_token_type
@@ -90,15 +89,15 @@ int			check_for_redirections(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 
 // Executor
-void		executor(t_list *commands_list);
+int			executor(t_list *commands_list, int exit_code);
 int			execute(t_command *command);
 void		execute_cmd(t_command *command, char **argv, char *envp[2]);
 void		wait_processes(int num_pipes, int *pids);
 t_list		*update_commands_list(t_list *commands_list, int num_pipes);
-void		child_process(t_command *command, int *pipe_fd);
+int			child_process(t_command *command, int *pipe_fd);
 bool		is_builtin(char *cmd);
-void		execute_builtin_parent(t_command *command, int *pipe_fd);
-void		execute_builtin_child(t_command *command, int *pipe_fd);
+int			execute_builtin_parent(t_command *command, int *pipe_fd);
+int			execute_builtin_child(t_command *command, int *pipe_fd);
 void		free_argv(char **argv);
 
 // Pipes
@@ -117,13 +116,13 @@ void		redirect_output(t_command *command);
 void		redirect_input(t_command *command);
 
 // Builtins
-void		ft_echo(t_command *command);
-void		ft_cd(t_command *command);
-void		ft_pwd(void);
-void		ft_env(t_command *command, char *cmd);
-void		ft_export(t_command *command);
-void		ft_unset(t_command *command);
-void		clear(void);
+int			ft_echo(t_command *command);
+int			ft_cd(t_command *command);
+int			ft_pwd(void);
+int			ft_env(t_command *command, char *cmd);
+int			ft_export(t_command *command);
+int			ft_unset(t_command *command);
+int			clear(void);
 bool		is_env_var(t_list *env_list, char *var_name);
 
 // Signals

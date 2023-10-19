@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-extern int	g_exit_code;
-
 static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char	*cmd_path;
@@ -73,30 +71,32 @@ int	execute(t_command *command)
 	int		pipe_fd[2];
 	pid_t	pid;
 	int		wstatus;
+	int		exit_code;
 
+	exit_code = 0;
 	if (pipe(pipe_fd) == -1)
 		return (return_with_error("Pipe failed."));
 	pid = fork();
 	if (pid < 0)
 		return (return_with_error("Fork failed."));
 	else if (pid == 0)
-		child_process(command, pipe_fd);
+		exit_code = child_process(command, pipe_fd);
 	else
 	{
 		if (is_builtin(command->cmd))
-			execute_builtin_parent(command, pipe_fd);
+			exit_code = execute_builtin_parent(command, pipe_fd);
 		waitpid(pid, &wstatus, 0);
 		if (!is_builtin(command->cmd))
 		{
 			if (WIFEXITED(wstatus))
-				g_exit_code = WEXITSTATUS(wstatus);
+				exit_code = WEXITSTATUS(wstatus);
 		}
 		close(pipe_fd[0]);
 	}
-	return (0);
+	return (exit_code);
 }
 
-void	executor(t_list *commands_list)
+int	executor(t_list *commands_list, int exit_code)
 {
 	t_command	*command;
 	int			num_pipes;
@@ -105,10 +105,12 @@ void	executor(t_list *commands_list)
 	while (commands_list != NULL)
 	{
 		command = commands_list->content;
+		command->exit_code = exit_code;
 		if (num_pipes == 0)
-			execute(command);
+			exit_code = execute(command);
 		else
-			ft_pipe(commands_list, num_pipes);
+			exit_code = ft_pipe(commands_list, num_pipes);
 		commands_list = update_commands_list(commands_list, num_pipes);
 	}
+	return (exit_code);
 }

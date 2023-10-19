@@ -43,6 +43,7 @@ void	free_tokens(t_list *tokens_list)
 // 	free(env);
 // }
 
+// minishell(96700,0x1e7462080) malloc: Double free of object 0x131805a00
 void	free_commands(t_list *commands_list)
 {
 	t_list		*tmp;

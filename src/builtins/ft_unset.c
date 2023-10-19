@@ -49,10 +49,9 @@ static void	delete_env_var(t_command *command, int arg_index)
 		prev_list = env_list;
 		env_list = env_list->next;
 	}
-	g_exit_code = EXIT_SUCCESS;
 }
 
-void	ft_unset(t_command *command)
+int	ft_unset(t_command *command)
 {
 	int		arg_index;
 
@@ -63,11 +62,12 @@ void	ft_unset(t_command *command)
 		{
 			printf("minishell: unset: '%s': not a valid identifier\n",
 				command->args[arg_index]);
-			g_exit_code = EXIT_FAILURE;
+			return (EXIT_FAILURE);
 		}
 		else if (!is_same_string(command->args[arg_index], " ")
 			&& !is_same_string(command->args[arg_index], "\t"))
 			delete_env_var(command, arg_index);
 		arg_index++;
 	}
+	return (EXIT_SUCCESS);
 }

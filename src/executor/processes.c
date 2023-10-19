@@ -12,18 +12,18 @@
 
 #include "../include/minishell.h"
 
-extern int	g_exit_code;
-
-void	execute_builtin_child(t_command *command, int *pipe_fd)
+int	execute_builtin_child(t_command *command, int *pipe_fd)
 {
 	int	signal_to_send;
+	int	exit_code;
 
+	exit_code = 0;
 	if (is_same_string(command->cmd, "echo"))
-		ft_echo(command);
+		exit_code = ft_echo(command);
 	else if (is_same_string(command->cmd, "pwd"))
-		ft_pwd();
+		exit_code = ft_pwd();
 	else if (is_same_string(command->cmd, "env"))
-		ft_env(command, "env");
+		exit_code = ft_env(command, "env");
 	else if (is_same_string(command->cmd, "exit"))
 	{
 		signal_to_send = SIGINT;
@@ -32,19 +32,22 @@ void	execute_builtin_child(t_command *command, int *pipe_fd)
 		close(pipe_fd[1]);
 	}
 	else if (is_same_string(command->cmd, "clear"))
-		clear();
+		exit_code = clear();
+	return (exit_code);
 }
 
-void	execute_builtin_parent(t_command *command, int *pipe_fd)
+int	execute_builtin_parent(t_command *command, int *pipe_fd)
 {
 	int	signal_from_child;
+	int	exit_code;
 
+	exit_code = 0;
 	if (is_same_string(command->cmd, "cd"))
-		ft_cd(command);
+		exit_code = ft_cd(command);
 	else if (is_same_string(command->cmd, "export"))
-		ft_export(command);
+		exit_code = ft_export(command);
 	else if (is_same_string(command->cmd, "unset"))
-		ft_unset(command);
+		exit_code = ft_unset(command);
 	else if (is_same_string(command->cmd, "exit"))
 	{
 		close(pipe_fd[1]);
@@ -58,6 +61,7 @@ void	execute_builtin_parent(t_command *command, int *pipe_fd)
 				exit(EXIT_SUCCESS);
 		}
 	}
+	return (exit_code);
 }
 
 static char	**fill_argv(t_command *command)
@@ -79,21 +83,24 @@ static char	**fill_argv(t_command *command)
 	return (argv);
 }
 
-void	child_process(t_command *command, int *pipe_fd)
+int	child_process(t_command *command, int *pipe_fd)
 {
 	char	**argv;
 	char	*envp[2];
+	int		exit_code;
 
+	exit_code = 0;
 	argv = fill_argv(command);
 	envp[0] = NULL;
 	close(pipe_fd[0]);
 	if (is_builtin(command->cmd))
-		execute_builtin_child(command, pipe_fd);
+		exit_code = execute_builtin_child(command, pipe_fd);
 	else
 		execute_cmd(command, argv, envp);
 	close(pipe_fd[1]);
 	free_argv(argv);
 	exit(1);
+	return (exit_code); // not run
 }
 
 void	wait_processes(int num_pipes, int *pids)

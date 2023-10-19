@@ -32,7 +32,7 @@ int	**initialize_pipe_fds(int num_pipes)
 }
 
 void	set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
-{
+{	
 	if (i == 0)
 		dup2(pipe_fd[i][1], STDOUT_FILENO);
 	else if (i > 0 && i < num_pipes)
@@ -43,8 +43,9 @@ void	set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i)
 	else if (i == num_pipes)
 		dup2(pipe_fd[i - 1][0], STDIN_FILENO);
 	close_fds(num_pipes, pipe_fd);
-	execute(command);
-	exit(EXIT_SUCCESS);
+	command->exit_code = execute(command); // update the struct
+	// printf("Exit code before: %d\n", command->exit_code);
+	exit(command->exit_code);
 }
 
 void	free_pipe_fds(int **pipe_fd, int num_pipes)

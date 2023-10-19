@@ -47,7 +47,9 @@ void	minishell(t_list *env)
 	char	*cmd;
 	t_list	*tokens_list;
 	t_list	*commands_list;
+	int		exit_code;
 
+	exit_code = 0;
 	while (42)
 	{
 		cmd = readline("***: ");
@@ -60,8 +62,8 @@ void	minishell(t_list *env)
 		tokens_list = lexer(cmd, env);
 		commands_list = parser(tokens_list, env);
 		free_tokens(tokens_list);
-		executor(commands_list);
-		free_commands(commands_list);
+		exit_code = executor(commands_list, exit_code);
+		// free_commands(commands_list);
 		// Lexer test
 		// ft_lstiter(tokens_list, print_token);
 		// Parser test

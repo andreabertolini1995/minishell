@@ -40,10 +40,9 @@ static void	replace_env_var(t_list *env_list, char *var_name, char *var_value)
 		}
 		env_list = env_list->next;
 	}
-	g_exit_code = EXIT_SUCCESS;
 }
 
-static void	add_env_var(t_command *command, int arg_index)
+static int	add_env_var(t_command *command, int arg_index)
 {
 	char	**input_var;
 	t_list	*env_list;
@@ -56,17 +55,17 @@ static void	add_env_var(t_command *command, int arg_index)
 	{
 		printf("minishell: export: '%s': not a valid identifier\n",
 			command->args[arg_index]);
-		g_exit_code = EXIT_FAILURE;
+		return (EXIT_FAILURE);
 	}
 	else
 	{
 		ft_lstadd_back(&env_list,
 			ft_lstnew(create_env_var(input_var[0], input_var[1])));
-		g_exit_code = EXIT_SUCCESS;
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	ft_export(t_command *command)
+int	ft_export(t_command *command)
 {
 	int		arg_index;
 
@@ -79,8 +78,10 @@ void	ft_export(t_command *command)
 		{
 			if (!is_same_string(command->args[arg_index], " ")
 				&& !is_same_string(command->args[arg_index], "\t"))
-				add_env_var(command, arg_index);
+				if (add_env_var(command, arg_index) == EXIT_FAILURE)
+					return (EXIT_FAILURE);
 			arg_index++;
 		}
 	}
+	return (EXIT_SUCCESS);
 }
