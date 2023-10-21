@@ -68,11 +68,11 @@ typedef struct s_token
 
 // Init structs
 t_token		*create_token(char *str, int type, t_list *env);
-t_command	*create_command(int num_args, t_list *env);
+t_command	*create_command(int num_args, t_list *env, int exit_code);
 t_env		*create_env_var(char *name, char *value);
 
 // Parser
-t_list		*parser(t_list *tokens_list, t_list *env);
+t_list		*parser(t_list *tokens_list, t_list *env, int exit_code);
 bool		is_file(char *path_cmd);
 int			ft_num_args(t_list *tokens_list);
 t_token		*update_tokens_list(t_list **tokens_list, t_token *token);
@@ -93,7 +93,7 @@ int			check_for_redirections(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 
 // Executor
-int			executor(t_list *commands_list, int exit_code);
+int			executor(t_list *commands_list);
 int			execute(t_command *command);
 void		execute_cmd(t_command *command, char **argv, char *envp[2]);
 void		wait_processes(int num_pipes, int *pids);

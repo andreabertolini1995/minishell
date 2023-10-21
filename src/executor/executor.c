@@ -60,7 +60,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	{
 		if (ft_strlen(command->cmd) > 0)
 		{
-			printf("%s: command not found\n", command->cmd);
+			printf("minishell: %s: command not found\n", command->cmd);
 			// free(argv);
 			// free(cmd_path); --> causing free/malloc issues
 		}
@@ -99,16 +99,16 @@ int	execute(t_command *command)
 	return (exit_code);
 }
 
-int	executor(t_list *commands_list, int exit_code)
+int	executor(t_list *commands_list)
 {
 	t_command	*command;
 	int			num_pipes;
+	int			exit_code;
 
 	num_pipes = get_num_pipes(commands_list);
 	while (commands_list != NULL)
 	{
 		command = commands_list->content;
-		command->exit_code = exit_code;
 		if (num_pipes == 0)
 			exit_code = execute(command);
 		else

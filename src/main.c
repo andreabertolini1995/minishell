@@ -60,9 +60,9 @@ static void	minishell(t_list *env)
 		}
 		add_history(cmd);
 		tokens_list = lexer(cmd, env);
-		commands_list = parser(tokens_list, env);
+		commands_list = parser(tokens_list, env, exit_code);
 		// free_tokens(tokens_list);
-		exit_code = executor(commands_list, exit_code);
+		exit_code = executor(commands_list);
 		// free_commands(commands_list);
 		// Lexer test
 		// ft_lstiter(tokens_list, print_token);

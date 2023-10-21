@@ -25,7 +25,7 @@ t_token	*create_token(char *str, int type, t_list *env)
 	return (token);
 }
 
-t_command	*create_command(int num_args, t_list *env)
+t_command	*create_command(int num_args, t_list *env, int exit_code)
 {
 	t_command	*command;
 
@@ -43,6 +43,7 @@ t_command	*create_command(int num_args, t_list *env)
 	command->infile = NULL;
 	command->outfile = NULL;
 	command->env = env;
+	command->exit_code = exit_code;
 	return (command);
 }
 

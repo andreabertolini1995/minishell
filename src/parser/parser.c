@@ -64,7 +64,10 @@ static void	parse_cmd_args(t_command *command,
 			if ((*token)->type == WORD
 				|| (is_same_string(command->cmd, "echo")))
 			{
-				command->args[arg_index] = ft_strdup((*token)->content);
+				if (is_same_string("$?", (*token)->content))
+					command->args[arg_index] = ft_itoa(command->exit_code);
+				else
+					command->args[arg_index] = ft_strdup((*token)->content);
 				arg_index++;
 			}
 		}
@@ -102,7 +105,7 @@ static void	parse_redirections_pipes(t_command *command,
 	}
 }
 
-t_list	*parser(t_list *tokens_list, t_list *env)
+t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 {
 	t_list		*commands_list;
 	t_token		*token;
@@ -116,7 +119,7 @@ t_list	*parser(t_list *tokens_list, t_list *env)
 		if (!is_same_string(token->content, " "))
 		{
 			num_args = ft_num_args(tokens_list);
-			command = create_command(num_args, env);
+			command = create_command(num_args, env, exit_code);
 			parse_cmd_args(command, &tokens_list, &token);
 			parse_redirections_pipes(command, &tokens_list, &token);
 			ft_lstadd_back(&commands_list, ft_lstnew(command));
