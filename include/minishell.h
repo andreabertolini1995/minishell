@@ -25,6 +25,7 @@
 # include <sys/wait.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <termios.h>
 # include "../libft/libft.h"
 
 # define EXIT_SUCCESS 0
@@ -132,6 +133,7 @@ char		*ft_getenv(t_list *env_list, char *var_name);
 
 // Signals
 void		signal_handler(int signum);
+void		disable_quit_signal();
 
 // Utils
 int			return_with_error(char *error_msg);

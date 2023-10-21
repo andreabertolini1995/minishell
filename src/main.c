@@ -78,6 +78,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
+	disable_quit_signal();
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	init_shell();
