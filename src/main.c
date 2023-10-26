@@ -20,7 +20,7 @@ void	init_shell(void)
 	printf("\n| | | | | | | | | | \\__ \\ | | |  __/ | |");
 	printf("\n|_| |_| |_|_|_| |_|_|___/_| |_|\\___|_|_|");
 	printf("\n\n");
-	printf("         by abertoli & shurlebu\n\n");
+	printf("         by abertoli & eltongid\n\n");
 	sleep(1);
 	clear();
 }
@@ -78,7 +78,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
-	disable_quit_signal();
 	signal(SIGINT, signal_handler);
 	signal(SIGQUIT, SIG_IGN);
 	init_shell();

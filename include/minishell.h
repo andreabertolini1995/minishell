@@ -57,7 +57,7 @@ typedef enum e_token_type
 	WORD = 0,
 	PIPE = 1,
 	REDIRECTION = 2,
-	SPACE = 3,
+	EMPTY = 3,
 }	t_token_type;
 
 typedef struct s_token

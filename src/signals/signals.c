@@ -20,19 +20,3 @@ void	signal_handler(int signum)
 		printf("\n***: ");
 	}
 }
-
-void disable_quit_signal() {
-    struct termios term;
-    
-    if (tcgetattr(STDIN_FILENO, &term) == -1) {
-        perror("tcgetattr");
-        exit(EXIT_FAILURE);
-    }
-
-    // term.c_cc[VQUIT] = _POSIX_VDISABLE; // Disable the quit character
-	term.c_lflag &= ~ECHOCTL; // Disable echo of control characters
-    if (tcsetattr(STDIN_FILENO, TCSANOW, &term) == -1) {
-        perror("tcsetattr");
-        exit(EXIT_FAILURE);
-    }
-}

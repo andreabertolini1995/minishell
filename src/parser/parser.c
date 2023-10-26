@@ -53,9 +53,9 @@ static void	parse_cmd_args(t_command *command,
 	arg_index = 0;
 	list_size = ft_lstsize((*tokens_list));
 	if (list_size > 1)
-		(*tokens_list) = (*tokens_list)->next; // skipping the first space
+		(*tokens_list) = (*tokens_list)->next; // skipping the first EMPTY
 	while (((*token)->type == WORD
-			|| (*token)->type == SPACE) && (*tokens_list) != NULL)
+			|| (*token)->type == EMPTY) && (*tokens_list) != NULL)
 	{
 		if (command->cmd == NULL)
 			update_cmd(command, (*token));

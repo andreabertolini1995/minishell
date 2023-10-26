@@ -25,7 +25,7 @@ int	ft_num_args(t_list *tokens_list)
 	cmd = token->content;
 	if (token->type != WORD)
 		return (0); // hardcoded for << 
-	while ((token->type == WORD || token->type == SPACE) && tokens_list != NULL)
+	while ((token->type == WORD || token->type == EMPTY) && tokens_list != NULL)
 	{
 		if (token->type == WORD || (is_same_string(cmd, "echo")))
 			num_args++;
@@ -41,7 +41,7 @@ int	ft_num_args(t_list *tokens_list)
 
 t_token	*update_tokens_list(t_list **tokens_list, t_token *token)
 {
-	while (token->type == SPACE && (*tokens_list) != NULL)
+	while (token->type == EMPTY && (*tokens_list) != NULL)
 	{
 		(*tokens_list) = (*tokens_list)->next;
 		if ((*tokens_list) != NULL)
