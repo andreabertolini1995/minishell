@@ -12,18 +12,23 @@
 
 #include "../include/minishell.h"
 
+int g_signal_num;
+
 void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		rl_replace_line("", 0); // necessary?
+		// rl_replace_line("", 0); // necessary?
 		if (g_blocking_command == true)
 		{
 			printf("\n");
 			g_blocking_command = false;
 		}
 		else
+		{
+			g_signal_num = SIGINT;
 			printf("\n***: ");
+		}
 	}
 }
 

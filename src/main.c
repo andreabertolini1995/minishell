@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+extern int g_signal_num;
+
 void	init_shell(void)
 {
 	printf("\n           _       _     _          _ _");
@@ -52,7 +54,8 @@ static void	minishell(t_list *env)
 	exit_code = 0;
 	while (42)
 	{
-		cmd = readline("***: ");
+		cmd = readline("****: ");
+		g_signal_num = 0;
 		if (cmd == NULL)
 		{
 			printf("exit\n");

@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+extern int g_signal_num;
+
 void	redirect_output(t_command *command)
 {
 	int	file;
@@ -43,20 +45,14 @@ void	redirect_input(t_command *command)
 	else
 	{
 		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
-		while (42)
+		while (g_signal_num != SIGINT && !is_same_string(line, command->infile))
 		{
 			line = readline("> ");
-			if (is_same_string(line, command->infile))
-			{
-				infile_redirect(command->infile);
-				unlink(command->infile);
-				break ;
-			}
-			else
-			{
-				write(file, line, ft_strlen(line));
-				write(file, "\n", 1);
-			}
+			write(file, line, ft_strlen(line));
+			write(file, "\n", 1);
 		}
+		infile_redirect(command->infile);
+		unlink(command->infile);
+		close(file);
 	}
 }
