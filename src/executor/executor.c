@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+int g_blocking_command = false;
+
 static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char	*cmd_path;

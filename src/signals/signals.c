@@ -12,11 +12,31 @@
 
 #include "../include/minishell.h"
 
-void	signal_handler(int signum)
+void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		// rl_replace_line("", 0);
-		printf("\n***: ");
+		rl_replace_line("", 0); // necessary?
+		if (g_blocking_command == true)
+		{
+			printf("\n");
+			g_blocking_command = false;
+		}
+		else
+			printf("\n***: ");
+	}
+}
+
+void	sigquit_handler(int signum)
+{
+	if (signum == SIGQUIT)
+	{
+		if (g_blocking_command == true)
+		{
+			printf("Quit (core dumped)\n"); // exit code: 131
+			g_blocking_command = false;
+		}
+		else
+			signal(SIGQUIT, SIG_IGN);
 	}
 }

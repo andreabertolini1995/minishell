@@ -105,6 +105,16 @@ static void	parse_redirections_pipes(t_command *command,
 	}
 }
 
+static bool is_blocking_command(t_command *command)
+{
+	if ((is_same_string(command->cmd, "cat")
+		&& command->num_args == 0)
+		|| (is_same_string(command->cmd, "grep")
+		&& command->num_args > 0))
+		return true;
+	return false;
+}
+
 t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 {
 	t_list		*commands_list;
@@ -125,5 +135,7 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 			ft_lstadd_back(&commands_list, ft_lstnew(command));
 		}
 	}
+	if (is_blocking_command(command))
+			g_blocking_command = true;
 	return (commands_list);
 }

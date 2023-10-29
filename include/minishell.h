@@ -32,6 +32,8 @@
 # define EXIT_FAILURE 1
 # define EXIT_CMD_NOT_FOUND 127
 
+extern int g_blocking_command;
+
 typedef struct s_env
 {
 	char	*name;
@@ -132,8 +134,8 @@ bool		is_env_var(t_list *env_list, char *var_name);
 char		*ft_getenv(t_list *env_list, char *var_name);
 
 // Signals
-void		signal_handler(int signum);
-void		disable_quit_signal();
+void		sigint_handler(int signum);
+void		sigquit_handler(int signum);
 
 // Utils
 int			return_with_error(char *error_msg);
