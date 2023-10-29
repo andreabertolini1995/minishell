@@ -19,7 +19,8 @@ bool	is_valid_identifier(char *str)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (!ft_isalpha(str[i]) && str[i] != ' ')
+		if (!ft_isalpha(str[i]) && str[i] != ' '
+			&& str[i] != '_')
 			return (false);
 		i++;
 	}
@@ -44,7 +45,7 @@ static void	delete_env_var(t_command *command, int arg_index)
 			else
 				prev_list->next = env_list->next;
 			free(env_var);
-			free(env_list);
+			// free(env_list);
 		}
 		prev_list = env_list;
 		env_list = env_list->next;
