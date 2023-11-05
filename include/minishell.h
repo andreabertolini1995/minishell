@@ -114,7 +114,7 @@ int			get_num_pipes(t_list *commands_list);
 int			ft_pipe(t_list *commands_list, int num_pipes);
 
 // Fds
-void		set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i);
+void		set_up_fds(int **pipe_fd, int num_pipes, int i);
 void		free_pipe_fds(int **pipe_fd, int num_pipes);
 void		close_fds(int num_pipes, int **pipe_fd);
 

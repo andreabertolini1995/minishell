@@ -92,15 +92,14 @@ int	child_process(t_command *command, int *pipe_fd)
 	exit_code = 0;
 	argv = fill_argv(command);
 	envp[0] = NULL;
-	close(pipe_fd[0]);
 	if (is_builtin(command->cmd))
 		exit_code = execute_builtin_child(command, pipe_fd);
 	else
 		execute_cmd(command, argv, envp);
+	close(pipe_fd[0]);
 	close(pipe_fd[1]);
 	free_argv(argv);
-	exit(1);
-	return (exit_code); // not run
+	return (exit_code);
 }
 
 void	wait_processes(int num_pipes, int *pids)

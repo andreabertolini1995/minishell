@@ -50,23 +50,29 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 {
 	int			i;
 	t_command	*command;
+	int			exit_code;
+	int			wstatus;
 
 	i = 0;
-	while (i < (num_pipes + 1))
+	while (i <= num_pipes)
 	{
 		command = commands_list->content;
 		pids[i] = fork();
 		if (pids[i] < 0)
 			return (return_with_error("Fork failed."));
-		else if (pids[i] == 0) {
-			set_up_fds(command, pipe_fd, num_pipes, i);
+		else if (pids[i] == 0)
+		{
+			set_up_fds(pipe_fd, num_pipes, i);
+			exit_code = child_process(command, pipe_fd[i]);
+			// exit(exit_code);
 		}
-		// if (command->exit_code == EXIT_FAILURE)
-		// 	return (command->exit_code);
+		waitpid(pids[i], &wstatus, 0); // it stops here 
+		if (WIFEXITED(wstatus))
+			exit_code = WEXITSTATUS(wstatus);
 		i++;
 		commands_list = commands_list->next;
 	}
-	return (command->exit_code);
+	return (exit_code);
 }
 
 int	ft_pipe(t_list *commands_list, int num_pipes)
@@ -81,9 +87,9 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 		return (1);
 	create_pipes(num_pipes, pipe_fd);
 	exit_code = ft_fork(commands_list, pipe_fd, num_pipes, pids);
-	close_fds(num_pipes, pipe_fd);
-	wait_processes(num_pipes, pids);
-	free_pipe_fds(pipe_fd, num_pipes);
+	// close_fds(num_pipes, pipe_fd);
+	// wait_processes(num_pipes, pids);
+	// free_pipe_fds(pipe_fd, num_pipes);
 	free(pids);
 	return (exit_code);
 }
