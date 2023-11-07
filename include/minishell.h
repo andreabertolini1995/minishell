@@ -99,9 +99,9 @@ int			check_for_redirections(char *cmd, int i,
 int			executor(t_list *commands_list);
 int			execute(t_command *command);
 void		execute_cmd(t_command *command, char **argv, char *envp[2]);
-void		wait_processes(int num_pipes, int *pids);
+void		wait_processes(int num_pipes, pid_t *pids);
 t_list		*update_commands_list(t_list *commands_list, int num_pipes);
-int			child_process(t_command *command, int *pipe_fd);
+void		child_process(t_command *command, int *pipe_fd);
 bool		is_builtin(char *cmd);
 int			execute_builtin_parent(t_command *command, int *pipe_fd);
 int			execute_builtin_child(t_command *command, int *pipe_fd);
@@ -114,7 +114,7 @@ int			get_num_pipes(t_list *commands_list);
 int			ft_pipe(t_list *commands_list, int num_pipes);
 
 // Fds
-void		set_up_fds(t_command *command, int **pipe_fd, int num_pipes, int i);
+void		set_up_fds(int **pipe_fd, int num_pipes, int i);
 void		free_pipe_fds(int **pipe_fd, int num_pipes);
 void		close_fds(int num_pipes, int **pipe_fd);
 

@@ -46,34 +46,49 @@ int	get_num_pipes(t_list *commands_list)
 }
 
 static int	ft_fork(t_list *commands_list, int **pipe_fd,
-					int num_pipes, int *pids)
+					int num_pipes, pid_t *pids)
 {
 	int			i;
 	t_command	*command;
+	int			exit_code;
+	// int			wstatus;
 
 	i = 0;
-	while (i < (num_pipes + 1))
+	exit_code = 0;
+	while (i <= num_pipes)
 	{
 		command = commands_list->content;
 		pids[i] = fork();
 		if (pids[i] < 0)
 			return (return_with_error("Fork failed."));
-		else if (pids[i] == 0) {
-			set_up_fds(command, pipe_fd, num_pipes, i);
+		else if (pids[i] == 0)
+		{
+			set_up_fds(pipe_fd, num_pipes, i);
+			exit(execute(command)); // would like to use child_process func instead
 		}
-		// if (command->exit_code == EXIT_FAILURE)
-		// 	return (command->exit_code);
+		// else
+		// {
+		// 	if (is_builtin(command->cmd))
+		// 		exit_code = execute_builtin_parent(command, pipe_fd[i]);
+		// 	waitpid(pids[i], &wstatus, 0);
+		// 	if (!is_builtin(command->cmd))
+		// 	{
+		// 		if (WIFEXITED(wstatus))
+		// 			exit_code = WEXITSTATUS(wstatus);
+		// 	}
+		// 	close_fds(num_pipes, pipe_fd);
+		// }
 		i++;
 		commands_list = commands_list->next;
 	}
-	return (command->exit_code);
+	return (exit_code);
 }
 
 int	ft_pipe(t_list *commands_list, int num_pipes)
 {
-	int	**pipe_fd;
-	int	*pids;
-	int	exit_code;
+	int		**pipe_fd;
+	pid_t	*pids;
+	int		exit_code;
 
 	pipe_fd = initialize_pipe_fds(num_pipes);
 	pids = (int *) malloc (sizeof(int) * (num_pipes + 1));

@@ -83,27 +83,26 @@ static char	**fill_argv(t_command *command)
 	return (argv);
 }
 
-int	child_process(t_command *command, int *pipe_fd)
+void	child_process(t_command *command, int *pipe_fd)
 {
 	char	**argv;
 	char	*envp[2];
-	int		exit_code;
 
-	exit_code = 0;
 	argv = fill_argv(command);
 	envp[0] = NULL;
 	close(pipe_fd[0]);
 	if (is_builtin(command->cmd))
-		exit_code = execute_builtin_child(command, pipe_fd);
+	{
+		command->exit_code = execute_builtin_child(command, pipe_fd);
+		close(pipe_fd[1]);
+		free_argv(argv);
+		exit(command->exit_code);
+	}	
 	else
 		execute_cmd(command, argv, envp);
-	close(pipe_fd[1]);
-	free_argv(argv);
-	exit(1);
-	return (exit_code); // not run
 }
 
-void	wait_processes(int num_pipes, int *pids)
+void	wait_processes(int num_pipes, pid_t *pids)
 {
 	int	i;
 

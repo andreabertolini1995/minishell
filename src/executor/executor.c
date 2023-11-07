@@ -65,8 +65,10 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 			printf("minishell: %s: command not found\n", command->cmd);
 			// free(argv);
 			// free(cmd_path); --> causing free/malloc issues
+			command->exit_code = EXIT_CMD_NOT_FOUND;
+			printf("Exit code: %d\n", command->exit_code);
+			exit(command->exit_code);
 		}
-		exit(EXIT_CMD_NOT_FOUND);
 	}
 	free(cmd_path);
 }
@@ -85,7 +87,7 @@ int	execute(t_command *command)
 	if (pid < 0)
 		return (return_with_error("Fork failed."));
 	else if (pid == 0)
-		exit_code = child_process(command, pipe_fd);
+		child_process(command, pipe_fd);
 	else
 	{
 		if (is_builtin(command->cmd))
