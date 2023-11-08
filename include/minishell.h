@@ -99,7 +99,7 @@ int			check_for_redirections(char *cmd, int i,
 int			executor(t_list *commands_list);
 int			execute(t_command *command);
 void		execute_cmd(t_command *command, char **argv, char *envp[2]);
-void		wait_processes(int num_pipes, pid_t *pids);
+int			wait_processes(int num_pipes, pid_t *pids);
 t_list		*update_commands_list(t_list *commands_list, int num_pipes);
 void		child_process(t_command *command, int *pipe_fd);
 bool		is_builtin(char *cmd);
