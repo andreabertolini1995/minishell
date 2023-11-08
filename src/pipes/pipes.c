@@ -72,7 +72,6 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *p
 		i++;
 	}
 	close_fds(num_pipes, pipe_fd);
-	close_fds(num_pipes, pipe_fd);
 	last_exit_status = wait_processes(num_pipes, pids);
 	return (last_exit_status);
 }
