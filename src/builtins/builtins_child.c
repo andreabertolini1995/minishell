@@ -83,7 +83,7 @@ char	*ft_getenv(t_list *env_list, char *var_name)
 			return (env_var->value);
 		env_list = env_list->next;
 	}
-	return ("");
+	return (NULL);
 }
 
 int	ft_env(t_command *command, char *cmd)

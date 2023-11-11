@@ -22,8 +22,9 @@ bool	is_file(char *path_cmd)
 
 bool	is_same_string(char *str1, char *str2)
 {
-	if (!ft_strncmp(str1, str2, ft_strlen(str1))
-		&& ft_strlen(str1) > 0)
+	if ((str1 != NULL && str2 != NULL)
+		&& (!ft_strncmp(str1, str2, ft_strlen(str1))
+		&& ft_strlen(str1) > 0))
 		return (true);
 	else
 		return (false);

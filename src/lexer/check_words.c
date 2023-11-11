@@ -34,6 +34,7 @@ static char	*create_word(char *cmd, int length, int i)
 static char	*check_if_env(char *word, t_list *env)
 {
 	int	i;
+	// char *env_var;
 
 	i = 0;
 	while (word[i + 1] != '\0')
@@ -47,6 +48,7 @@ static char	*check_if_env(char *word, t_list *env)
 	}
 	return (word);
 }
+
 
 int	check_for_word_in_single_quotes(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
