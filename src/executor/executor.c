@@ -65,9 +65,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 			printf("minishell: %s: command not found\n", command->cmd);
 			// free(argv);
 			// free(cmd_path); --> causing free/malloc issues
-			command->exit_code = EXIT_CMD_NOT_FOUND;
-			printf("Exit code: %d\n", command->exit_code);
-			exit(command->exit_code);
+			exit(EXIT_CMD_NOT_FOUND);
 		}
 	}
 	free(cmd_path);

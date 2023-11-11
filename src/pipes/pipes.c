@@ -47,14 +47,12 @@ int	get_num_pipes(t_list *commands_list)
 
 static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *pids)
 {
-	int	i;
+	int			i;
 	t_command	*command;
-	//int	wstatus;
-	int	last_exit_status;
+	int			exit_status;
 
 	i = 0;
-	//wstatus = 0;
-	last_exit_status = 0;
+	exit_status = 0;
 	while(i <= num_pipes)
 	{
 		command = (t_command *)(commands_list->content);
@@ -67,13 +65,13 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *p
 			exit(execute(command));
 		}
 		else
-				last_exit_status = execute_builtin_parent(command, pipe_fd[i]);
+			exit_status = execute_builtin_parent(command, pipe_fd[i]);
 		commands_list = commands_list->next;
 		i++;
 	}
 	close_fds(num_pipes, pipe_fd);
-	last_exit_status = wait_processes(num_pipes, pids);
-	return (last_exit_status);
+	exit_status = wait_processes(num_pipes, pids);
+	return (exit_status);
 }
 
 int	ft_pipe(t_list *commands_list, int num_pipes)
@@ -89,7 +87,6 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 	create_pipes(num_pipes, pipe_fd);
 	exit_code = ft_fork(commands_list, pipe_fd, num_pipes, pids);
 	close_fds(num_pipes, pipe_fd);
-	//wait_processes(num_pipes, pids);
 	free_pipe_fds(pipe_fd, num_pipes);
 	free(pids);
 	return (exit_code);

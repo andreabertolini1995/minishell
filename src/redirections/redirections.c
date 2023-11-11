@@ -45,11 +45,14 @@ void	redirect_input(t_command *command)
 	else
 	{
 		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
-		while (g_signal_num != SIGINT && !is_same_string(line, command->infile))
+		while (g_signal_num != SIGINT)
 		{
 			line = readline("> ");
+			if (is_same_string(line, command->infile))
+				break ;
 			write(file, line, ft_strlen(line));
 			write(file, "\n", 1);
+			
 		}
 		infile_redirect(command->infile);
 		unlink(command->infile);
