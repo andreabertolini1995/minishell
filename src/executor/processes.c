@@ -102,14 +102,35 @@ void	child_process(t_command *command, int *pipe_fd)
 		execute_cmd(command, argv, envp);
 }
 
-void	wait_processes(int num_pipes, pid_t *pids)
+// void	wait_processes(int num_pipes, pid_t *pids)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while (i < (num_pipes + 1))
+// 	{
+// 		waitpid(pids[i], NULL, 0);
+// 		i++;
+// 	}
+// }
+
+int	wait_processes(int num_pipes, pid_t *pids) //updated function, returns int status in ft_fork
 {
 	int	i;
+	int	wstatus;
+	int	last_exit_status;
 
 	i = 0;
+	wstatus = 0;
 	while (i < (num_pipes + 1))
 	{
-		waitpid(pids[i], NULL, 0);
+		waitpid(pids[i], &wstatus, 0);
+		if(WIFEXITED(wstatus))
+		{
+			if(i == num_pipes)
+				last_exit_status = WEXITSTATUS(wstatus);
+		}
 		i++;
 	}
+	return(last_exit_status);
 }

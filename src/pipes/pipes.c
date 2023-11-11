@@ -45,43 +45,35 @@ int	get_num_pipes(t_list *commands_list)
 	return (num_pipes);
 }
 
-static int	ft_fork(t_list *commands_list, int **pipe_fd,
-					int num_pipes, pid_t *pids)
+static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *pids)
 {
-	int			i;
+	int	i;
 	t_command	*command;
-	int			exit_code;
-	// int			wstatus;
+	//int	wstatus;
+	int	last_exit_status;
 
 	i = 0;
-	exit_code = 0;
-	while (i <= num_pipes)
+	//wstatus = 0;
+	last_exit_status = 0;
+	while(i <= num_pipes)
 	{
-		command = commands_list->content;
+		command = (t_command *)(commands_list->content);
 		pids[i] = fork();
 		if (pids[i] < 0)
-			return (return_with_error("Fork failed."));
+			return(return_with_error("failed"));
 		else if (pids[i] == 0)
 		{
 			set_up_fds(pipe_fd, num_pipes, i);
-			exit(execute(command)); // would like to use child_process func instead
+			exit(execute(command));
 		}
-		// else
-		// {
-		// 	if (is_builtin(command->cmd))
-		// 		exit_code = execute_builtin_parent(command, pipe_fd[i]);
-		// 	waitpid(pids[i], &wstatus, 0);
-		// 	if (!is_builtin(command->cmd))
-		// 	{
-		// 		if (WIFEXITED(wstatus))
-		// 			exit_code = WEXITSTATUS(wstatus);
-		// 	}
-		// 	close_fds(num_pipes, pipe_fd);
-		// }
-		i++;
+		else
+				last_exit_status = execute_builtin_parent(command, pipe_fd[i]);
 		commands_list = commands_list->next;
+		i++;
 	}
-	return (exit_code);
+	close_fds(num_pipes, pipe_fd);
+	last_exit_status = wait_processes(num_pipes, pids);
+	return (last_exit_status);
 }
 
 int	ft_pipe(t_list *commands_list, int num_pipes)
@@ -97,7 +89,7 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 	create_pipes(num_pipes, pipe_fd);
 	exit_code = ft_fork(commands_list, pipe_fd, num_pipes, pids);
 	close_fds(num_pipes, pipe_fd);
-	wait_processes(num_pipes, pids);
+	//wait_processes(num_pipes, pids);
 	free_pipe_fds(pipe_fd, num_pipes);
 	free(pids);
 	return (exit_code);

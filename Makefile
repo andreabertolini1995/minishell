@@ -4,7 +4,7 @@ SOURCES = $(wildcard $(SRCDIR)/**/*.c $(SRCDIR)/*.c)
 OBJ_DIR = obj
 OBJS = $(patsubst $(SOURCES)/%.c,$(OBJ_DIR)/%.o,$(SOURCES))
 LIBFT = libft/libft.a
-INCLUDES = -I libft/includes -I include -g3
+INCLUDES = -I libft/includes -I include -g3 -lreadline
 
 CC = cc
 RM = rm -f
