@@ -12,6 +12,8 @@
 
 #include "../include/minishell.h"
 
+extern int g_signal_num;
+
 static bool	check_new_line(char *option)
 {
 	size_t	i;
@@ -47,7 +49,13 @@ int	ft_echo(t_command *command)
 	}
 	if (is_same_string(command->args[i], "$?"))
 	{
-		printf("%d", command->exit_code);
+		printf("Signal num: %d\n", g_signal_num);
+		if (g_signal_num == SIGINT)
+			printf("130\n");
+		else if (g_signal_num == SIGQUIT)
+			printf("131\n");
+		else
+			printf("%d", command->exit_code);
 		i++;
 	}
 	while (i < command->num_args)

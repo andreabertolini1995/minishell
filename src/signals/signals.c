@@ -23,10 +23,12 @@ void	sigint_handler(int signum)
 		{
 			printf("\n");
 			g_blocking_command = false;
+			g_signal_num = 131;
 		}
 		else
 		{
-			g_signal_num = SIGINT;
+			// g_signal_num = SIGINT;
+			g_signal_num = 131;
 			printf("\n***: ");
 		}
 	}
@@ -40,8 +42,12 @@ void	sigquit_handler(int signum)
 		{
 			printf("Quit (core dumped)\n"); // exit code: 131
 			g_blocking_command = false;
+			g_signal_num = 131;
 		}
 		else
+		{
 			signal(SIGQUIT, SIG_IGN);
+			// g_signal_num = SIGQUIT;
+		}	
 	}
 }
