@@ -24,7 +24,7 @@ bool	is_same_string(char *str1, char *str2)
 {
 	if ((str1 != NULL && str2 != NULL)
 		&& (!ft_strncmp(str1, str2, ft_strlen(str1))
-		&& ft_strlen(str1) > 0))
+			&& ft_strlen(str1) > 0))
 		return (true);
 	else
 		return (false);
@@ -34,7 +34,7 @@ bool	is_infile_redirection(char *cmd)
 {
 	if (is_same_string(cmd, "<")
 		|| is_same_string(cmd, "<<"))
-			return (true);
+		return (true);
 	else
 		return (false);
 }

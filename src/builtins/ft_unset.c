@@ -45,7 +45,6 @@ static void	delete_env_var(t_command *command, int arg_index)
 			else
 				prev_list->next = env_list->next;
 			free(env_var);
-			// free(env_list);
 		}
 		prev_list = env_list;
 		env_list = env_list->next;

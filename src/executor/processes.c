@@ -101,28 +101,23 @@ void	child_process(t_command *command, int *pipe_fd)
 		close(pipe_fd[1]);
 		free_argv(argv);
 		exit(command->exit_code);
-	}	
+	}
 	else
 		execute_cmd(command, argv, envp);
 }
 
-int	wait_processes(int num_pipes, pid_t *pids)
+int	parent_process(t_command *command, int *pipe_fd, pid_t pid)
 {
-	int	i;
-	int	wstatus;
-	int	last_exit_status;
+	int		wstatus;
+	int		exit_code;
 
-	i = 0;
-	wstatus = 0;
-	while (i < (num_pipes + 1))
+	if (is_builtin(command->cmd))
+		exit_code = execute_builtin_parent(command, pipe_fd);
+	waitpid(pid, &wstatus, 0);
+	if (!is_builtin(command->cmd))
 	{
-		waitpid(pids[i], &wstatus, 0);
-		if(WIFEXITED(wstatus))
-		{
-			if(i == num_pipes)
-				last_exit_status = WEXITSTATUS(wstatus);
-		}
-		i++;
+		if (WIFEXITED(wstatus))
+			exit_code = WEXITSTATUS(wstatus);
 	}
-	return(last_exit_status);
+	return (exit_code);
 }

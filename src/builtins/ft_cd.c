@@ -68,7 +68,7 @@ static int	change_dir(t_command *command, char *pwd)
 
 	ft_export(create_export_cmd(command, "OLDPWD",
 			getcwd(buffer, sizeof(buffer))));
-	chdir(pwd); 
+	chdir(pwd);
 	ft_export(create_export_cmd(command, "PWD",
 			getcwd(buffer, sizeof(buffer))));
 	return (EXIT_SUCCESS);

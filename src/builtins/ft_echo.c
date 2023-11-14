@@ -12,61 +12,66 @@
 
 #include "../include/minishell.h"
 
-int	**initialize_pipe_fds(int num_pipes)
+static bool	check_new_line(char *option)
 {
-	int	**pipe_fd;
-	int	i;
-
-	pipe_fd = (int **) malloc (sizeof(int *) * num_pipes);
-	if (pipe_fd == NULL)
-		return (NULL);
-	i = 0;
-	while (i < num_pipes)
-	{
-		pipe_fd[i] = (int *) malloc (sizeof(int) * 2);
-		if (pipe_fd[i] == NULL)
-			return (NULL);
-		i++;
-	}
-	return (pipe_fd);
-}
-
-void	set_up_fds(int **pipe_fd, int num_pipes, int i)
-{
-	if (i == 0)
-		dup2(pipe_fd[i][1], STDOUT_FILENO);
-	else if (i > 0 && i < num_pipes)
-	{
-		dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-		dup2(pipe_fd[i][1], STDOUT_FILENO);
-	}
-	else if (i == num_pipes)
-		dup2(pipe_fd[i - 1][0], STDIN_FILENO);
-	close_fds(num_pipes, pipe_fd);
-}
-
-void	free_pipe_fds(int **pipe_fd, int num_pipes)
-{
-	int	i;
+	size_t	i;
 
 	i = 0;
-	while (i < num_pipes)
+	if (option[i] != '-' && option[i + 1] != 'n')
+		return (true);
+	while (option[i] != '\0')
 	{
-		free(pipe_fd[i]);
-		i++;
+		if (option[i] == '-')
+			i++;
+		while (option[i] == 'n')
+			i++;
 	}
-	free(pipe_fd);
+	if (i == ft_strlen(option))
+		return (false);
+	return (true);
 }
 
-void	close_fds(int num_pipes, int **pipe_fd)
+static void	print_exit_code(t_command *command)
 {
-	int	i;
+	if (g_signal_num == SIGINT)
+	{
+		printf("%d", EXIT_SIGINT);
+		g_signal_num = EXIT_SUCCESS;
+	}
+	else if (g_signal_num == SIGQUIT)
+	{
+		printf("%d", EXIT_SIGQUIT);
+		g_signal_num = EXIT_SUCCESS;
+	}
+	else
+		printf("%d", command->exit_code);
+}
+
+int	ft_echo(t_command *command)
+{
+	int		i;
+	bool	new_line;
 
 	i = 0;
-	while (i < num_pipes)
+	new_line = check_new_line(command->args[i]);
+	if (new_line == false)
 	{
-		close(pipe_fd[i][0]);
-		close(pipe_fd[i][1]);
+		i++;
+		while (!check_new_line(command->args[i])
+			|| is_same_string(command->args[i], " "))
+			i++;
+	}
+	if (is_same_string(command->args[i], "$?"))
+	{
+		print_exit_code(command);
 		i++;
 	}
+	while (i < command->num_args)
+	{
+		printf("%s", command->args[i]);
+		i++;
+	}
+	if (new_line == true)
+		printf("\n");
+	return (EXIT_SUCCESS);
 }

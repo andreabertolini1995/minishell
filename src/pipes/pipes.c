@@ -45,7 +45,8 @@ int	get_num_pipes(t_list *commands_list)
 	return (num_pipes);
 }
 
-static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *pids)
+static int	ft_fork(t_list *commands_list, int **pipe_fd,
+					int num_pipes, pid_t *pids)
 {
 	int			i;
 	t_command	*command;
@@ -53,12 +54,12 @@ static int ft_fork(t_list *commands_list, int **pipe_fd, int num_pipes, pid_t *p
 
 	i = 0;
 	exit_status = 0;
-	while(i <= num_pipes)
+	while (i <= num_pipes)
 	{
 		command = (t_command *)(commands_list->content);
 		pids[i] = fork();
 		if (pids[i] < 0)
-			return(return_with_error("failed"));
+			return (return_with_error("failed"));
 		else if (pids[i] == 0)
 		{
 			set_up_fds(pipe_fd, num_pipes, i);

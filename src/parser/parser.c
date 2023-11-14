@@ -38,7 +38,7 @@ static void	add_redirection(t_command *command,
 
 static	void	update_cmd(t_command *command, t_token *token)
 {
-	if (token->content == NULL) // in case $(not-env-variable)
+	if (token->content == NULL)
 		command->cmd = NULL;
 	else
 		command->cmd = ft_strdup(token->content);
@@ -53,7 +53,7 @@ static void	parse_cmd_args(t_command *command,
 	arg_index = 0;
 	list_size = ft_lstsize((*tokens_list));
 	if (list_size > 1)
-		(*tokens_list) = (*tokens_list)->next; // skipping the first EMPTY
+		(*tokens_list) = (*tokens_list)->next;
 	while (((*token)->type == WORD
 			|| (*token)->type == EMPTY) && (*tokens_list) != NULL)
 	{
@@ -66,7 +66,6 @@ static void	parse_cmd_args(t_command *command,
 			{
 				// if (is_same_string("$?", (*token)->content))
 				// 	command->args[arg_index] = ft_itoa(command->exit_code);
-				// else
 				command->args[arg_index] = ft_strdup((*token)->content);
 				arg_index++;
 			}
@@ -105,19 +104,6 @@ static void	parse_redirections_pipes(t_command *command,
 	}
 }
 
-static bool is_blocking_command(t_command *command)
-{
-	if (command->cmd != NULL)
-	{
-		if ((is_same_string(command->cmd, "cat")
-			&& command->num_args == 0)
-			|| (is_same_string(command->cmd, "grep")
-			&& command->num_args > 0))
-			return true;
-	}
-	return false;
-}
-
 t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 {
 	t_list		*commands_list;
@@ -139,6 +125,6 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 		}
 	}
 	if (is_blocking_command(command))
-			g_blocking_command = true;
+		g_blocking_command = true;
 	return (commands_list);
 }

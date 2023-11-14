@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-int g_blocking_command = false;
+int	g_blocking_command = false;
 
 static char	*combine_cmd_path(char *cmd, char *path)
 {
@@ -63,8 +63,6 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		if (ft_strlen(command->cmd) > 0)
 		{
 			printf("minishell: %s: command not found\n", command->cmd);
-			// free(argv);
-			// free(cmd_path); --> causing free/malloc issues
 			exit(EXIT_CMD_NOT_FOUND);
 		}
 	}
@@ -75,7 +73,6 @@ int	execute(t_command *command)
 {
 	int		pipe_fd[2];
 	pid_t	pid;
-	int		wstatus;
 	int		exit_code;
 
 	exit_code = 0;
@@ -87,17 +84,7 @@ int	execute(t_command *command)
 	else if (pid == 0)
 		child_process(command, pipe_fd);
 	else
-	{
-		if (is_builtin(command->cmd))
-			exit_code = execute_builtin_parent(command, pipe_fd);
-		waitpid(pid, &wstatus, 0);
-		if (!is_builtin(command->cmd))
-		{
-			if (WIFEXITED(wstatus))
-				exit_code = WEXITSTATUS(wstatus);
-		}
-		close(pipe_fd[0]);
-	}
+		exit_code = parent_process(command, pipe_fd, pid);
 	return (exit_code);
 }
 

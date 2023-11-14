@@ -34,8 +34,8 @@
 # define EXIT_SIGINT 130
 # define EXIT_SIGQUIT 131
 
-extern int g_blocking_command;
-extern int g_signal_num;
+extern int	g_blocking_command;
+extern int	g_signal_num;
 
 typedef struct s_env
 {
@@ -82,6 +82,7 @@ t_list		*parser(t_list *tokens_list, t_list *env, int exit_code);
 bool		is_file(char *path_cmd);
 int			ft_num_args(t_list *tokens_list);
 t_token		*update_tokens_list(t_list **tokens_list, t_token *token);
+bool		is_blocking_command(t_command *command);
 
 // Lexer
 t_list		*lexer(char *cmd, t_list *env);
@@ -105,6 +106,7 @@ void		execute_cmd(t_command *command, char **argv, char *envp[2]);
 int			wait_processes(int num_pipes, pid_t *pids);
 t_list		*update_commands_list(t_list *commands_list, int num_pipes);
 void		child_process(t_command *command, int *pipe_fd);
+int			parent_process(t_command *command, int *pipe_fd, pid_t pid);
 bool		is_builtin(char *cmd);
 int			execute_builtin_parent(t_command *command, int *pipe_fd);
 int			execute_builtin_child(t_command *command, int *pipe_fd);

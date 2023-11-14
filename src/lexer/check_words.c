@@ -48,7 +48,6 @@ static char	*check_if_env(char *word, t_list *env)
 	return (word);
 }
 
-
 int	check_for_word_in_single_quotes(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
 {
@@ -66,7 +65,7 @@ int	check_for_word_in_single_quotes(char *cmd, int i,
 		word = create_word(cmd, length, i);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
-	i++; // added recently
+	i++;
 	return (i);
 }
 
@@ -88,7 +87,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 		word = check_if_env(word, env);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}
-	i++; // added recently
+	i++;
 	return (i);
 }
 

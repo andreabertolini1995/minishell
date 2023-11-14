@@ -61,3 +61,24 @@ t_list	*update_commands_list(t_list *commands_list, int num_pipes)
 		commands_list = commands_list->next;
 	return (commands_list);
 }
+
+int	wait_processes(int num_pipes, pid_t *pids)
+{
+	int	i;
+	int	wstatus;
+	int	last_exit_status;
+
+	i = 0;
+	wstatus = 0;
+	while (i < (num_pipes + 1))
+	{
+		waitpid(pids[i], &wstatus, 0);
+		if (WIFEXITED(wstatus))
+		{
+			if (i == num_pipes)
+				last_exit_status = WEXITSTATUS(wstatus);
+		}
+		i++;
+	}
+	return (last_exit_status);
+}

@@ -55,7 +55,7 @@ static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_list *env)
 	return (i);
 }
 
-static void	check_for_EMPTYs(char *cmd, int i,
+static void	check_for_spaces(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
 {
 	if (cmd[i] == ' ')
@@ -83,7 +83,7 @@ t_list	*lexer(char *cmd, t_list *env)
 		}
 		i = check_for_redirections(cmd, i, &tokens_list, env);
 		i = check_for_word(cmd, i, &tokens_list, env);
-		check_for_EMPTYs(cmd, i, &tokens_list, env);
+		check_for_spaces(cmd, i, &tokens_list, env);
 		if (cmd[i] != '\0' && cmd[i] != '\''
 			&& cmd[i] != '"' && cmd[i] != ' ' && cmd[i] != '\t')
 			i++;
