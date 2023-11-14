@@ -46,10 +46,10 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	char	*cmd_path;
 	char	**sub_paths;
 
-	if (command->outfile != NULL)
-		redirect_output(command);
 	if (command->infile != NULL)
 		redirect_input(command);
+	if (command->outfile != NULL)
+		redirect_output(command);
 	if (is_same_string("/bin/", command->cmd))
 		cmd_path = command->cmd;
 	else
