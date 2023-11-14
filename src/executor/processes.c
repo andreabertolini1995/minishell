@@ -102,19 +102,7 @@ void	child_process(t_command *command, int *pipe_fd)
 		execute_cmd(command, argv, envp);
 }
 
-// void	wait_processes(int num_pipes, pid_t *pids)
-// {
-// 	int	i;
-
-// 	i = 0;
-// 	while (i < (num_pipes + 1))
-// 	{
-// 		waitpid(pids[i], NULL, 0);
-// 		i++;
-// 	}
-// }
-
-int	wait_processes(int num_pipes, pid_t *pids) //updated function, returns int status in ft_fork
+int	wait_processes(int num_pipes, pid_t *pids)
 {
 	int	i;
 	int	wstatus;

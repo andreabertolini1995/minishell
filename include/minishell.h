@@ -31,8 +31,11 @@
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
 # define EXIT_CMD_NOT_FOUND 127
+# define EXIT_SIGINT 130
+# define EXIT_SIGQUIT 131
 
 extern int g_blocking_command;
+extern int g_signal_num;
 
 typedef struct s_env
 {

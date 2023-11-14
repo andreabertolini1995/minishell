@@ -12,8 +12,6 @@
 
 #include "../include/minishell.h"
 
-extern int g_signal_num;
-
 void	redirect_output(t_command *command)
 {
 	int	file;
@@ -52,7 +50,6 @@ void	redirect_input(t_command *command)
 				break ;
 			write(file, line, ft_strlen(line));
 			write(file, "\n", 1);
-			
 		}
 		infile_redirect(command->infile);
 		unlink(command->infile);

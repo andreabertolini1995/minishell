@@ -19,18 +19,14 @@ void	sigint_handler(int signum)
 	if (signum == SIGINT)
 	{
 		// rl_replace_line("", 0); // necessary?
+		g_signal_num = SIGINT;
 		if (g_blocking_command == true)
 		{
 			printf("\n");
 			g_blocking_command = false;
-			g_signal_num = 131;
 		}
 		else
-		{
-			// g_signal_num = SIGINT;
-			g_signal_num = 131;
 			printf("\n***: ");
-		}
 	}
 }
 
@@ -40,14 +36,11 @@ void	sigquit_handler(int signum)
 	{
 		if (g_blocking_command == true)
 		{
-			printf("Quit (core dumped)\n"); // exit code: 131
+			printf("Quit (core dumped)\n");
 			g_blocking_command = false;
-			g_signal_num = 131;
+			g_signal_num = SIGQUIT;
 		}
 		else
-		{
 			signal(SIGQUIT, SIG_IGN);
-			// g_signal_num = SIGQUIT;
-		}	
 	}
 }
