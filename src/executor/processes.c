@@ -18,6 +18,10 @@ int	execute_builtin_child(t_command *command, int *pipe_fd)
 	int	exit_code;
 
 	exit_code = 0;
+	if (command->outfile != NULL)
+		redirect_output(command);
+	if (command->infile != NULL)
+		redirect_input(command);
 	if (is_same_string(command->cmd, "echo"))
 		exit_code = ft_echo(command);
 	else if (is_same_string(command->cmd, "pwd"))
