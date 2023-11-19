@@ -18,15 +18,11 @@ void	sigint_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
-		// rl_replace_line("", 0); // necessary?
+		printf("\n");
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
 		g_signal_num = SIGINT;
-		if (g_blocking_command == true)
-		{
-			printf("\n");
-			g_blocking_command = false;
-		}
-		else
-			printf("\n***: ");
 	}
 }
 

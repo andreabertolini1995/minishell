@@ -50,9 +50,10 @@ static void	minishell(t_list *env)
 	int		exit_code;
 
 	exit_code = 0;
-	g_signal_num = 0;
+	
 	while (42)
 	{
+		g_signal_num = 0;
 		cmd = readline("****: ");
 		if (cmd == NULL)
 		{

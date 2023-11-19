@@ -66,7 +66,6 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 			exit(EXIT_CMD_NOT_FOUND);
 		}
 	}
-	free(cmd_path);
 }
 
 int	execute(t_command *command)
