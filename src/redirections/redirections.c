@@ -43,6 +43,7 @@ void	redirect_input(t_command *command)
 	else
 	{
 		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		g_signal_num = EXIT_SUCCESS;
 		while (g_signal_num != SIGINT)
 		{
 			line = readline("> ");
