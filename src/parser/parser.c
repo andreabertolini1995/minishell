@@ -125,6 +125,6 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 		}
 	}
 	if (is_blocking_command(command))
-		g_blocking_command = true;
+		signal(SIGQUIT, sigquit_handler);
 	return (commands_list);
 }

@@ -34,7 +34,6 @@
 # define EXIT_SIGINT 130
 # define EXIT_SIGQUIT 131
 
-extern int	g_blocking_command;
 extern int	g_signal_num;
 
 typedef struct s_env

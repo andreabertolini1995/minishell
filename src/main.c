@@ -50,10 +50,11 @@ static void	minishell(t_list *env)
 	int		exit_code;
 
 	exit_code = 0;
-	
+	g_signal_num = 0;
 	while (42)
 	{
-		g_signal_num = 0;
+		signal(SIGINT, sigint_handler);
+		signal(SIGQUIT, SIG_IGN);
 		cmd = readline("****: ");
 		if (cmd == NULL)
 		{
@@ -80,8 +81,6 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
-	signal(SIGINT, sigint_handler);
-	signal(SIGQUIT, sigquit_handler);
 	init_shell();
 	minishell(env);
 	// free_env(env);
