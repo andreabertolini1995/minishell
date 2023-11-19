@@ -94,7 +94,6 @@ void	child_process(t_command *command, int *pipe_fd)
 
 	argv = fill_argv(command);
 	envp[0] = NULL;
-	close(pipe_fd[0]);
 	if (is_builtin(command->cmd))
 	{
 		command->exit_code = execute_builtin_child(command, pipe_fd);

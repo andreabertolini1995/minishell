@@ -63,7 +63,7 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 		else if (pids[i] == 0)
 		{
 			set_up_fds(pipe_fd, num_pipes, i);
-			exit(execute(command));
+			child_process(command, pipe_fd[i]);
 		}
 		else
 			exit_status = execute_builtin_parent(command, pipe_fd[i]);
