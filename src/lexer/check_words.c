@@ -33,7 +33,8 @@ static char	*create_word(char *cmd, int length, int i)
 
 static char	*check_if_env(char *word, t_list *env)
 {
-	int	i;
+	int		i;
+	char	*env_var;
 
 	i = 0;
 	while (word[i + 1] != '\0')
@@ -41,7 +42,11 @@ static char	*check_if_env(char *word, t_list *env)
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
 			word += (i + 1);
-			return (ft_getenv(env, word));
+			env_var = ft_getenv(env, word);
+			if (env_var != NULL)
+				return (env_var);
+			else
+				return ("");
 		}
 		i++;
 	}
