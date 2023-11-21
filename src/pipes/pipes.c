@@ -56,10 +56,10 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 	exit_status = 0;
 	while (i <= num_pipes)
 	{
-		command = (t_command *)(commands_list->content);
+		command = commands_list->content;
 		pids[i] = fork();
 		if (pids[i] < 0)
-			return (return_with_error("failed"));
+			return (return_with_error("Fork failed"));
 		else if (pids[i] == 0)
 		{
 			set_up_fds(pipe_fd, num_pipes, i);

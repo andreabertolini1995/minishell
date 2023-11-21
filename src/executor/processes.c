@@ -56,9 +56,9 @@ int	execute_builtin_parent(t_command *command, int *pipe_fd)
 	{
 		close(pipe_fd[1]);
 		read(pipe_fd[0], &signal_from_child, sizeof(int));
+		close(pipe_fd[0]);
 		if (signal_from_child == SIGINT)
 		{
-			close(pipe_fd[0]);
 			if (command->num_args == 1)
 				exit(ft_atoi(command->args[0]));
 			else
