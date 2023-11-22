@@ -55,18 +55,21 @@ int	ft_echo(t_command *command)
 	bool	new_line;
 
 	i = 0;
-	new_line = check_new_line(command->args[i]);
-	if (new_line == false)
+	if (command->num_args > 0)
 	{
-		i++;
-		while (!check_new_line(command->args[i])
-			|| is_same_string(command->args[i], " "))
+		new_line = check_new_line(command->args[i]);
+		if (new_line == false)
+		{
 			i++;
-	}
-	if (is_same_string(command->args[i], "$?"))
-	{
-		print_exit_code(command);
-		i++;
+			while (!check_new_line(command->args[i])
+				|| is_same_string(command->args[i], " "))
+				i++;
+		}
+		if (is_same_string(command->args[i], "$?"))
+		{
+			print_exit_code(command);
+			i++;
+		}
 	}
 	while (i < command->num_args)
 	{

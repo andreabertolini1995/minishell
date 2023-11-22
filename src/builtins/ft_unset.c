@@ -16,6 +16,8 @@ bool	is_valid_identifier(char *str)
 {
 	int	i;
 
+	if (str == NULL)
+		return (false);
 	i = 0;
 	while (str[i] != '\0')
 	{
