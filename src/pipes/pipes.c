@@ -58,6 +58,7 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 	{
 		command = (t_command *)(commands_list->content);
 		pids[i] = fork();
+		
 		if (pids[i] < 0)
 			return (return_with_error("failed"));
 		else if (pids[i] == 0)
@@ -87,7 +88,7 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 		return (1);
 	create_pipes(num_pipes, pipe_fd);
 	exit_code = ft_fork(commands_list, pipe_fd, num_pipes, pids);
-	close_fds(num_pipes, pipe_fd);
+	//close_fds(num_pipes, pipe_fd);//I think this is a double close
 	free_pipe_fds(pipe_fd, num_pipes);
 	free(pids);
 	return (exit_code);

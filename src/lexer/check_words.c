@@ -17,7 +17,7 @@ static char	*create_word(char *cmd, int length, int i)
 	char	*word;
 	int		j;
 
-	word = (char *) malloc (sizeof(char) * length);
+	word = (char *) malloc (sizeof(char) * length + 1);
 	if (word == NULL)
 		return (NULL);
 	j = 0;

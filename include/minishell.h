@@ -27,6 +27,7 @@
 # include <signal.h>
 # include <termios.h>
 # include "../libft/libft.h"
+#include <sys/ioctl.h>
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
@@ -124,7 +125,7 @@ void		close_fds(int num_pipes, int **pipe_fd);
 
 // Redirections
 void		redirect_output(t_command *command);
-void		redirect_input(t_command *command);
+int			redirect_input(t_command *command);
 
 // Builtins
 int			ft_echo(t_command *command);

@@ -51,10 +51,11 @@ static void	minishell(t_list *env)
 
 	exit_code = 0;
 	g_signal_num = 0;
+	signal(SIGINT, sigint_handler);
+	signal(SIGQUIT, SIG_IGN);
 	while (42)
 	{
-		signal(SIGINT, sigint_handler);
-		signal(SIGQUIT, SIG_IGN);
+		printf("reached main\n");
 		cmd = readline("****: ");
 		if (cmd == NULL)
 		{
@@ -64,9 +65,9 @@ static void	minishell(t_list *env)
 		add_history(cmd);
 		tokens_list = lexer(cmd, env);
 		commands_list = parser(tokens_list, env, exit_code);
-		// free_tokens(tokens_list);
+		free_tokens(tokens_list);
 		exit_code = executor(commands_list);
-		// free_commands(commands_list);
+		free_commands(commands_list);
 		// Lexer test
 		// ft_lstiter(tokens_list, print_token);
 		// Parser test
