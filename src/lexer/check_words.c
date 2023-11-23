@@ -41,14 +41,19 @@ static char	*check_if_env(char *word, t_list *env)
 	{
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
-			word += (i + 1);
-			env_var = ft_getenv(env, word);
+			env_var = ft_getenv(env, &word[i+1]);
 			if (env_var != NULL)
 				return (env_var);
-			else
-				return ("");
 		}
 		i++;
+	}
+	if (word[0] == '$' && ft_strlen(word) > 1)
+	{
+		if (word[1] != '?')
+		{
+			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
+				return ("");
+		}		
 	}
 	return (word);
 }

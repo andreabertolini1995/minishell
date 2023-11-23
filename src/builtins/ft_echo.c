@@ -65,7 +65,7 @@ int	ft_echo(t_command *command)
 				|| is_same_string(command->args[i], " "))
 				i++;
 		}
-		if (is_same_string(command->args[i], "$?"))
+		if (is_same_string("$?", command->args[i]))
 		{
 			print_exit_code(command);
 			i++;
