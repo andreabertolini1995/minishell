@@ -143,6 +143,7 @@ void		ft_exit_parent(t_command *command, int *pipe_fd);
 
 // Signals
 void		sigint_handler(int signum);
+void		sigint_blocking_cmd_handler(int signum);
 void		sigquit_handler(int signum);
 
 // Utils
