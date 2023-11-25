@@ -24,6 +24,13 @@ void	sigint_handler(int signum)
 	g_signal_num = SIGINT;
 }
 
+void	sigint_handler_heredoc(int signum)
+{
+	(void)signum;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	g_signal_num = SIGINT;
+}
+
 void sigint_blocking_cmd_handler(int signum)
 {
 	(void)signum;
