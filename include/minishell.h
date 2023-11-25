@@ -146,6 +146,7 @@ void		ft_exit_parent(t_command *command, int *pipe_fd);
 void		sigint_handler(int signum);
 void		sigquit_handler(int signum);
 void		sigint_handler_heredoc(int signum);
+void		sigint_blocking_cmd_handler(int signum);
 
 // Utils
 int			return_with_error(char *error_msg);
