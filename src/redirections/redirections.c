@@ -42,7 +42,7 @@ void	redirect_input(t_command *command)
 		infile_redirect(command->infile);
 	else
 	{
-		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		g_signal_num = EXIT_SUCCESS;
 		signal(SIGINT, sigint_handler_heredoc);
 		while (42)

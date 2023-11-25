@@ -112,6 +112,7 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 	int			num_args;
 
 	commands_list = NULL;
+	command = NULL;
 	while (tokens_list != NULL)
 	{
 		token = update_tokens_list(&tokens_list, tokens_list->content);
@@ -124,7 +125,8 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 			ft_lstadd_back(&commands_list, ft_lstnew(command));
 		}
 	}
-	if (is_blocking_command(command))
+
+	if (command != NULL && is_blocking_command(command))
 	{
 		signal(SIGINT, sigint_blocking_cmd_handler);
 		signal(SIGQUIT, sigquit_handler);

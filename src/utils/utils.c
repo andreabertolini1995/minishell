@@ -14,6 +14,8 @@
 
 bool	is_file(char *path_cmd)
 {
+	if (path_cmd == NULL)
+		return (false);
 	if (access(path_cmd, F_OK) == 0)
 		return (true);
 	else
