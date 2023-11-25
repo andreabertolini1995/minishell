@@ -26,6 +26,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
+# include <sys/ioctl.h>
 # include "../libft/libft.h"
 
 # define EXIT_SUCCESS 0
@@ -144,6 +145,7 @@ void		ft_exit_parent(t_command *command, int *pipe_fd);
 // Signals
 void		sigint_handler(int signum);
 void		sigint_blocking_cmd_handler(int signum);
+void		sigint_handler_heredoc(int signum);
 void		sigquit_handler(int signum);
 
 // Utils
