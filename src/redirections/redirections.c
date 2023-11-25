@@ -44,13 +44,20 @@ void	redirect_input(t_command *command)
 	{
 		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		g_signal_num = EXIT_SUCCESS;
-		while (g_signal_num != SIGINT)
+		signal(SIGINT, sigint_handler_heredoc);
+		while (42)
 		{
 			line = readline("> ");
-			if (is_same_string(line, command->infile))
-				break ;
+			if (!line || is_same_string(line, command->infile))
+				break;
+			if (g_signal_num == SIGINT)
+			{
+				free(line);
+				break;
+			}
 			write(file, line, ft_strlen(line));
 			write(file, "\n", 1);
+			free(line);
 		}
 		infile_redirect(command->infile);
 		unlink(command->infile);
