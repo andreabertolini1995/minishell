@@ -21,14 +21,12 @@ void	sigint_handler(int signum)
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	printf("hello\n");
 	g_signal_num = SIGINT;
 }
 
 void	sigint_handler_heredoc(int signum)
 {
 	(void)signum;
-	printf("hey\n");
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 	g_signal_num = SIGINT;
 }
