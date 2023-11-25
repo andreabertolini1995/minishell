@@ -30,3 +30,5 @@ void	sigquit_handler(int signum)
 	printf("Quit (core dumped)\n");
 	g_signal_num = SIGQUIT;
 }
+
+// test
