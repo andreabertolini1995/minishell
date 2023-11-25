@@ -17,7 +17,7 @@ static char	*create_word(char *cmd, int length, int i)
 	char	*word;
 	int		j;
 
-	word = (char *) malloc (sizeof(char) * length + 1);
+	word = (char *) malloc (sizeof(char) * (length + 1));
 	if (word == NULL)
 		return (NULL);
 	j = 0;
@@ -33,17 +33,27 @@ static char	*create_word(char *cmd, int length, int i)
 
 static char	*check_if_env(char *word, t_list *env)
 {
-	int	i;
+	int		i;
+	char	*env_var;
 
 	i = 0;
 	while (word[i + 1] != '\0')
 	{
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
-			word += (i + 1);
-			return (ft_getenv(env, word));
+			env_var = ft_getenv(env, &word[i+1]);
+			if (env_var != NULL)
+				return (env_var);
 		}
 		i++;
+	}
+	if (word[0] == '$' && ft_strlen(word) > 1)
+	{
+		if (word[1] != '?')
+		{
+			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
+				return ("");
+		}		
 	}
 	return (word);
 }

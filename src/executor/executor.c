@@ -55,6 +55,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		path = ft_getenv(command->env, "PATH");
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
+		free(sub_paths);
 	}
 	if (cmd_path == NULL)
 		return ;

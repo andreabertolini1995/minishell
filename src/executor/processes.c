@@ -14,7 +14,6 @@
 
 int	execute_builtin_child(t_command *command, int *pipe_fd)
 {
-	int	signal_to_send;
 	int	exit_code;
 
 	exit_code = 0;
@@ -29,12 +28,7 @@ int	execute_builtin_child(t_command *command, int *pipe_fd)
 	else if (is_same_string(command->cmd, "env"))
 		exit_code = ft_env(command, "env");
 	else if (is_same_string(command->cmd, "exit"))
-	{
-		signal_to_send = SIGINT;
-		printf("exit\n");
-		write(pipe_fd[1], &signal_to_send, sizeof(int));
-		close(pipe_fd[1]);
-	}
+		ft_exit_child(command, pipe_fd);
 	else if (is_same_string(command->cmd, "clear"))
 		exit_code = clear();
 	return (exit_code);
@@ -42,8 +36,7 @@ int	execute_builtin_child(t_command *command, int *pipe_fd)
 
 int	execute_builtin_parent(t_command *command, int *pipe_fd)
 {
-	int	signal_from_child;
-	int	exit_code;
+	int		exit_code;
 
 	exit_code = 0;
 	if (is_same_string(command->cmd, "cd"))
@@ -53,18 +46,7 @@ int	execute_builtin_parent(t_command *command, int *pipe_fd)
 	else if (is_same_string(command->cmd, "unset"))
 		exit_code = ft_unset(command);
 	else if (is_same_string(command->cmd, "exit"))
-	{
-		close(pipe_fd[1]);
-		read(pipe_fd[0], &signal_from_child, sizeof(int));
-		if (signal_from_child == SIGINT)
-		{
-			close(pipe_fd[0]);
-			if (command->num_args == 1)
-				exit(ft_atoi(command->args[0]));
-			else
-				exit(EXIT_SUCCESS);
-		}
-	}
+		ft_exit_parent(command, pipe_fd);
 	return (exit_code);
 }
 

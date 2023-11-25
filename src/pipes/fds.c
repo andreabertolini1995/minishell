@@ -18,7 +18,7 @@ int	**initialize_pipe_fds(int num_pipes)
 	int	i;
 	int	j;
 
-	pipe_fd = (int **) malloc (sizeof(int *) * num_pipes + 1);
+	pipe_fd = (int **) malloc (sizeof(int *) * (num_pipes + 1));
 	if (pipe_fd == NULL)
 		return (NULL);
 	i = 0;
