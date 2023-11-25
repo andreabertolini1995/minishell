@@ -125,7 +125,7 @@ void		close_fds(int num_pipes, int **pipe_fd);
 
 // Redirections
 void		redirect_output(t_command *command);
-int		redirect_input(t_command *command);
+void		redirect_input(t_command *command);
 
 // Builtins
 int			ft_echo(t_command *command);
