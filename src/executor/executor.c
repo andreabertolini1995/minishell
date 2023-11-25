@@ -57,6 +57,8 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		cmd_path = get_cmd_path(command, sub_paths);
 		free(sub_paths);
 	}
+	if (cmd_path == NULL)
+		return ;
 	if (execve(cmd_path, argv, envp) < 0)
 	{
 		if (ft_strlen(command->cmd) > 0)

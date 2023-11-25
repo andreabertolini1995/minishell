@@ -33,7 +33,7 @@ static void	infile_redirect(char *file_name)
 	close(file);
 }
 
-void	redirect_input(t_command *command)
+int	redirect_input(t_command *command)
 {
 	int		file;
 	char	*line;
@@ -43,17 +43,30 @@ void	redirect_input(t_command *command)
 	else
 	{
 		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+		if (file == -1)
+			return (EXIT_FAILURE);
 		g_signal_num = EXIT_SUCCESS;
 		while (g_signal_num != SIGINT)
+		while (1)
 		{
 			line = readline("> ");
 			if (is_same_string(line, command->infile))
 				break ;
+			if (!line || is_same_string(line, command->infile))
+				break;
+			if (g_signal_num == SIGINT)
+			{
+				g_signal_num = EXIT_SUCCESS;
+				free(line);
+				break;
+			}
 			write(file, line, ft_strlen(line));
 			write(file, "\n", 1);
+			free(line);
 		}
 		infile_redirect(command->infile);
 		unlink(command->infile);
 		close(file);
 	}
+	return EXIT_FAILURE;
 }
