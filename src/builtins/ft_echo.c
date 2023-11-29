@@ -65,15 +65,13 @@ int	ft_echo(t_command *command)
 				|| is_same_string(command->args[i], " "))
 				i++;
 		}
-		if (is_same_string("$?", command->args[i]))
-		{
-			print_exit_code(command);
-			i++;
-		}
 	}
 	while (i < command->num_args)
 	{
-		printf("%s", command->args[i]);
+		if (is_same_string("$?", command->args[i]))
+			print_exit_code(command);
+		else
+			printf("%s", command->args[i]);
 		i++;
 	}
 	if (new_line == true)

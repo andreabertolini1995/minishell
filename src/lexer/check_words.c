@@ -101,20 +101,34 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 	return (i);
 }
 
+static int	calculate_word_without_quotes_length(char *cmd, int i)
+{
+	int length;
+
+	length = 0;
+	if (ft_strlen(cmd) > 1)
+	{
+		if (cmd[i] == '$' && cmd[i + 1] == '?')
+			return (2);
+	}
+	while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
+		&& cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\'' 
+		&& cmd[i] != '"' && cmd[i] != '$' && cmd[i] != '\0')
+	{
+		length++;
+		i++;
+	}
+	return (length);
+}
+
 int	check_for_word_without_quotes(char *cmd, int i,
 		t_list **tokens_list, t_list *env)
 {
 	int		length;
 	char	*word;
 
-	length = 0;
-	while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
-		&& cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\'' 
-		&& cmd[i] != '"' && cmd[i] != '\0')
-	{
-		length++;
-		i++;
-	}
+	length = calculate_word_without_quotes_length(cmd, i);
+	i = i + length;
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
