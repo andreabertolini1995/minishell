@@ -109,7 +109,8 @@ int	check_for_word_without_quotes(char *cmd, int i,
 
 	length = 0;
 	while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
-		&& cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\0')
+		&& cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\'' 
+		&& cmd[i] != '"' && cmd[i] != '\0')
 	{
 		length++;
 		i++;
