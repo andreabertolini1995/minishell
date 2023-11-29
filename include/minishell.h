@@ -99,6 +99,13 @@ int			check_for_infile_redirection(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 int			check_for_redirections(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
+int			check_for_spaces(char *cmd, int i,
+				t_list **tokens_list, t_list *env);
+
+// Lexer utils
+int			calculate_word_without_quotes_length(char *cmd, int i);
+int			calculate_word_in_double_quotes_length(char *cmd, int i);
+int			calculate_word_length(char *cmd, int i, bool double_quotes);
 
 // Executor
 int			executor(t_list *commands_list);

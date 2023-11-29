@@ -55,7 +55,7 @@ static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_list *env)
 	return (i);
 }
 
-static void	check_for_spaces(char *cmd, int i,
+int	check_for_spaces(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
 {
 	if (cmd[i] == ' ')
@@ -64,6 +64,9 @@ static void	check_for_spaces(char *cmd, int i,
 	else if (cmd[i] == '\t')
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token("\t", EMPTY, env)));
+	while (cmd[i] == ' ' || cmd[i] == '\t')
+			i++;
+	return (i);
 }
 
 t_list	*lexer(char *cmd, t_list *env)
@@ -83,13 +86,11 @@ t_list	*lexer(char *cmd, t_list *env)
 		}
 		i = check_for_redirections(cmd, i, &tokens_list, env);
 		i = check_for_word(cmd, i, &tokens_list, env);
-		check_for_spaces(cmd, i, &tokens_list, env);
+		i = check_for_spaces(cmd, i, &tokens_list, env);
 		// Keep commented out to check this removal doens't break something else
 		// if (cmd[i] != '\0' && cmd[i] != '\''
 		// 	&& cmd[i] != '"' && cmd[i] != ' ' && cmd[i] != '\t')
 		// 	i++;
-		while (cmd[i] == ' ' || cmd[i] == '\t')
-			i++;
 	}
 	return (tokens_list);
 }

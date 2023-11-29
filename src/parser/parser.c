@@ -125,7 +125,6 @@ t_list	*parser(t_list *tokens_list, t_list *env, int exit_code)
 			ft_lstadd_back(&commands_list, ft_lstnew(command));
 		}
 	}
-
 	if (command != NULL && is_blocking_command(command))
 	{
 		signal(SIGINT, sigint_blocking_cmd_handler);

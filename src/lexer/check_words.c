@@ -41,7 +41,7 @@ static char	*check_if_env(char *word, t_list *env)
 	{
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
-			env_var = ft_getenv(env, &word[i+1]);
+			env_var = ft_getenv(env, &word[i + 1]);
 			if (env_var != NULL)
 				return (env_var);
 		}
@@ -49,13 +49,32 @@ static char	*check_if_env(char *word, t_list *env)
 	}
 	if (word[0] == '$' && ft_strlen(word) > 1)
 	{
-		if (word[1] != '?')
+		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
 		{
 			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
 				return ("");
 		}		
 	}
 	return (word);
+}
+
+int	check_for_word_without_quotes(char *cmd, int i,
+		t_list **tokens_list, t_list *env)
+{
+	int		length;
+	char	*word;
+
+	length = calculate_word_length(cmd, i, false);
+	// printf("Length: %d\n", length);
+	i = i + length;
+	if (length > 0)
+	{
+		word = create_word(cmd, length, i);
+		// printf("Word: %s\n", word);
+		word = check_if_env(word, env);
+		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+	}
+	return (i);
 }
 
 int	check_for_word_in_single_quotes(char *cmd, int i,
@@ -85,55 +104,18 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 	int		length;
 	char	*word;
 
-	length = 0;
 	while (cmd[i] != '"' && cmd[i] != '\0')
 	{
-		length++;
-		i++;
-	}
-	if (length > 0)
-	{
-		word = create_word(cmd, length, i);
-		word = check_if_env(word, env);
-		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+		length = calculate_word_length(cmd, i, true);
+		i = i + length;
+		if (length > 0)
+		{
+			word = create_word(cmd, length, i);
+			word = check_if_env(word, env);
+			ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+		}
+		i = check_for_spaces(cmd, i, tokens_list, env);	
 	}
 	i++;
-	return (i);
-}
-
-static int	calculate_word_without_quotes_length(char *cmd, int i)
-{
-	int length;
-
-	length = 0;
-	if (ft_strlen(cmd) > 1)
-	{
-		if (cmd[i] == '$' && cmd[i + 1] == '?')
-			return (2);
-	}
-	while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
-		&& cmd[i] != ' ' && cmd[i] != '\t' && cmd[i] != '\'' 
-		&& cmd[i] != '"' && cmd[i] != '$' && cmd[i] != '\0')
-	{
-		length++;
-		i++;
-	}
-	return (length);
-}
-
-int	check_for_word_without_quotes(char *cmd, int i,
-		t_list **tokens_list, t_list *env)
-{
-	int		length;
-	char	*word;
-
-	length = calculate_word_without_quotes_length(cmd, i);
-	i = i + length;
-	if (length > 0)
-	{
-		word = create_word(cmd, length, i);
-		word = check_if_env(word, env);
-		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
-	}
 	return (i);
 }

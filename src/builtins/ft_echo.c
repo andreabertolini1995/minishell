@@ -19,7 +19,7 @@ static bool	check_new_line(char *option)
 	i = 0;
 	if (ft_strlen(option) == 0)
 		return (true);
-	if (option[i] != '-' && option[i + 1] != 'n')
+	if (option[i] != '-' || option[i + 1] != 'n')
 		return (true);
 	while (option[i] != '\0')
 	{
