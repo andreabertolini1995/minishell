@@ -65,12 +65,10 @@ int	check_for_word_without_quotes(char *cmd, int i,
 	char	*word;
 
 	length = calculate_word_length(cmd, i, false);
-	// printf("Length: %d\n", length);
 	i = i + length;
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
-		// printf("Word: %s\n", word);
 		word = check_if_env(word, env);
 		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 	}

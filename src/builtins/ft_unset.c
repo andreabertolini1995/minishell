@@ -12,6 +12,10 @@
 
 #include "../include/minishell.h"
 
+/* Function to check if the env variable name
+(not value) contains invalid characters:
+- digits are admitted unless it starts with a digit
+*/
 bool	is_valid_identifier(char *str)
 {
 	int	i;
@@ -19,10 +23,12 @@ bool	is_valid_identifier(char *str)
 	if (str == NULL)
 		return (false);
 	i = 0;
+	if (ft_isdigit(str[i]))
+		return (false);
 	while (str[i] != '\0')
 	{
-		if (!ft_isalpha(str[i]) && str[i] != ' '
-			&& str[i] != '_')
+		if (!ft_isalpha(str[i]) && !ft_isdigit(str[i])
+			&& str[i] != ' ' && str[i] != '_')
 			return (false);
 		i++;
 	}
