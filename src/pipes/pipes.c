@@ -70,7 +70,7 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 		commands_list = commands_list->next;
 		i++;
 	}
-	// close_fds(num_pipes, pipe_fd);
+	close_fds(num_pipes, pipe_fd);
 	exit_status = wait_processes(num_pipes, pids);
 	return (exit_status);
 }
