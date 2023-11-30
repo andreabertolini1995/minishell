@@ -42,6 +42,32 @@ static void	replace_env_var(t_list *env_list, char *var_name, char *var_value)
 	}
 }
 
+static char	*remove_double_quotes_from_str(char *str)
+{
+	char	*str_without_quotes;
+	int		i;
+	int		j;
+
+	i = 0;
+	if (str[i] == '"' && is_there_second_double_quote(str, i))
+	{
+		i++;
+		str_without_quotes = (char *) malloc (sizeof(char) * (ft_strlen(str) - 2));
+		if (str_without_quotes == NULL)
+			return (NULL);
+		j = 0;
+		while (str[i] != '"')
+		{
+			str_without_quotes[j] = str[i];
+			i++;
+			j++;
+		}
+		return (str_without_quotes);
+	}
+	else
+		return (str);
+}
+
 static int	add_env_var(t_command *command, int arg_index)
 {
 	char	**input_var;
@@ -60,7 +86,8 @@ static int	add_env_var(t_command *command, int arg_index)
 	else
 	{
 		ft_lstadd_back(&env_list,
-			ft_lstnew(create_env_var(input_var[0], input_var[1])));
+			ft_lstnew(create_env_var(input_var[0],
+			remove_double_quotes_from_str(input_var[1]))));
 	}
 	return (EXIT_SUCCESS);
 }

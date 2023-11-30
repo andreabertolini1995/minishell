@@ -106,6 +106,7 @@ int			check_for_spaces(char *cmd, int i,
 int			calculate_word_without_quotes_length(char *cmd, int i);
 int			calculate_word_in_double_quotes_length(char *cmd, int i);
 int			calculate_word_length(char *cmd, int i, bool double_quotes);
+bool		is_there_second_double_quote(char *cmd, int i);
 
 // Executor
 int			executor(t_list *commands_list);

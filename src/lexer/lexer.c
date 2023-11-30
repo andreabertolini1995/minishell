@@ -23,7 +23,7 @@ static bool	is_there_second_single_quote(char *cmd, int i)
 	return (false);
 }
 
-static bool	is_there_second_double_quote(char *cmd, int i)
+bool	is_there_second_double_quote(char *cmd, int i)
 {
 	while (cmd[i] != '\0')
 	{
