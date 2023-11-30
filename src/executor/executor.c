@@ -53,12 +53,16 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	else
 	{
 		path = ft_getenv(command->env, "PATH");
+		if (path == NULL)
+		{
+			printf("minishell: %s: No such file or directory\n",
+				command->cmd);
+			return ;
+		}
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
 		free(sub_paths);
 	}
-	if (cmd_path == NULL)
-		return ;
 	if (execve(cmd_path, argv, envp) < 0)
 	{
 		if (ft_strlen(command->cmd) > 0)
