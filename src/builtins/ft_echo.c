@@ -49,6 +49,19 @@ static void	print_exit_code(t_command *command)
 		printf("%d", command->exit_code);
 }
 
+static void	print_word(char *word)
+{
+	int	i;
+
+	i = 0;
+	while (word[i] != '\0')
+	{
+		if (word[i] != '\\')
+			printf("%c", word[i]);
+		i++;
+	}
+}
+
 int	ft_echo(t_command *command)
 {
 	int		i;
@@ -71,7 +84,7 @@ int	ft_echo(t_command *command)
 		if (is_same_string("$?", command->args[i]))
 			print_exit_code(command);
 		else
-			printf("%s", command->args[i]);
+			print_word(command->args[i]);
 		i++;
 	}
 	if (new_line == true)
