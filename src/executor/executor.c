@@ -55,8 +55,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		path = ft_getenv(command->env, "PATH");
 		if (path == NULL)
 		{
-			printf("minishell: %s: No such file or directory\n",
-				command->cmd);
+			print_error_msg(command->cmd, NO_FILE_OR_DIR);
 			return ;
 		}
 		sub_paths = ft_split(path, ':');
@@ -67,7 +66,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	{
 		if (ft_strlen(command->cmd) > 0)
 		{
-			printf("minishell: %s: command not found\n", command->cmd);
+			print_error_msg(command->cmd, CMD_NOT_FOUND);
 			exit(EXIT_CMD_NOT_FOUND);
 		}
 	}

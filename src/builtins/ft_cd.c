@@ -87,8 +87,7 @@ int	ft_cd(t_command *command)
 		return (change_dir(command, command->args[0]));
 	else
 	{
-		printf("minishell: cd: %s: No such file or directory\n",
-			command->args[0]);
+		print_error_msg(command->args[0], NO_FILE_OR_DIR);
 		return (EXIT_FAILURE);
 	}
 }

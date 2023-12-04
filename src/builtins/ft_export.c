@@ -79,8 +79,7 @@ static int	add_env_var(t_command *command, int arg_index)
 		replace_env_var(env_list, input_var[0], input_var[1]);
 	else if (!is_valid_identifier(input_var[0]))
 	{
-		printf("minishell: export: '%s': not a valid identifier\n",
-			command->args[arg_index]);
+		print_error_msg(command->args[arg_index], NOT_VALID_IDENTIFIER);
 		return (EXIT_FAILURE);
 	}
 	else

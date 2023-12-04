@@ -12,6 +12,20 @@
 
 #include "../include/minishell.h"
 
+void	print_error_msg(char *str, int msg_type)
+{
+	if (msg_type == CMD_NOT_FOUND)
+		printf("minishell: %s: command not found\n", str);
+	else if (msg_type == NO_FILE_OR_DIR)
+		printf("minishell: %s: No such file or directory\n", str);
+	else if (msg_type == NUM_ARG_REQUIRED)
+		printf("minishell: exit: %s: numeric argument required\n", str);
+	else if (msg_type == TOO_MANY_ARGS)
+		printf("minishell: exit: too many arguments\n");
+	else if (msg_type == NOT_VALID_IDENTIFIER)
+		printf("minishell: export: '%s': not a valid identifier\n", str);
+}
+
 static bool	check_new_line(char *option)
 {
 	size_t	i;
@@ -56,6 +70,14 @@ static void	print_word(char *word)
 	i = 0;
 	while (word[i] != '\0')
 	{
+		if (word[i] == ';')
+		{
+			if (i > 0)
+				printf("\n");
+			if ((int)word[i + 1] != 0)
+				print_error_msg(word + i + 1, CMD_NOT_FOUND);
+			return ;
+		}
 		if (word[i] != '\\')
 			printf("%c", word[i]);
 		i++;

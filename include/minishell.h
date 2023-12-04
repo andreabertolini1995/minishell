@@ -38,6 +38,15 @@
 
 extern int	g_signal_num;
 
+typedef enum e_error_msgs
+{
+	CMD_NOT_FOUND = 1,
+	NO_FILE_OR_DIR = 2,
+	NUM_ARG_REQUIRED = 3,
+	TOO_MANY_ARGS = 4,
+	NOT_VALID_IDENTIFIER = 5
+}	t_error_msgs;
+
 typedef struct s_env
 {
 	char	*name;
@@ -149,6 +158,7 @@ char		*ft_getenv(t_list *env_list, char *var_name);
 char		*remove_quotes_from_str(char *str);
 void		ft_exit_child(t_command *command, int *pipe_fd);
 void		ft_exit_parent(t_command *command, int *pipe_fd);
+void		print_error_msg(char *str, int msg_type);
 
 // Signals
 void		sigint_handler(int signum);

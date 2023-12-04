@@ -47,14 +47,13 @@ void	ft_exit_child(t_command *command, int *pipe_fd)
 	{
 		arg_str = remove_quotes_from_str(command->args[0]);
 		if (ft_atoi(arg_str) == 0)
-			printf("minishell: exit: %s: numeric argument required\n",
-				command->args[0]);
+			print_error_msg(command->args[0], NUM_ARG_REQUIRED);
 		free(arg_str);
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
 	else if (command->num_args > 1)
-		printf("minishell: exit: too many arguments\n");
+		print_error_msg(NULL, TOO_MANY_ARGS);
 	else
 	{
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
