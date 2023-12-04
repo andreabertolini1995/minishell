@@ -12,6 +12,19 @@
 
 #include "../include/minishell.h"
 
+void free_str(char **str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i] != NULL)
+	{
+		free(str[i]);
+		i++;
+	}
+	free(str);
+}
+
 void	free_tokens(t_list *tokens_list)
 {
 	t_list	*tmp;
@@ -21,29 +34,32 @@ void	free_tokens(t_list *tokens_list)
 	{
 		tmp = tokens_list->next;
 		token = tokens_list->content;
-		// if (token->type == WORD)
-		// 	free(token->content); // to check if the word belongs to the env
+		// Check if this causes issues - if the word belongs to the env
+		if (token->type == WORD)
+			free(token->content);
 		free(token);
 		free(tokens_list);
 		tokens_list = tmp;
 	}
 }
 
-// void	free_env(t_env *env)
-// {
-// 	int	i;
+void	free_env(t_list *env_list)
+{
+	t_list	*tmp;
+	t_env	*env;
 
-// 	i = 0;
-// 	while (env->envp[i] != NULL)
-// 	{
-// 		free(env->envp[i]);
-// 		i++;
-// 	}
-// 	free(env->envp);
-// 	free(env);
-// }
+	while (env_list != NULL)
+	{
+		tmp = env_list->next;
+		env = env_list->content;
+		free(env->name);
+		free(env->value);
+		free(env);
+		free(env_list);
+		env_list = tmp;
+	}
+}
 
-// minishell(96700,0x1e7462080) malloc: Double free of object 0x131805a00
 void	free_commands(t_list *commands_list)
 {
 	t_list		*tmp;
@@ -70,3 +86,4 @@ void	free_commands(t_list *commands_list)
 		commands_list = tmp;
 	}
 }
+

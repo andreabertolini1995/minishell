@@ -15,9 +15,11 @@
 static char	*combine_cmd_path(char *cmd, char *path)
 {
 	char	*cmd_path;
+	char	*temp;
 
-	cmd_path = ft_strjoin(path, "/");
-	cmd_path = ft_strjoin(cmd_path, cmd);
+	temp = ft_strjoin(path, "/");
+	cmd_path = ft_strjoin(temp, cmd);
+	free(temp);
 	return (cmd_path);
 }
 
@@ -27,6 +29,7 @@ char	*get_cmd_path(t_command *command, char **sub_paths)
 	char	*cmd_path;
 
 	i = 0;
+	cmd_path = NULL;
 	while (sub_paths[i] != NULL)
 	{
 		cmd_path = combine_cmd_path(command->cmd, sub_paths[i]);
@@ -60,7 +63,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		}
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
-		free(sub_paths);
+		free_str(sub_paths);
 	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{

@@ -181,7 +181,8 @@ bool		is_valid_identifier(char *str);
 
 // Free data
 void		free_tokens(t_list *tokens_list);
-// void		free_env(t_env *env);
+void		free_env(t_list *env_list);
 void		free_commands(t_list *commands_list);
+void		free_str(char **str);
 
 #endif
