@@ -14,7 +14,7 @@ LEAKS_FLAGS = -fsanitize=address -fno-omit-frame-pointer
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
+	$(CC) $(CFLAGS) $(LEAKS_FLAGS) $(OBJS) $(LIBFT) $(INCLUDES) -o $(NAME)
 
 $(OBJ_DIR)/%.o: $(SRCDIR)/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@

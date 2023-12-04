@@ -19,7 +19,7 @@ char	*remove_quotes_from_str(char *str)
 	int		i;
 	int		j;
 
-	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str) - 2));
+	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str)));
 	if (new_str == NULL)
 		return (NULL);
 	i = 0;
@@ -38,15 +38,18 @@ char	*remove_quotes_from_str(char *str)
 
 void	ft_exit_child(t_command *command, int *pipe_fd)
 {
-	int	signal_to_send;
+	int		signal_to_send;
+	char	*arg_str;
 
 	signal_to_send = SIGINT;
 	printf("exit\n");
 	if (command->num_args == 1)
 	{
-		if (ft_atoi(remove_quotes_from_str(command->args[0])) == 0)
+		arg_str = remove_quotes_from_str(command->args[0]);
+		if (ft_atoi(arg_str) == 0)
 			printf("minishell: exit: %s: numeric argument required\n",
 				command->args[0]);
+		free(arg_str);
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
@@ -57,6 +60,7 @@ void	ft_exit_child(t_command *command, int *pipe_fd)
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
+	
 }
 
 void	ft_exit_parent(t_command *command, int *pipe_fd)
