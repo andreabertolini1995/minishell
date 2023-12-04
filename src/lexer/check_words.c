@@ -35,9 +35,11 @@ static char	*check_if_env(char *word, t_list *env)
 {
 	int		i;
 	char	*env_var;
+	char	*env_value;
+	char	*env_value1;
 
 	i = 0;
-	while (word[i + 1] != '\0')
+	while (word[i])
 	{
 		if (word[i] == '$' && word[i + 1] != '?')
 		{
@@ -49,11 +51,18 @@ static char	*check_if_env(char *word, t_list *env)
 	}
 	if (word[0] == '$' && ft_strlen(word) > 1)
 	{
-		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
+		if (word[1] != '?')
 		{
-			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
+			env_value = ft_split(word, '$')[1];
+			env_value1 = ft_getenv(env, env_value);
+			free(env_value);
+			if (env_value1 == NULL)
+			{
+				free(word); // Free
 				return ("");
-		}		
+			}
+			return env_value;
+		}	
 	}
 	return (word);
 }
@@ -112,7 +121,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 			word = check_if_env(word, env);
 			ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
 		}
-		i = check_for_spaces(cmd, i, tokens_list, env);	
+		i = check_for_spaces(cmd, i, tokens_list, env);
 	}
 	i++;
 	return (i);

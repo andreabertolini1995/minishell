@@ -64,6 +64,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
 		free_str(sub_paths);
+		//free(path);
 	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{

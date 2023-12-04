@@ -58,14 +58,16 @@ static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_list *env)
 int	check_for_spaces(char *cmd, int i,
 			t_list **tokens_list, t_list *env)
 {
-	if (cmd[i] == ' ')
-		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token(" ", EMPTY, env)));
-	else if (cmd[i] == '\t')
-		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token("\t", EMPTY, env)));
-	while (cmd[i] == ' ' || cmd[i] == '\t')
-			i++;
+	while (cmd[i])//this prevents the invalid read of 1 multiple times from happening as the code is accessing memory beyond the command
+	{
+		if (cmd[i] == ' ')
+			ft_lstadd_back(tokens_list,
+				ft_lstnew(create_token(" ", EMPTY, env)));
+		else if (cmd[i] == '\t')
+			ft_lstadd_back(tokens_list,
+				ft_lstnew(create_token("\t", EMPTY, env)));
+		i++;
+	}
 	return (i);
 }
 

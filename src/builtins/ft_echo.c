@@ -90,6 +90,7 @@ int	ft_echo(t_command *command)
 	bool	new_line;
 
 	i = 0;
+	new_line = false; //initialise new_line, otherwise there is unconditional jump by valgrind //try command echo "hello , withohut closing the double quote
 	if (command->num_args > 0)
 	{
 		new_line = check_new_line(command->args[i]);
