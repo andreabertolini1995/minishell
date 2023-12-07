@@ -39,7 +39,7 @@ static bool	is_word_const(char *word, t_list *env)
 }
 
 int	check_for_word_without_quotes(char *cmd, int i,
-		t_list **tokens_list, t_list *env)
+		t_list **tokens_list, t_list *env, int exit_code)
 {
 	int		length;
 	char	*word;
@@ -51,7 +51,7 @@ int	check_for_word_without_quotes(char *cmd, int i,
 	{
 		word = create_word(cmd, length, i);
 		is_const = is_word_const(word, env);
-		word = check_if_env_or_exit_code(word, env);
+		word = check_if_env_or_exit_code(word, env, exit_code);
 		if (is_const)
 			ft_lstadd_back(tokens_list,
 				ft_lstnew(create_token(word, CONST, env)));
@@ -84,11 +84,12 @@ int	check_for_word_in_single_quotes(char *cmd, int i,
 }
 
 int	check_for_word_in_double_quotes(char *cmd, int i,
-			t_list **tokens_list, t_list *env)
+			t_list **tokens_list, t_list *env, int exit_code)
 {
 	int		length;
 	char	*word;
 	bool	is_const;
+
 
 	while (cmd[i] != '"' && cmd[i] != '\0')
 	{
@@ -98,7 +99,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 		{
 			word = create_word(cmd, length, i);
 			is_const = is_word_const(word, env);
-			word = check_if_env_or_exit_code(word, env);
+			word = check_if_env_or_exit_code(word, env, exit_code);
 			if (is_const)
 				ft_lstadd_back(tokens_list,
 					ft_lstnew(create_token(word, CONST, env)));

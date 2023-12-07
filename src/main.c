@@ -63,7 +63,7 @@ static void	minishell(t_list *env)
 			exit(0);
 		}
 		add_history(cmd);
-		tokens_list = lexer(cmd, env);
+		tokens_list = lexer(cmd, env, exit_code);
 		commands_list = parser(tokens_list, env, exit_code);
 		// Lexer test
 		// ft_lstiter(tokens_list, print_token);

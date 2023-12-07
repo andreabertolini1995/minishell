@@ -96,13 +96,13 @@ t_token		*update_tokens_list(t_list **tokens_list, t_token *token);
 bool		is_blocking_command(t_command *command);
 
 // Lexer
-t_list		*lexer(char *cmd, t_list *env);
+t_list		*lexer(char *cmd, t_list *env, int exit_code);
 int			check_for_word_in_single_quotes(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 int			check_for_word_in_double_quotes(char *cmd, int i,
-				t_list **tokens_list, t_list *env);
+				t_list **tokens_list, t_list *env, int exit_code);
 int			check_for_word_without_quotes(char *cmd, int i,
-				t_list **tokens_list, t_list *env);
+				t_list **tokens_list, t_list *env, int exit_code);
 int			check_for_outfile_redirection(char *cmd, int i,
 				t_list **tokens_list, t_list *env);
 int			check_for_infile_redirection(char *cmd, int i,
@@ -117,7 +117,7 @@ int			calculate_word_without_quotes_length(char *cmd, int i);
 int			calculate_word_in_double_quotes_length(char *cmd, int i);
 int			calculate_word_length(char *cmd, int i, bool double_quotes);
 bool		is_there_second_double_quote(char *cmd, int i);
-char		*check_if_env_or_exit_code(char *word, t_list *env);
+char		*check_if_env_or_exit_code(char *word, t_list *env, int exit_code);
 bool		is_word_env(char *word, t_list *env);
 bool		is_word_exit_code(char *word, t_list *env);
 

@@ -34,7 +34,7 @@ static char	*check_if_env(char *word, t_list *env)
 	return (NULL);
 }
 
-static char	*check_if_exit_code(char *word, t_list *env)
+static char	*check_if_exit_code(char *word, t_list *env, int exit_code)
 {
 	if (word[0] == '$' && ft_strlen(word) > 1)
 	{
@@ -49,20 +49,20 @@ static char	*check_if_exit_code(char *word, t_list *env)
 		else if (word[1] == '?' && ft_strlen(word) == 2)
 		{
 			free (word);
-			return ("0");
+			return (ft_itoa(exit_code));
 		}
 	}
 	return (NULL);
 }
 
-char	*check_if_env_or_exit_code(char *word, t_list *env)
+char	*check_if_env_or_exit_code(char *word, t_list *env, int exit_code)
 {
 	char	*result;
 
 	result = check_if_env(word, env);
 	if (result != NULL)
 		return (result);
-	result = check_if_exit_code(word, env);
+	result = check_if_exit_code(word, env, exit_code);
 	if (result != NULL)
 		return (result);
 	return (word);
