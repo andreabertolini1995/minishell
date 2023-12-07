@@ -12,44 +12,43 @@
 
 #include "../include/minishell.h"
 
-int	check_for_outfile_redirection(char *cmd, int i,
+char	*check_for_outfile_redirection(char *cmd,
 				t_list **tokens_list, t_list *env)
 {
-	if (cmd[i + 1] == '>')
+	if (*(cmd + 1) == '>')
 	{
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token(">>", REDIRECTION, env)));
-		i++;
+		cmd++;
 	}
 	else
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token(">", REDIRECTION, env)));
-	i++;
-	return (i);
+	cmd++;
+	return (cmd);
 }
 
-int	check_for_infile_redirection(char *cmd, int i,
+char	*check_for_infile_redirection(char *cmd,
 				t_list **tokens_list, t_list *env)
 {
-	if (cmd[i + 1] == '<')
+	if (*(cmd + 1) == '<')
 	{
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token("<<", REDIRECTION, env)));
-		i++;
+		cmd++;
 	}
 	else
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token("<", REDIRECTION, env)));
-	i++;
-	return (i);
+	cmd++;
+	return (cmd);
 }
 
-int	check_for_redirections(char *cmd, int i,
-				t_list **tokens_list, t_list *env)
+char	*check_for_redirections(char *cmd, t_list **tokens_list, t_list *env)
 {
-	if (cmd[i] == '>')
-		i = check_for_outfile_redirection(cmd, i, tokens_list, env);
-	else if (cmd[i] == '<')
-		i = check_for_infile_redirection(cmd, i, tokens_list, env);
-	return (i);
+	if (*cmd == '>')
+		cmd = check_for_outfile_redirection(cmd, tokens_list, env);
+	else if (*cmd == '<')
+		cmd = check_for_infile_redirection(cmd, tokens_list, env);
+	return (cmd);
 }

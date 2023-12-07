@@ -12,75 +12,83 @@
 
 #include "../include/minishell.h"
 
+static char	*calc_initial_cmd(t_list **tokens_list)
+{
+	t_token	*token;
+
+	if ((*tokens_list) != NULL && ft_lstsize(*tokens_list) > 0)
+	{
+		token = (*tokens_list)->content;
+		return (token->content);
+	}
+	return (NULL);
+}
+
 /* 
 Function to calculate the length of a word within no quotes.
 Special checks have been added to support exporting of environmental
 variables whose value is within double quotes.
 */
-int	calculate_word_without_quotes_length(char *cmd, int i)
+static int	calculate_word_without_quotes_length(t_list **tokens_list,
+				char *cmd)
 {
-	int length;
+	int		length;
+	char	*initial_cmd;
 
 	length = 0;
-	if (ft_strlen(cmd) > 1)
+	initial_cmd = calc_initial_cmd(tokens_list);
+	if (*cmd == '$' && *(cmd + 1) == '?')
+		return (2);
+	while (*cmd != '|' && *cmd != '>' && *cmd != '<'
+		&& *cmd != '\t' && *cmd != '\'' && *cmd != '\0')
 	{
-		if (cmd[i] == '$' && cmd[i + 1] == '?')
-			return (2);
-	}
-	while (cmd[i] != '|' && cmd[i] != '>' && cmd[i] != '<'
-		&& cmd[i] != '\t' && cmd[i] != '\'' && cmd[i] != '\0')
-	{
-		if (cmd[i] == '"' && (!is_same_string("export", cmd)
-			|| !is_there_second_double_quote(cmd, i)))
+		if (*cmd == '"' && (!is_same_string("export", initial_cmd)
+				|| !is_there_second_double_quote(cmd)))
 			break ;
-		if (cmd[i] == ' ' && (!is_same_string("export", cmd)
-			|| (i == (int)ft_strlen("export"))))
+		if (*cmd == ' ' && (!is_same_string("export", initial_cmd)))
 			break ;
-		if (cmd[i] == '$' && ft_strlen(cmd) == 1)
+		if (*cmd == '$' && ft_strlen(cmd) == 1)
 			return (1);
 		length++;
-		i++;
+		cmd++;
 	}
 	return (length);
 }
 
-int	calculate_word_in_double_quotes_length(char *cmd, int i)
+static int	calculate_word_in_double_quotes_length(char *cmd)
 {
-	int length;
+	int	length;
 
 	length = 0;
-	if (ft_strlen(cmd) > 1)
+	if (*cmd == '$' && *(cmd + 1) == '?')
+		return (2);
+	while (*cmd != '"' && *cmd != '\0')
 	{
-		if (cmd[i] == '$' && cmd[i + 1] == '?')
-			return (2);
-	}
-	while (cmd[i] != '"' && cmd[i] != '\0')
-	{
-		if (cmd[i] == '$')
+		if (*cmd == '$')
 		{
 			if (length > 0)
 				return (length);
-			while (cmd[i] != '"' && cmd[i] != '\0'
-				&& cmd[i] != ' ' && cmd[i] != '\t')
+			while (*cmd != '"' && *cmd != '\0'
+				&& *cmd != ' ' && *cmd != '\t')
 			{
 				length++;
-				i++;
+				cmd++;
 			}
 			return (length);
 		}
 		length++;
-		i++;
+		cmd++;
 	}
 	return (length);
 }
 
-int	calculate_word_length(char *cmd, int i, bool double_quotes)
+int	calculate_word_length(t_list **tokens_list, char *cmd, bool double_quotes)
 {
-	int length;
-	
+	int		length;
+
 	if (double_quotes)
-		length = calculate_word_in_double_quotes_length(cmd, i);
+		length = calculate_word_in_double_quotes_length(cmd);
 	else
-		length = calculate_word_without_quotes_length(cmd, i);
+		length = calculate_word_without_quotes_length(tokens_list, cmd);
 	return (length);
 }

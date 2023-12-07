@@ -49,7 +49,7 @@ static char	*remove_double_quotes_from_str(char *str)
 	int		j;
 
 	i = 0;
-	if (str[i] == '"' && is_there_second_double_quote(str, i))
+	if (str[i] == '"' && is_there_second_double_quote(str))
 	{
 		i++;
 		str_without_quotes = (char *) malloc (sizeof(char) * (ft_strlen(str) - 2));
