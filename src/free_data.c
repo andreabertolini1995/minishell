@@ -34,7 +34,6 @@ void	free_tokens(t_list *tokens_list)
 	{
 		tmp = tokens_list->next;
 		token = tokens_list->content;
-		// Check if this causes issues - if the word belongs to the env
 		if (token->type == WORD)
 			free(token->content);
 		free(token);

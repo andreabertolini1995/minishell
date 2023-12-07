@@ -73,6 +73,7 @@ typedef enum e_token_type
 	PIPE = 1,
 	REDIRECTION = 2,
 	EMPTY = 3,
+	CONST = 4,
 }	t_token_type;
 
 typedef struct s_token
@@ -116,6 +117,9 @@ int			calculate_word_without_quotes_length(char *cmd, int i);
 int			calculate_word_in_double_quotes_length(char *cmd, int i);
 int			calculate_word_length(char *cmd, int i, bool double_quotes);
 bool		is_there_second_double_quote(char *cmd, int i);
+char		*check_if_env_or_exit_code(char *word, t_list *env);
+bool		is_word_env(char *word, t_list *env);
+bool		is_word_exit_code(char *word, t_list *env);
 
 // Executor
 int			executor(t_list *commands_list);

@@ -31,31 +31,11 @@ static char	*create_word(char *cmd, int length, int i)
 	return (word);
 }
 
-static char	*check_if_env(char *word, t_list *env)
+static bool	is_word_const(char *word, t_list *env)
 {
-	int		i;
-	char	*env_var;
-
-	i = 0;
-	while (word[i + 1] != '\0')
-	{
-		if (word[i] == '$' && word[i + 1] != '?')
-		{
-			env_var = ft_getenv(env, &word[i + 1]);
-			if (env_var != NULL)
-				return (env_var);
-		}
-		i++;
-	}
-	if (word[0] == '$' && ft_strlen(word) > 1)
-	{
-		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
-		{
-			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
-				return ("");
-		}		
-	}
-	return (word);
+	if (is_word_env(word, env) || is_word_exit_code(word, env))
+		return (true);
+	return (false);
 }
 
 int	check_for_word_without_quotes(char *cmd, int i,
@@ -63,14 +43,21 @@ int	check_for_word_without_quotes(char *cmd, int i,
 {
 	int		length;
 	char	*word;
+	bool	is_const;
 
 	length = calculate_word_length(cmd, i, false);
 	i = i + length;
 	if (length > 0)
 	{
 		word = create_word(cmd, length, i);
-		word = check_if_env(word, env);
-		ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+		is_const = is_word_const(word, env);
+		word = check_if_env_or_exit_code(word, env);
+		if (is_const)
+			ft_lstadd_back(tokens_list,
+				ft_lstnew(create_token(word, CONST, env)));
+		else
+			ft_lstadd_back(tokens_list,
+				ft_lstnew(create_token(word, WORD, env)));
 	}
 	return (i);
 }
@@ -101,6 +88,7 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 {
 	int		length;
 	char	*word;
+	bool	is_const;
 
 	while (cmd[i] != '"' && cmd[i] != '\0')
 	{
@@ -109,10 +97,16 @@ int	check_for_word_in_double_quotes(char *cmd, int i,
 		if (length > 0)
 		{
 			word = create_word(cmd, length, i);
-			word = check_if_env(word, env);
-			ft_lstadd_back(tokens_list, ft_lstnew(create_token(word, WORD, env)));
+			is_const = is_word_const(word, env);
+			word = check_if_env_or_exit_code(word, env);
+			if (is_const)
+				ft_lstadd_back(tokens_list,
+					ft_lstnew(create_token(word, CONST, env)));
+			else
+				ft_lstadd_back(tokens_list,
+					ft_lstnew(create_token(word, WORD, env)));
 		}
-		i = check_for_spaces(cmd, i, tokens_list, env);	
+		i = check_for_spaces(cmd, i, tokens_list, env);
 	}
 	i++;
 	return (i);
