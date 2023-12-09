@@ -36,9 +36,12 @@ char	*get_cmd_path(t_command *command, char **sub_paths)
 		if (is_file(cmd_path))
 			return (cmd_path);
 		else
+		{
+			free(cmd_path);
 			i++;
+		}
 	}
-	return (cmd_path);
+	return (NULL);
 }
 
 void	execute_cmd(t_command *command, char **argv, char *envp[2])
@@ -47,6 +50,9 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	char	*cmd_path;
 	char	**sub_paths;
 
+	path = NULL;
+	cmd_path = NULL;
+	sub_paths = NULL;
 	if (command->infile != NULL)
 		redirect_input(command);
 	if (command->outfile != NULL)
@@ -59,19 +65,27 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		if (path == NULL)
 		{
 			print_error_msg(command->cmd, NO_FILE_OR_DIR);
-			return ;
+			free_command(command);
+			free_argv(argv);
+			exit (EXIT_CMD_NOT_FOUND);
 		}
 		sub_paths = ft_split(path, ':');
 		cmd_path = get_cmd_path(command, sub_paths);
 		free_str(sub_paths);
 	}
+	if (cmd_path == NULL)
+	{
+		print_error_msg(command->cmd, CMD_NOT_FOUND);
+		free_command(command);
+		free_argv(argv);
+		exit (EXIT_CMD_NOT_FOUND);
+	}
 	if (execve(cmd_path, argv, envp) < 0)
 	{
-		if (ft_strlen(command->cmd) > 0)
-		{
-			print_error_msg(command->cmd, CMD_NOT_FOUND);
-			exit(EXIT_CMD_NOT_FOUND);
-		}
+		print_error_msg(command->cmd, CMD_NOT_FOUND);
+		free_command(command);
+		free_argv(argv);
+		exit(EXIT_CMD_NOT_FOUND);
 	}
 }
 
@@ -88,9 +102,17 @@ int	execute(t_command *command)
 	if (pid < 0)
 		return (return_with_error("Fork failed."));
 	else if (pid == 0)
+	{
+		close(pipe_fd[0]);
 		child_process(command, pipe_fd);
+		close(pipe_fd[1]);
+	}
 	else
+	{
+		close(pipe_fd[1]);
 		exit_code = parent_process(command, pipe_fd, pid);
+		close(pipe_fd[0]);
+	}
 	return (exit_code);
 }
 

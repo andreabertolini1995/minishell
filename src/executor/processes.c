@@ -80,7 +80,10 @@ void	child_process(t_command *command, int *pipe_fd)
 	{
 		command->exit_code = execute_builtin_child(command, pipe_fd);
 		close(pipe_fd[1]);
+		close(pipe_fd[0]);
 		free_argv(argv);
+		free_env(command->env);
+		//free_command(command);
 		exit(command->exit_code);
 	}
 	else

@@ -43,7 +43,10 @@ static char	*check_if_env(char *word, t_list *env)
 		{
 			env_var = ft_getenv(env, &word[i + 1]);
 			if (env_var != NULL)
+			{
+				free(word);//added this
 				return (env_var);
+			}
 		}
 		i++;
 	}

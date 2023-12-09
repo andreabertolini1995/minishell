@@ -184,5 +184,6 @@ void		free_tokens(t_list *tokens_list);
 void		free_env(t_list *env_list);
 void		free_commands(t_list *commands_list);
 void		free_str(char **str);
+void		free_command(t_command *command);
 
 #endif

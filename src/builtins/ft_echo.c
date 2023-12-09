@@ -90,6 +90,8 @@ int	ft_echo(t_command *command)
 	bool	new_line;
 
 	i = 0;
+
+	new_line = true;
 	if (command->num_args > 0)
 	{
 		new_line = check_new_line(command->args[i]);
@@ -105,6 +107,8 @@ int	ft_echo(t_command *command)
 	{
 		if (is_same_string("$?", command->args[i]))
 			print_exit_code(command);
+		else if (is_same_string("-e", command->args[i]))
+			break ;
 		else
 			print_word(command->args[i]);
 		i++;

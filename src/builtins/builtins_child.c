@@ -33,7 +33,8 @@ char	*ft_getenv(t_list *env_list, char *var_name)
 		env_var = env_list->content;
 		if (is_same_string(env_var->name, var_name))
 			return (env_var->value);
-		env_list = env_list->next;
+		else
+			env_list = env_list->next;
 	}
 	return (NULL);
 }

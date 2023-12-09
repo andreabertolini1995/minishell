@@ -38,6 +38,8 @@ static void	add_redirection(t_command *command,
 
 static	void	update_cmd(t_command *command, t_token *token)
 {
+	free(command->cmd);
+
 	if (token->content == NULL)
 		command->cmd = NULL;
 	else

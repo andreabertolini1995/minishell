@@ -48,19 +48,28 @@ t_list	*update_commands_list(t_list *commands_list, int num_pipes)
 {
 	int	i;
 
+	if (commands_list == NULL)
+		return (NULL);
 	if (num_pipes > 0)
 	{
 		i = 0;
 		while (i < (num_pipes + 1))
 		{
+			if (commands_list == NULL)
+				return (NULL);
 			commands_list = commands_list->next;
 			i++;
 		}
 	}
 	else
+	{
+		if(commands_list == NULL)
+			return (NULL);
 		commands_list = commands_list->next;
+	}
 	return (commands_list);
 }
+
 
 int	wait_processes(int num_pipes, pid_t *pids)
 {
@@ -70,10 +79,12 @@ int	wait_processes(int num_pipes, pid_t *pids)
 
 	i = 0;
 	wstatus = 0;
+	last_exit_status = 0;
 	while (i < (num_pipes + 1))
 	{
-		waitpid(pids[i], &wstatus, 0);
-		if (WIFEXITED(wstatus))
+		if (waitpid(pids[i], &wstatus, 0) == -1)
+			return (return_with_error("empty command"));// ls | 
+		else if (WIFEXITED(wstatus))
 		{
 			if (i == num_pipes)
 				last_exit_status = WEXITSTATUS(wstatus);

@@ -54,18 +54,23 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 
 	i = 0;
 	exit_status = 0;
-	while (i <= num_pipes)
+	while (commands_list != NULL && i <= num_pipes)
 	{
 		command = commands_list->content;
+		if (command == NULL)
+			break;
 		pids[i] = fork();
 		if (pids[i] < 0)
+		{
+			pids[i] = -1;
 			return (return_with_error("Fork failed"));
+		}
 		else if (pids[i] == 0)
 		{
 			set_up_fds(pipe_fd, num_pipes, i);
 			child_process(command, pipe_fd[i]);
 		}
-		else
+		else if (pids[i] > 0)
 			exit_status = execute_builtin_parent(command, pipe_fd[i]);
 		commands_list = commands_list->next;
 		i++;
@@ -82,6 +87,8 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 	int		exit_code;
 
 	pipe_fd = initialize_pipe_fds(num_pipes);
+	if (pipe_fd == NULL)
+		return (1);
 	pids = (int *) malloc (sizeof(int) * (num_pipes + 1));
 	if (pids == NULL)
 		return (1);
@@ -92,3 +99,4 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 	free(pids);
 	return (exit_code);
 }
+

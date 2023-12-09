@@ -47,14 +47,25 @@ t_command	*create_command(int num_args, t_list *env, int exit_code)
 	return (command);
 }
 
-t_env	*create_env_var(char *name, char *value)
+t_env *create_env_var(char *name, char *value)
 {
 	t_env	*env_var;
 
-	env_var = (t_env *) malloc (sizeof(t_env));
+	env_var = (t_env *)malloc(sizeof(t_env));
 	if (env_var == NULL)
 		return (NULL);
-	env_var->name = name;
-	env_var->value = value;
+	env_var->name = strdup(name);
+	if (env_var->name == NULL)
+	{
+		free(env_var);
+		return (NULL);
+	}
+	env_var->value = strdup(value);
+	if (env_var->value == NULL)
+	{
+		free(env_var->name);
+		free(env_var);
+		return (NULL);
+	}
 	return (env_var);
 }
