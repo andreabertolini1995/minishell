@@ -12,6 +12,13 @@
 
 #include "../include/minishell.h"
 
+static int	min(int a, int b)
+{
+	if (a >= b)
+		return (b);
+	return (a);
+}
+
 bool	is_file(char *path_cmd)
 {
 	if (path_cmd == NULL)
@@ -22,11 +29,18 @@ bool	is_file(char *path_cmd)
 		return (false);
 }
 
+/*
+Introduced the min_length to generalize this function.
+Ensure this applies to all the occurences where this function is called.
+*/
 bool	is_same_string(char *str1, char *str2)
 {
+	int	min_length;
+
+	min_length = min((int)ft_strlen(str1), (int)ft_strlen(str2));
 	if ((str1 != NULL && str2 != NULL)
-		&& (!ft_strncmp(str1, str2, ft_strlen(str1))
-			&& ft_strlen(str1) > 0))
+		&& (!ft_strncmp(str1, str2, min_length)
+			&& min_length > 0))
 		return (true);
 	else
 		return (false);

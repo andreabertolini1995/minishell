@@ -27,12 +27,11 @@ static void	replace_substr(char *original, char *substring, char *result, char *
 	{
         if (strstr(src, substring) == src)
 		{
-            strcpy(dest, replacement);
+            strcpy(dest, replacement); // to be replaced with own function
             dest += replacement_length;
             src += substring_length;
-        } else {
+        } else
             *dest++ = *src++;
-        }
     }
     *dest = '\0';
 }
@@ -84,15 +83,30 @@ int	ft_pwd(void)
 char	*ft_getenv(t_list *env_list, char *var_name)
 {
 	t_env	*env_var;
-
+	char	*result;
+	size_t	var_name_length;
+	size_t	count;
+	
+	result = NULL;
+	var_name_length = ft_strlen(var_name);
+	count = 0;
 	while (env_list != NULL)
 	{
 		env_var = env_list->content;
 		if (is_same_string(var_name, env_var->name))
-			return (env_var->value);
+		{
+			while (count < var_name_length)
+			{
+				if (result == NULL)
+					result = ft_strjoin("", env_var->value);
+				else
+					result = ft_strjoin(result, env_var->value);
+				count += ft_strlen(env_var->name) + 1;
+			}
+		}
 		env_list = env_list->next;
 	}
-	return (NULL);
+	return (result);
 }
 
 int	ft_env(t_command *command, char *cmd)
