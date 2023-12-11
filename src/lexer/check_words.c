@@ -52,6 +52,8 @@ char	*check_for_word_without_quotes(char *cmd,
 		word = create_word(cmd, length);
 		is_const = is_word_const(word, env);
 		word = check_if_env_or_exit_code(word, env, exit_code);
+		if (is_same_string("PATH", word)) // check this condition doesn't break other scenarios
+			word = append_path(word, "$PATH", getenv("PATH"));
 		if (is_const)
 			ft_lstadd_back(tokens_list,
 				ft_lstnew(create_token(word, CONST, env)));

@@ -69,7 +69,10 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	{
 		if (ft_strlen(command->cmd) > 0)
 		{
-			print_error_msg(command->cmd, CMD_NOT_FOUND);
+			if (is_same_string(command->cmd, path))
+				print_error_msg(command->cmd, NO_FILE_OR_DIR);
+			else
+				print_error_msg(command->cmd, CMD_NOT_FOUND);
 			exit(EXIT_CMD_NOT_FOUND);
 		}
 	}

@@ -162,6 +162,7 @@ char		*remove_quotes_from_str(char *str);
 void		ft_exit_child(t_command *command, int *pipe_fd);
 void		ft_exit_parent(t_command *command, int *pipe_fd);
 void		print_error_msg(char *str, int msg_type);
+char		*append_path(char *original, char *substring, char *replacement);
 
 // Signals
 void		sigint_handler(int signum);
