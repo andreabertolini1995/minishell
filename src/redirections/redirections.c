@@ -33,34 +33,37 @@ static void	infile_redirect(char *file_name)
 	close(file);
 }
 
-void	redirect_input(t_command *command)
+static void	launch_heredoc(t_command *command)
 {
 	int		file;
 	char	*line;
 
-	if (is_same_string(command->infile_redirect, "<<"))
+	file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	g_signal_num = EXIT_SUCCESS;
+	signal(SIGINT, sigint_handler_heredoc);
+	while (42)
 	{
-		file = open(command->infile, O_WRONLY | O_CREAT | O_APPEND, 0777);
-		g_signal_num = EXIT_SUCCESS;
-		signal(SIGINT, sigint_handler_heredoc);
-		while (42)
+		line = readline("> ");
+		if (!line || is_same_string(line, command->infile))
+			break ;
+		if (g_signal_num == SIGINT)
 		{
-			line = readline("> ");
-			if (!line || is_same_string(line, command->infile))
-				break;
-			if (g_signal_num == SIGINT)
-			{
-				free(line);
-				break;
-			}
-			write(file, line, ft_strlen(line));
-			write(file, "\n", 1);
 			free(line);
+			break ;
 		}
-		infile_redirect(command->infile);
-		unlink(command->infile);
-		close(file);
+		write(file, line, ft_strlen(line));
+		write(file, "\n", 1);
+		free(line);
 	}
+	infile_redirect(command->infile);
+	unlink(command->infile);
+	close(file);
+}
+
+void	redirect_input(t_command *command)
+{
+	if (is_same_string(command->infile_redirect, "<<"))
+		launch_heredoc(command);
 	else
 		infile_redirect(command->infile);
 }

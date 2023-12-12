@@ -182,6 +182,8 @@ bool		is_infile_redirection(char *cmd);
 bool		is_pipe(char *cmd);
 bool		is_outfile_redirection(char *cmd);
 bool		is_valid_identifier(char *str);
+int			min(int a, int b);
+
 
 // Free data
 void		free_tokens(t_list *tokens_list);

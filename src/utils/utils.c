@@ -12,13 +12,6 @@
 
 #include "../include/minishell.h"
 
-static int	min(int a, int b)
-{
-	if (a >= b)
-		return (b);
-	return (a);
-}
-
 bool	is_file(char *path_cmd)
 {
 	if (path_cmd == NULL)

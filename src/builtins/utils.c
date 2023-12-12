@@ -12,20 +12,6 @@
 
 #include "../include/minishell.h"
 
-char	*ft_strcpy(char *dest, char *src)
-{
-	int	i;
-
-	i = 0;
-	while (src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (dest);
-}
-
 static void	replace_substr(char *original, char *substring,
 				char *result, char *replacement)
 {
@@ -85,18 +71,4 @@ char	*append_path(char *original, char *substring, char *replacement)
 		return (NULL);
 	replace_substr(original, substring, result, replacement);
 	return (result);
-}
-
-void	print_error_msg(char *str, int msg_type)
-{
-	if (msg_type == CMD_NOT_FOUND)
-		printf("minishell: %s: command not found\n", str);
-	else if (msg_type == NO_FILE_OR_DIR)
-		printf("minishell: %s: No such file or directory\n", str);
-	else if (msg_type == NUM_ARG_REQUIRED)
-		printf("minishell: exit: %s: numeric argument required\n", str);
-	else if (msg_type == TOO_MANY_ARGS)
-		printf("minishell: exit: too many arguments\n");
-	else if (msg_type == NOT_VALID_IDENTIFIER)
-		printf("minishell: export: '%s': not a valid identifier\n", str);
 }
