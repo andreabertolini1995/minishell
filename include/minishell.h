@@ -132,6 +132,7 @@ bool		is_builtin(char *cmd);
 int			execute_builtin_parent(t_command *command, int *pipe_fd);
 int			execute_builtin_child(t_command *command, int *pipe_fd);
 void		free_argv(char **argv);
+void		exit_program(t_command *command, char *path);
 
 // Pipes
 int			**initialize_pipe_fds(int num_pipes);

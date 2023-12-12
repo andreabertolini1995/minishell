@@ -12,6 +12,18 @@
 
 #include "../include/minishell.h"
 
+void	exit_program(t_command *command, char *path)
+{
+	if (ft_strlen(command->cmd) > 0)
+	{
+		if (is_same_string(command->cmd, path))
+			print_error_msg(command->cmd, NO_FILE_OR_DIR);
+		else
+			print_error_msg(command->cmd, CMD_NOT_FOUND);
+		exit(EXIT_CMD_NOT_FOUND);
+	}
+}
+
 void	free_argv(char **argv)
 {
 	int	i;

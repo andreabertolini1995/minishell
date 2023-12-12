@@ -66,16 +66,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		free_str(sub_paths);
 	}
 	if (execve(cmd_path, argv, envp) < 0)
-	{
-		if (ft_strlen(command->cmd) > 0)
-		{
-			if (is_same_string(command->cmd, path))
-				print_error_msg(command->cmd, NO_FILE_OR_DIR);
-			else
-				print_error_msg(command->cmd, CMD_NOT_FOUND);
-			exit(EXIT_CMD_NOT_FOUND);
-		}
-	}
+		exit_program(command, path);
 }
 
 int	execute(t_command *command)
