@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void free_str(char **str)
+void	free_str(char **str)
 {
 	int	i;
 
@@ -85,4 +85,3 @@ void	free_commands(t_list *commands_list)
 		commands_list = tmp;
 	}
 }
-
