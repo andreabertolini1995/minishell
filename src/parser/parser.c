@@ -64,8 +64,6 @@ static void	parse_cmd_args(t_command *command,
 			if ((*token)->type == WORD || (*token)->type == CONST
 				|| (is_same_string(command->cmd, "echo")))
 			{
-				// if (is_same_string("$?", (*token)->content))
-				// 	command->args[arg_index] = ft_itoa(command->exit_code);
 				command->args[arg_index] = ft_strdup((*token)->content);
 				arg_index++;
 			}

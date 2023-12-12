@@ -25,9 +25,11 @@ int	ft_num_args(t_list *tokens_list)
 	cmd = token->content;
 	if (token->type != WORD && token->type != CONST)
 		return (0);
-	while ((token->type == WORD || token->type == CONST || token->type == EMPTY) && tokens_list != NULL)
+	while ((token->type == WORD || token->type == CONST
+			|| token->type == EMPTY) && tokens_list != NULL)
 	{
-		if (token->type == WORD || token->type == CONST || (is_same_string(cmd, "echo")))
+		if (token->type == WORD || token->type == CONST
+			|| (is_same_string(cmd, "echo")))
 			num_args++;
 		tokens_list = tokens_list->next;
 		if (tokens_list != NULL)
@@ -58,7 +60,7 @@ bool	is_blocking_command(t_command *command)
 				&& command->num_args == 0)
 			|| (is_same_string(command->cmd, "grep")
 				&& command->num_args > 0))
-			return true;
+			return (true);
 	}
 	return (false);
 }
