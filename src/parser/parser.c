@@ -56,14 +56,14 @@ static void	parse_cmd_args(t_command *command,
 	list_size = ft_lstsize((*tokens_list));
 	if (list_size > 1)
 		(*tokens_list) = (*tokens_list)->next;
-	while (((*token)->type == WORD
+	while (((*token)->type == WORD || (*token)->type == CONST
 			|| (*token)->type == EMPTY) && (*tokens_list) != NULL)
 	{
 		if (command->cmd == NULL)
 			update_cmd(command, (*token));
 		else
 		{
-			if ((*token)->type == WORD
+			if ((*token)->type == WORD || (*token)->type == CONST
 				|| (is_same_string(command->cmd, "echo")))
 			{
 				// if (is_same_string("$?", (*token)->content))

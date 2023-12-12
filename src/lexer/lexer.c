@@ -12,85 +12,83 @@
 
 #include "../include/minishell.h"
 
-static bool	is_there_second_single_quote(char *cmd, int i)
+static bool	is_there_second_single_quote(char *cmd)
 {
-	while (cmd[i] != '\0')
+	while (*cmd != '\0')
 	{
-		if (cmd[i] == '\'')
+		if (*cmd == '\'')
 			return (true);
-		i++;
+		cmd++;
 	}
 	return (false);
 }
 
-bool	is_there_second_double_quote(char *cmd, int i)
+bool	is_there_second_double_quote(char *cmd)
 {
-	while (cmd[i] != '\0')
+	while (*cmd != '\0')
 	{
-		if (cmd[i] == '"')
+		if (*cmd == '"')
 			return (true);
-		i++;
+		cmd++;
 	}
 	return (false);
 }
 
-static int	check_for_word(char *cmd, int i, t_list **tokens_list, t_list *env)
+static char	*check_for_word(char *cmd, t_list **tokens_list,
+			t_list *env, int exit_code)
 {
-	if (cmd[i] == '\'')
+	if (*cmd == '\'')
 	{
-		if (is_there_second_single_quote(cmd, i))
-			i = check_for_word_in_single_quotes(cmd, i + 1, tokens_list, env);
+		if (is_there_second_single_quote(cmd))
+			cmd = check_for_word_in_single_quotes(cmd + 1, tokens_list, env);
 		else
-			i = check_for_word_without_quotes(cmd, i, tokens_list, env);
+			cmd = check_for_word_without_quotes(cmd, tokens_list,
+					env, exit_code);
 	}
-	else if (cmd[i] == '"')
+	else if (*cmd == '"')
 	{
-		if (is_there_second_double_quote(cmd, i))
-			i = check_for_word_in_double_quotes(cmd, i + 1, tokens_list, env);
+		if (is_there_second_double_quote(cmd))
+			cmd = check_for_word_in_double_quotes(cmd + 1, tokens_list,
+					env, exit_code);
 		else
-			i = check_for_word_without_quotes(cmd, i, tokens_list, env);
+			cmd = check_for_word_without_quotes(cmd, tokens_list,
+					env, exit_code);
 	}
 	else
-		i = check_for_word_without_quotes(cmd, i, tokens_list, env);
-	return (i);
+		cmd = check_for_word_without_quotes(cmd, tokens_list, env, exit_code);
+	return (cmd);
 }
 
-int	check_for_spaces(char *cmd, int i,
+char	*check_for_spaces(char *cmd,
 			t_list **tokens_list, t_list *env)
 {
-	if (cmd[i] == ' ')
+	if (*cmd == ' ')
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token(" ", EMPTY, env)));
-	else if (cmd[i] == '\t')
+	else if (*cmd == '\t')
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token("\t", EMPTY, env)));
-	while (cmd[i] == ' ' || cmd[i] == '\t')
-			i++;
-	return (i);
+	while (*cmd == ' ' || *cmd == '\t')
+		cmd++;
+	return (cmd);
 }
 
-t_list	*lexer(char *cmd, t_list *env)
+t_list	*lexer(char *cmd, t_list *env, int exit_code)
 {
-	size_t	i;
 	t_list	*tokens_list;
 
-	i = 0;
 	tokens_list = NULL;
-	while (cmd[i] != '\0')
+	while (*cmd != '\0')
 	{
-		if (cmd[i] == '|')
+		if (*cmd == '|')
 		{
 			ft_lstadd_back(&tokens_list,
 				ft_lstnew(create_token("|", PIPE, env)));
-			i++;
+			cmd++;
 		}
-		i = check_for_redirections(cmd, i, &tokens_list, env);
-		i = check_for_word(cmd, i, &tokens_list, env);
-		i = check_for_spaces(cmd, i, &tokens_list, env);
-		// Keep commented out to check this removal doens't break something else
-		// if (cmd[i] != '\0' && cmd[i] != '\''
-		// 	&& cmd[i] != '"' && cmd[i] != ' ' && cmd[i] != '\t')
-		// 	i++;
+		cmd = check_for_redirections(cmd, &tokens_list, env);
+		cmd = check_for_word(cmd, &tokens_list, env, exit_code);
+		cmd = check_for_spaces(cmd, &tokens_list, env);
 	}
 	return (tokens_list);
 }

@@ -23,11 +23,11 @@ int	ft_num_args(t_list *tokens_list)
 	num_args = 0;
 	token = tokens_list->content;
 	cmd = token->content;
-	if (token->type != WORD)
+	if (token->type != WORD && token->type != CONST)
 		return (0);
-	while ((token->type == WORD || token->type == EMPTY) && tokens_list != NULL)
+	while ((token->type == WORD || token->type == CONST || token->type == EMPTY) && tokens_list != NULL)
 	{
-		if (token->type == WORD || (is_same_string(cmd, "echo")))
+		if (token->type == WORD || token->type == CONST || (is_same_string(cmd, "echo")))
 			num_args++;
 		tokens_list = tokens_list->next;
 		if (tokens_list != NULL)
