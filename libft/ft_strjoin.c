@@ -47,8 +47,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 {
 	char	*conc_str;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
 	conc_str = (char *) malloc (sizeof(char)
 			* (ft_strlen(s1) + ft_strlen(s2)) + 1);
 	if (conc_str == NULL)

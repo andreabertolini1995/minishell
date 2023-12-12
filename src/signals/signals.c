@@ -31,7 +31,7 @@ void	sigint_handler_heredoc(int signum)
 	g_signal_num = SIGINT;
 }
 
-void sigint_blocking_cmd_handler(int signum)
+void	sigint_blocking_cmd_handler(int signum)
 {
 	(void)signum;
 	printf("\n");
