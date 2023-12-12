@@ -15,7 +15,7 @@
 int	return_with_error(char *error_msg)
 {
 	perror(error_msg);
-	return (1);
+	return (EXIT_FAILURE);
 }
 
 void	print_error_msg(char *str, int msg_type)

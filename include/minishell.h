@@ -132,7 +132,7 @@ bool		is_builtin(char *cmd);
 int			execute_builtin_parent(t_command *command, int *pipe_fd);
 int			execute_builtin_child(t_command *command, int *pipe_fd);
 void		free_argv(char **argv);
-void		exit_program(t_command *command, char *path);
+void		exit_program(t_command *command, char *path, char **argv);
 
 // Pipes
 int			**initialize_pipe_fds(int num_pipes);
@@ -187,6 +187,7 @@ int			min(int a, int b);
 // Free data
 void		free_tokens(t_list *tokens_list);
 void		free_env(t_list *env_list);
+void		free_command(t_command *command);
 void		free_commands(t_list *commands_list);
 void		free_str(char **str);
 

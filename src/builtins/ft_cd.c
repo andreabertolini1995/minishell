@@ -48,6 +48,7 @@ static	t_command	*create_export_cmd(t_command *cd_cmd,
 						char *var_name, char *var_value)
 {
 	t_command	*command;
+	char		*arg;
 
 	command = (t_command *) malloc (sizeof(t_command));
 	if (command == NULL)
@@ -56,8 +57,9 @@ static	t_command	*create_export_cmd(t_command *cd_cmd,
 	command->args = (char **) malloc (sizeof(char *) * command->num_args);
 	if (command->args == NULL)
 		return (NULL);
-	command->args[0] = ft_strjoin(var_name, "=");
-	command->args[0] = ft_strjoin(command->args[0], var_value);
+	arg = ft_strjoin(var_name, "=");
+	command->args[0] = ft_strjoin(arg, var_value);
+	free(arg);
 	command->env = cd_cmd->env;
 	return (command);
 }

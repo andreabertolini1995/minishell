@@ -36,9 +36,12 @@ char	*get_cmd_path(t_command *command, char **sub_paths)
 		if (is_file(cmd_path))
 			return (cmd_path);
 		else
+		{
+			free(cmd_path);
 			i++;
+		}
 	}
-	return (cmd_path);
+	return (NULL);
 }
 
 void	execute_cmd(t_command *command, char **argv, char *envp[2])
@@ -65,8 +68,16 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 		cmd_path = get_cmd_path(command, sub_paths);
 		free_str(sub_paths);
 	}
+	if (cmd_path == NULL)
+	{
+		print_error_msg(command->cmd, CMD_NOT_FOUND);
+		free_command(command);
+		free_argv(argv);
+		free(path);
+		exit (EXIT_CMD_NOT_FOUND);
+	}
 	if (execve(cmd_path, argv, envp) < 0)
-		exit_program(command, path);
+		exit_program(command, path, argv);
 }
 
 int	execute(t_command *command)

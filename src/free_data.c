@@ -59,6 +59,33 @@ void	free_env(t_list *env_list)
 	}
 }
 
+void	free_command(t_command *command)
+{
+	int	i;
+
+	i = 0;
+	free_env(command->env);
+	if (command != NULL)
+	{
+		free(command->cmd);
+		free(command->operator);
+		free(command->outfile_redirect);
+		free(command->infile_redirect);
+		free(command->infile);
+		free(command->outfile);
+	}
+	if (command->args != NULL)
+	{
+		while (i < command->num_args)
+		{
+			free(command->args[i]);
+			i++;
+		}
+		free(command->args);
+	}
+	free(command);
+}
+
 void	free_commands(t_list *commands_list)
 {
 	t_list		*tmp;

@@ -37,7 +37,7 @@ static t_list	*store_env(char **envp)
 	{
 		env_var = ft_split(envp[i], '=');
 		ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
-		free(env_var);
+		free_str(env_var);
 		i++;
 	}
 	return (env);
@@ -64,6 +64,7 @@ static void	minishell(t_list *env)
 		}
 		add_history(cmd);
 		tokens_list = lexer(cmd, env, exit_code);
+		free(cmd);
 		commands_list = parser(tokens_list, env, exit_code);
 		// Lexer test
 		// ft_lstiter(tokens_list, print_token);

@@ -76,6 +76,8 @@ static void	echo_print(t_command *command, int i, bool new_line)
 	{
 		if (is_same_string("$?", command->args[i]))
 			print_exit_code(command);
+		// else if (is_same_string("-e", command->args[i]))
+		// 	break ; --> might want to fix it :)
 		else
 			print_word(command->args[i]);
 		i++;

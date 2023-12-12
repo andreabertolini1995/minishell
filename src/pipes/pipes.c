@@ -54,9 +54,11 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 
 	i = 0;
 	exit_status = 0;
-	while (i <= num_pipes)
+	while (i <= num_pipes && commands_list != NULL)
 	{
 		command = commands_list->content;
+		if (command == NULL)
+			break;
 		pids[i] = fork();
 		if (pids[i] < 0)
 			return (return_with_error("Fork failed"));
@@ -82,9 +84,11 @@ int	ft_pipe(t_list *commands_list, int num_pipes)
 	int		exit_code;
 
 	pipe_fd = initialize_pipe_fds(num_pipes);
+	if (pipe_fd == NULL)
+		return (EXIT_FAILURE);
 	pids = (int *) malloc (sizeof(int) * (num_pipes + 1));
 	if (pids == NULL)
-		return (1);
+		return (EXIT_FAILURE);
 	create_pipes(num_pipes, pipe_fd);
 	exit_code = ft_fork(commands_list, pipe_fd, num_pipes, pids);
 	close_fds(num_pipes, pipe_fd);

@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	exit_program(t_command *command, char *path)
+void	exit_program(t_command *command, char *path, char **argv)
 {
 	if (ft_strlen(command->cmd) > 0)
 	{
@@ -20,6 +20,9 @@ void	exit_program(t_command *command, char *path)
 			print_error_msg(command->cmd, NO_FILE_OR_DIR);
 		else
 			print_error_msg(command->cmd, CMD_NOT_FOUND);
+		free_command(command);
+		free_argv(argv);
+		free(path);
 		exit(EXIT_CMD_NOT_FOUND);
 	}
 }
@@ -60,10 +63,12 @@ t_list	*update_commands_list(t_list *commands_list, int num_pipes)
 {
 	int	i;
 
+	if (commands_list == NULL)
+		return (NULL);
 	if (num_pipes > 0)
 	{
 		i = 0;
-		while (i < (num_pipes + 1))
+		while (i < (num_pipes + 1) && commands_list != NULL)
 		{
 			commands_list = commands_list->next;
 			i++;
@@ -84,7 +89,8 @@ int	wait_processes(int num_pipes, pid_t *pids)
 	wstatus = 0;
 	while (i < (num_pipes + 1))
 	{
-		waitpid(pids[i], &wstatus, 0);
+		if (waitpid(pids[i], &wstatus, 0) == -1)
+			return (return_with_error("Not implemented :)"));
 		if (WIFEXITED(wstatus))
 		{
 			if (i == num_pipes)
