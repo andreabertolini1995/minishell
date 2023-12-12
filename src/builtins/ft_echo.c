@@ -12,20 +12,6 @@
 
 #include "../include/minishell.h"
 
-void	print_error_msg(char *str, int msg_type)
-{
-	if (msg_type == CMD_NOT_FOUND)
-		printf("minishell: %s: command not found\n", str);
-	else if (msg_type == NO_FILE_OR_DIR)
-		printf("minishell: %s: No such file or directory\n", str);
-	else if (msg_type == NUM_ARG_REQUIRED)
-		printf("minishell: exit: %s: numeric argument required\n", str);
-	else if (msg_type == TOO_MANY_ARGS)
-		printf("minishell: exit: too many arguments\n");
-	else if (msg_type == NOT_VALID_IDENTIFIER)
-		printf("minishell: export: '%s': not a valid identifier\n", str);
-}
-
 static bool	check_new_line(char *option)
 {
 	size_t	i;
@@ -84,12 +70,27 @@ static void	print_word(char *word)
 	}
 }
 
+static void	echo_print(t_command *command, int i, bool new_line)
+{
+	while (i < command->num_args)
+	{
+		if (is_same_string("$?", command->args[i]))
+			print_exit_code(command);
+		else
+			print_word(command->args[i]);
+		i++;
+	}
+	if (new_line == true)
+		printf("\n");
+}
+
 int	ft_echo(t_command *command)
 {
 	int		i;
 	bool	new_line;
 
 	i = 0;
+	new_line = true;
 	if (command->num_args > 0)
 	{
 		new_line = check_new_line(command->args[i]);
@@ -101,15 +102,6 @@ int	ft_echo(t_command *command)
 				i++;
 		}
 	}
-	while (i < command->num_args)
-	{
-		if (is_same_string("$?", command->args[i]))
-			print_exit_code(command);
-		else
-			print_word(command->args[i]);
-		i++;
-	}
-	if (new_line == true)
-		printf("\n");
+	echo_print(command, i, new_line);
 	return (EXIT_SUCCESS);
 }

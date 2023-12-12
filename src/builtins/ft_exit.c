@@ -1,4 +1,3 @@
-
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
@@ -59,7 +58,6 @@ void	ft_exit_child(t_command *command, int *pipe_fd)
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
-	
 }
 
 void	ft_exit_parent(t_command *command, int *pipe_fd)

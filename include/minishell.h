@@ -163,6 +163,7 @@ void		ft_exit_child(t_command *command, int *pipe_fd);
 void		ft_exit_parent(t_command *command, int *pipe_fd);
 void		print_error_msg(char *str, int msg_type);
 char		*append_path(char *original, char *substring, char *replacement);
+char		*ft_strcpy(char *dest, char *src);
 
 // Signals
 void		sigint_handler(int signum);

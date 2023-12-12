@@ -52,7 +52,8 @@ static char	*remove_double_quotes_from_str(char *str)
 	if (str[i] == '"' && is_there_second_double_quote(str))
 	{
 		i++;
-		str_without_quotes = (char *) malloc (sizeof(char) * (ft_strlen(str) - 2));
+		str_without_quotes = (char *) malloc (sizeof(char)
+				* (ft_strlen(str) - 2));
 		if (str_without_quotes == NULL)
 			return (NULL);
 		j = 0;
@@ -86,7 +87,7 @@ static int	add_env_var(t_command *command, int arg_index)
 	{
 		ft_lstadd_back(&env_list,
 			ft_lstnew(create_env_var(input_var[0],
-			remove_double_quotes_from_str(input_var[1]))));
+					remove_double_quotes_from_str(input_var[1]))));
 	}
 	return (EXIT_SUCCESS);
 }

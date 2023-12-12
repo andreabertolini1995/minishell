@@ -38,5 +38,5 @@ char	*ft_strnstr(const char *big, const char *small, size_t n)
 			j = 0;
 		}
 	}
-	return (0);
+	return (NULL);
 }
