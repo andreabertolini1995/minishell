@@ -42,6 +42,16 @@ void	free_tokens(t_list *tokens_list)
 	}
 }
 
+void	free_env_var(t_env *env_var)
+{
+	if (env_var != NULL)
+	{
+		free(env_var->name);
+		free(env_var->value);
+		free(env_var);
+	}
+}
+
 void	free_env(t_list *env_list)
 {
 	t_list	*tmp;
@@ -51,9 +61,7 @@ void	free_env(t_list *env_list)
 	{
 		tmp = env_list->next;
 		env = env_list->content;
-		free(env->name);
-		free(env->value);
-		free(env);
+		free_env_var(env);
 		free(env_list);
 		env_list = tmp;
 	}

@@ -45,7 +45,10 @@ static void	launch_heredoc(t_command *command)
 	{
 		line = readline("> ");
 		if (!line || is_same_string(line, command->infile))
+		{
+			free(line);
 			break ;
+		}
 		if (g_signal_num == SIGINT)
 		{
 			free(line);

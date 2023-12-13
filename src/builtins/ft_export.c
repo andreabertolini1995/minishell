@@ -81,14 +81,17 @@ static int	add_env_var(t_command *command, int arg_index)
 	else if (!is_valid_identifier(input_var[0]))
 	{
 		print_error_msg(command->args[arg_index], NOT_VALID_IDENTIFIER);
+		free_str(input_var);
 		return (EXIT_FAILURE);
 	}
 	else
 	{
-		ft_lstadd_back(&env_list,
-			ft_lstnew(create_env_var(input_var[0],
-					remove_double_quotes_from_str(input_var[1]))));
+		if (input_var[0] != NULL && input_var[1] != NULL)
+			ft_lstadd_back(&env_list,
+				ft_lstnew(create_env_var(input_var[0],
+						remove_double_quotes_from_str(input_var[1]))));
 	}
+	free_str(input_var);
 	return (EXIT_SUCCESS);
 }
 

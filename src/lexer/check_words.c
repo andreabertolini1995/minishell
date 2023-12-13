@@ -33,7 +33,7 @@ static char	*create_word(char *cmd, int length)
 
 static bool	is_word_const(char *word, t_list *env)
 {
-	if (is_word_env(word, env) || is_word_exit_code(word, env))
+	if (is_word_env(word, env)) //|| is_word_exit_code(word, env))
 		return (true);
 	return (false);
 }
@@ -43,23 +43,31 @@ char	*check_for_word_without_quotes(char *cmd,
 {
 	int		length;
 	char	*word;
-	bool	is_const;
+	char	*temp;
+	// bool	is_const;
 
 	length = calculate_word_length(tokens_list, cmd, false);
 	cmd = cmd + length;
 	if (length > 0)
 	{
 		word = create_word(cmd, length);
-		is_const = is_word_const(word, env);
+		// is_const = is_word_const(word, env);
 		if (is_same_string("PATH", word))
-			word = append_path(word, "$PATH", getenv("PATH"));
+		{
+			temp = append_path(word, "$PATH", getenv("PATH"));
+			free(word);
+			word = temp;
+		}
 		word = check_if_env_or_exit_code(word, env, exit_code);
-		if (is_const)
-			ft_lstadd_back(tokens_list,
-				ft_lstnew(create_token(word, CONST, env)));
-		else
-			ft_lstadd_back(tokens_list,
-				ft_lstnew(create_token(word, WORD, env)));
+		// if (is_const)
+		// {
+		// 	printf("here\n");
+		// 	ft_lstadd_back(tokens_list,
+		// 		ft_lstnew(create_token(word, CONST, env)));
+		// }
+		ft_lstadd_back(tokens_list,
+			ft_lstnew(create_token(word, WORD, env)));
+		// free(word); //--> creates some sort of error
 	}
 	return (cmd);
 }

@@ -67,12 +67,20 @@ static	t_command	*create_export_cmd(t_command *cd_cmd,
 static int	change_dir(t_command *command, char *pwd)
 {
 	char	buffer[1024];
-
-	ft_export(create_export_cmd(command, "OLDPWD",
-			getcwd(buffer, sizeof(buffer))));
+	t_command	*command1;
+	t_command	*command2;
+	
+	command1 = create_export_cmd(command, "OLDPWD",
+			getcwd(buffer, sizeof(buffer)));
+	ft_export(command1);
+	free_str(command1->args);
+	free(command1);
 	chdir(pwd);
-	ft_export(create_export_cmd(command, "PWD",
-			getcwd(buffer, sizeof(buffer))));
+	command2 = create_export_cmd(command, "PWD",
+			getcwd(buffer, sizeof(buffer)));
+	ft_export(command2);
+	free_str(command2->args);
+	free(command2);
 	return (EXIT_SUCCESS);
 }
 

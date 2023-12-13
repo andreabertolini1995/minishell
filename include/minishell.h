@@ -187,6 +187,7 @@ int			min(int a, int b);
 // Free data
 void		free_tokens(t_list *tokens_list);
 void		free_env(t_list *env_list);
+void		free_env_var(t_env *env_var);
 void		free_command(t_command *command);
 void		free_commands(t_list *commands_list);
 void		free_str(char **str);

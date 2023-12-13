@@ -24,10 +24,7 @@ static char	*check_if_env(char *word, t_list *env)
 		{
 			env_var = ft_getenv(env, &word[i + 1]);
 			if (env_var != NULL)
-			{
-				free (word);
 				return (env_var);
-			}
 		}
 		i++;
 	}
@@ -61,7 +58,10 @@ char	*check_if_env_or_exit_code(char *word, t_list *env, int exit_code)
 
 	result = check_if_env(word, env);
 	if (result != NULL)
+	{
+		free(word);
 		return (result);
+	}
 	result = check_if_exit_code(word, env, exit_code);
 	if (result != NULL)
 		return (result);
@@ -80,7 +80,10 @@ bool	is_word_env(char *word, t_list *env)
 		{
 			env_var = ft_getenv(env, &word[i + 1]);
 			if (env_var != NULL)
+			{
+				free(env_var);
 				return (true);
+			}
 		}
 		i++;
 	}

@@ -70,5 +70,6 @@ char	*append_path(char *original, char *substring, char *replacement)
 	if (result == NULL)
 		return (NULL);
 	replace_substr(original, substring, result, replacement);
+	free(original);
 	return (result);
 }

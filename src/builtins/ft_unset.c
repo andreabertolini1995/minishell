@@ -39,12 +39,14 @@ static void	delete_env_var(t_command *command, int arg_index)
 {
 	t_list	*env_list;
 	t_list	*prev_list;
+	t_list	*tmp;
 	t_env	*env_var;
 
 	env_list = command->env;
 	prev_list = NULL;
 	while (env_list != NULL)
 	{
+		tmp = env_list->next;
 		env_var = env_list->content;
 		if (is_same_string(env_var->name, command->args[arg_index]))
 		{
@@ -52,10 +54,11 @@ static void	delete_env_var(t_command *command, int arg_index)
 				prev_list = env_list->next;
 			else
 				prev_list->next = env_list->next;
-			free(env_var);
+			free_env_var(env_var);
+			free(env_list);
 		}
 		prev_list = env_list;
-		env_list = env_list->next;
+		env_list = tmp;
 	}
 }
 

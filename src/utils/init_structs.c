@@ -63,16 +63,16 @@ t_env *create_env_var(char *name, char *value)
 {
 	t_env	*env_var;
 
-	env_var = (t_env *)malloc(sizeof(t_env));
+	env_var = (t_env *) malloc (sizeof(t_env));
 	if (env_var == NULL)
 		return (NULL);
-	env_var->name = strdup(name);
+	env_var->name = ft_strdup(name);
 	if (env_var->name == NULL)
 	{
 		free(env_var);
 		return (NULL);
 	}
-	env_var->value = strdup(value);
+	env_var->value = ft_strdup(value);
 	if (env_var->value == NULL)
 	{
 		free(env_var->name);
