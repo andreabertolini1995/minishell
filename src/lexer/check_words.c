@@ -44,6 +44,7 @@ char	*check_for_word_without_quotes(char *cmd,
 	int		length;
 	char	*word;
 	bool	is_const;
+	char	*temp;
 
 	length = calculate_word_length(tokens_list, cmd, false);
 	cmd = cmd + length;
@@ -52,7 +53,11 @@ char	*check_for_word_without_quotes(char *cmd,
 		word = create_word(cmd, length);
 		is_const = is_word_const(word, env);
 		if (is_same_string("PATH", word))
-			word = append_path(word, "$PATH", getenv("PATH"));
+		{
+			temp = append_path(word, "$PATH", getenv("PATH"));
+			free(word);
+			word = temp;
+		}
 		word = check_if_env_or_exit_code(word, env, exit_code);
 		if (is_const)
 			ft_lstadd_back(tokens_list,
