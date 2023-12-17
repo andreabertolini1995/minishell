@@ -30,4 +30,6 @@ void	print_error_msg(char *str, int msg_type)
 		printf("minishell: exit: too many arguments\n");
 	else if (msg_type == NOT_VALID_IDENTIFIER)
 		printf("minishell: export: '%s': not a valid identifier\n", str);
+	else if (msg_type == UNEXPECTED_VALUE)
+		printf("minishell: syntax error near unexpected token `newline'\n");
 }

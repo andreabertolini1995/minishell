@@ -20,16 +20,22 @@ static void	add_redirection(t_command *command,
 	if (is_same_string(str, "infile"))
 	{
 		command->infile_redirect = token->content;
-		next_token = update_tokens_list(tokens_list,
-				(*tokens_list)->next->content);
-		command->infile = ft_strdup(next_token->content);
+		if ((*tokens_list)->next != NULL)
+		{
+			next_token = update_tokens_list(tokens_list,
+					(*tokens_list)->next->content);
+			command->infile = ft_strdup(next_token->content);
+		}
 	}
 	else
 	{
 		command->outfile_redirect = token->content;
-		next_token = update_tokens_list(tokens_list,
-				(*tokens_list)->next->content);
-		command->outfile = ft_strdup(next_token->content);
+		if ((*tokens_list)->next != NULL)
+		{
+			next_token = update_tokens_list(tokens_list,
+					(*tokens_list)->next->content);
+			command->outfile = ft_strdup(next_token->content);
+		}
 	}
 	(*tokens_list) = (*tokens_list)->next;
 	if ((*tokens_list) != NULL)

@@ -31,6 +31,7 @@
 
 # define EXIT_SUCCESS 0
 # define EXIT_FAILURE 1
+# define EXIT_UNEXP_VALUE 2
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_SIGINT 130
 # define EXIT_SIGQUIT 131
@@ -44,7 +45,8 @@ typedef enum e_error_msgs
 	NO_FILE_OR_DIR = 2,
 	NUM_ARG_REQUIRED = 3,
 	TOO_MANY_ARGS = 4,
-	NOT_VALID_IDENTIFIER = 5
+	NOT_VALID_IDENTIFIER = 5,
+	UNEXPECTED_VALUE = 6
 }	t_error_msgs;
 
 typedef struct s_env

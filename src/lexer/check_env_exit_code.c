@@ -33,11 +33,12 @@ static char	*check_if_env(char *word, t_list *env)
 
 static char	*check_if_exit_code(char *word, t_list *env, int exit_code)
 {
+	(void)exit_code;
 	if (word[0] == '$' && ft_strlen(word) > 1)
 	{
 		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
 		{
-			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
+			if (ft_getenv(env, word + 1) == NULL)
 			{
 				free (word);
 				return ("");
@@ -46,7 +47,7 @@ static char	*check_if_exit_code(char *word, t_list *env, int exit_code)
 		else if (word[1] == '?' && ft_strlen(word) == 2)
 		{
 			free (word);
-			return (ft_itoa(exit_code));
+			return ("$?");
 		}
 	}
 	return (NULL);

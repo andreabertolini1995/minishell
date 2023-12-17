@@ -21,9 +21,7 @@ int	execute_builtin_child(t_command *command, int *pipe_fd)
 		redirect_input(command);
 	if (command->outfile != NULL)
 		redirect_output(command);
-	if (is_same_string(command->cmd, "echo"))
-		exit_code = ft_echo(command);
-	else if (is_same_string(command->cmd, "pwd"))
+	if (is_same_string(command->cmd, "pwd"))
 		exit_code = ft_pwd();
 	else if (is_same_string(command->cmd, "env"))
 		exit_code = ft_env(command, "env");
@@ -41,6 +39,8 @@ int	execute_builtin_parent(t_command *command, int *pipe_fd)
 	exit_code = 0;
 	if (is_same_string(command->cmd, "cd"))
 		exit_code = ft_cd(command);
+	else if (is_same_string(command->cmd, "echo"))
+		exit_code = ft_echo(command);
 	else if (is_same_string(command->cmd, "export"))
 		exit_code = ft_export(command);
 	else if (is_same_string(command->cmd, "unset"))

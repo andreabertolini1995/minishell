@@ -51,7 +51,7 @@ static void	minishell(t_list *env)
 	int		exit_code;
 
 	exit_code = 0;
-	g_signal_num = 0;
+	g_signal_num = EXIT_SUCCESS;
 	while (42)
 	{
 		signal(SIGINT, sigint_handler);
@@ -60,7 +60,7 @@ static void	minishell(t_list *env)
 		if (cmd == NULL)
 		{
 			printf("exit\n");
-			exit(0);
+			exit(EXIT_SUCCESS);
 		}
 		add_history(cmd);
 		tokens_list = lexer(cmd, env, exit_code);

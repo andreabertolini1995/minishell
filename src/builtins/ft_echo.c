@@ -74,7 +74,9 @@ static void	echo_print(t_command *command, int i, bool new_line)
 {
 	while (i < command->num_args)
 	{
-		if (is_same_string("$?", command->args[i]))
+		if (is_same_string("$>", command->args[i]))
+			print_error_msg(NULL, UNEXPECTED_VALUE);
+		else if (is_same_string("$?", command->args[i]))
 			print_exit_code(command);
 		else
 			print_word(command->args[i]);
@@ -103,5 +105,7 @@ int	ft_echo(t_command *command)
 		}
 	}
 	echo_print(command, i, new_line);
+	if (is_same_string("$>", command->args[0]))
+		return (EXIT_UNEXP_VALUE);
 	return (EXIT_SUCCESS);
 }

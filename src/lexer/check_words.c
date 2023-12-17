@@ -40,6 +40,8 @@ static bool	is_word_const(char *word, t_list *env)
 			if (ft_getenv(env, word + 1) == NULL)
 				return (true);
 		}
+		else if (word[1] == '?' && ft_strlen(word) == 2)
+			return (true);
 	}
 	return (false);
 }
