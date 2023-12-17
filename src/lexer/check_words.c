@@ -33,7 +33,7 @@ static char	*create_word(char *cmd, int length)
 
 static bool	is_word_const(char *word, t_list *env)
 {
-	char *env_var;
+	char	*env_var;
 
 	env_var = NULL;
 	if (word[0] == '$' && ft_strlen(word) > 1)
