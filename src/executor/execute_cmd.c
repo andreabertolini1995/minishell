@@ -14,7 +14,10 @@
 
 static void	free_all(t_command *command, char **argv, char *path)
 {
-	print_error_msg(command->cmd, CMD_NOT_FOUND);
+	if (is_same_string(command->cmd, path))
+		print_error_msg(command->cmd, NO_FILE_OR_DIR);
+	else
+		print_error_msg(command->cmd, CMD_NOT_FOUND);
 	free_command(command);
 	free_argv(argv);
 	free(path);

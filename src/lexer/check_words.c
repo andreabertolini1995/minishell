@@ -37,25 +37,12 @@ static bool	is_word_const(char *word, t_list *env)
 	{
 		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
 		{
-			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
+			if (ft_getenv(env, word + 1) == NULL)
 				return (true);
 		}
 	}
 	return (false);
 }
-
-// static char	*check_path(char *word)
-// {
-// 	char	*temp;
-
-// 	if (is_same_string("PATH", word))
-// 	{
-// 		temp = append_path(word, "$PATH", getenv("PATH"));
-// 		free(word);
-// 		word = temp;
-// 	}
-// 	return (word);
-// }
 
 char	*check_for_word_without_quotes(char *cmd,
 		t_list **tokens_list, t_list *env, int exit_code)
@@ -70,15 +57,15 @@ char	*check_for_word_without_quotes(char *cmd,
 	{
 		word = create_word(cmd, length);
 		is_const = is_word_const(word, env);
-		// word = check_path(word);
+		if (is_same_string("PATH", word))
+			word = append_path(word, "$PATH", getenv("PATH"));
 		word = check_if_env_or_exit_code(word, env, exit_code);
 		if (is_const)
-		{
 			ft_lstadd_back(tokens_list,
 				ft_lstnew(create_token(word, CONST, env)));
-		}
-		ft_lstadd_back(tokens_list,
-			ft_lstnew(create_token(word, WORD, env)));
+		else
+			ft_lstadd_back(tokens_list,
+				ft_lstnew(create_token(word, WORD, env)));
 	}
 	return (cmd);
 }
