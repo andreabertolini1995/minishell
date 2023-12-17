@@ -59,7 +59,7 @@ t_command	*create_command(int num_args, t_list *env, int exit_code)
 // 	return (env_var);
 // }
 
-t_env *create_env_var(char *name, char *value)
+t_env	*create_env_var(char *name, char *value)
 {
 	t_env	*env_var;
 

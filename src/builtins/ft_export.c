@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abertoli <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 17:33:54 by abertoli          #+#    #+#             */
-/*   Updated: 2022/10/21 18:29:38 by abertoli         ###   ########.fr       */
+/*   Updated: 2023/12/17 11:34:52 by eltongid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ static int	add_env_var(t_command *command, int arg_index)
 	else if (!is_valid_identifier(input_var[0]))
 	{
 		print_error_msg(command->args[arg_index], NOT_VALID_IDENTIFIER);
-		free_str(input_var);
 		return (EXIT_FAILURE);
 	}
 	else
@@ -91,7 +90,6 @@ static int	add_env_var(t_command *command, int arg_index)
 				ft_lstnew(create_env_var(input_var[0],
 						remove_double_quotes_from_str(input_var[1]))));
 	}
-	free_str(input_var);
 	return (EXIT_SUCCESS);
 }
 

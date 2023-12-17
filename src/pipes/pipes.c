@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: abertoli <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: eltongid <eltongid@student.42berlin.d      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/18 17:33:54 by abertoli          #+#    #+#             */
-/*   Updated: 2022/10/21 18:29:38 by abertoli         ###   ########.fr       */
+/*   Created: 2023/12/16 21:19:57 by eltongid          #+#    #+#             */
+/*   Updated: 2023/12/17 11:39:02 by eltongid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,20 +45,29 @@ int	get_num_pipes(t_list *commands_list)
 	return (num_pipes);
 }
 
+static int	close_fds_exit(int num_pipes, int **pipe_fd, pid_t *pids)
+{
+	int	exit_status;
+
+	close_fds(num_pipes, pipe_fd);
+	exit_status = wait_processes(num_pipes, pids);
+	return (exit_status);
+}
+
 static int	ft_fork(t_list *commands_list, int **pipe_fd,
 					int num_pipes, pid_t *pids)
 {
 	int			i;
-	t_command	*command;
 	int			exit_status;
+	t_command	*command;
 
-	i = 0;
+	i = -1;
 	exit_status = 0;
-	while (i <= num_pipes && commands_list != NULL)
+	while (i++ <= num_pipes && commands_list != NULL)
 	{
 		command = commands_list->content;
 		if (command == NULL)
-			break;
+			break ;
 		pids[i] = fork();
 		if (pids[i] < 0)
 			return (return_with_error("Fork failed"));
@@ -70,10 +79,8 @@ static int	ft_fork(t_list *commands_list, int **pipe_fd,
 		else
 			exit_status = execute_builtin_parent(command, pipe_fd[i]);
 		commands_list = commands_list->next;
-		i++;
 	}
-	close_fds(num_pipes, pipe_fd);
-	exit_status = wait_processes(num_pipes, pids);
+	exit_status = close_fds_exit(num_pipes, pipe_fd, pids);
 	return (exit_status);
 }
 

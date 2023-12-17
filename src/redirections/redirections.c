@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   redirections.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abertoli <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 17:33:54 by abertoli          #+#    #+#             */
-/*   Updated: 2022/10/21 18:29:38 by abertoli         ###   ########.fr       */
+/*   Updated: 2023/12/17 11:37:28 by eltongid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,16 @@ static void	infile_redirect(char *file_name)
 	close(file);
 }
 
+static void	write_to_line(int file, char *line)
+{
+	if (line != NULL)
+	{
+		write(file, line, ft_strlen(line));
+		write(file, "\n", 1);
+		free(line);
+	}
+}
+
 static void	launch_heredoc(t_command *command)
 {
 	int		file;
@@ -54,9 +64,7 @@ static void	launch_heredoc(t_command *command)
 			free(line);
 			break ;
 		}
-		write(file, line, ft_strlen(line));
-		write(file, "\n", 1);
-		free(line);
+		write_to_line(file, line);
 	}
 	infile_redirect(command->infile);
 	unlink(command->infile);

@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_str_is_printable.c                              :+:      :+:    :+:   */
+/*   ft_cd.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: abertoli <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/18 17:33:54 by abertoli          #+#    #+#             */
-/*   Updated: 2022/10/21 18:29:38 by abertoli         ###   ########.fr       */
+/*   Updated: 2023/12/17 11:35:07 by eltongid         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,20 +66,20 @@ static	t_command	*create_export_cmd(t_command *cd_cmd,
 
 static int	change_dir(t_command *command, char *pwd)
 {
-	char	buffer[1024];
+	char		buffer[1024];
 	t_command	*command1;
 	t_command	*command2;
-	
+
 	command1 = create_export_cmd(command, "OLDPWD",
 			getcwd(buffer, sizeof(buffer)));
 	ft_export(command1);
-	free_str(command1->args);
+	free(command1->args);
 	free(command1);
 	chdir(pwd);
 	command2 = create_export_cmd(command, "PWD",
 			getcwd(buffer, sizeof(buffer)));
 	ft_export(command2);
-	free_str(command2->args);
+	free(command2->args);
 	free(command2);
 	return (EXIT_SUCCESS);
 }
