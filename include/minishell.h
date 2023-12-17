@@ -133,6 +133,7 @@ int			execute_builtin_parent(t_command *command, int *pipe_fd);
 int			execute_builtin_child(t_command *command, int *pipe_fd);
 void		free_argv(char **argv);
 void		exit_program(t_command *command, char *path, char **argv);
+char		*get_cmd_path(t_command *command, char **sub_paths);
 
 // Pipes
 int			**initialize_pipe_fds(int num_pipes);
