@@ -70,13 +70,17 @@ static void	print_word(char *word)
 	}
 }
 
+/* 
+This function has to change according to the fact that
+in the lexer we translate directly $? into the numeric exit code.
+*/
 static void	echo_print(t_command *command, int i, bool new_line)
 {
 	while (i < command->num_args)
 	{
 		if (is_same_string("$>", command->args[i]))
 			print_error_msg(NULL, UNEXPECTED_VALUE);
-		else if (is_same_string("$?", command->args[i]))
+		else if (is_same_string("$?", command->args[i])) // to be changed
 			print_exit_code(command);
 		else
 			print_word(command->args[i]);
