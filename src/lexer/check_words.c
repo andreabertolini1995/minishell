@@ -32,7 +32,7 @@ static char	*create_word(char *cmd, int length)
 }
 
 /* 
-Update this function based on the itoa.
+TO DO: Update this function based on the itoa.
 */
 static bool	is_word_const(char *word, t_list *env)
 {

@@ -54,6 +54,10 @@ void	free_env(t_list *env_list)
 	}
 }
 
+/*
+TO DO: Refactor the following two functions.
+Free commands should use free_command if possible.
+*/
 void	free_command(t_command *command)
 {
 	int	i;
