@@ -56,5 +56,5 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	if (cmd_path == NULL)
 		free_all(command, argv, path);
 	if (execve(cmd_path, argv, envp) < 0)
-		exit_program(command, path, argv);
+		exit_program(command, path);
 }

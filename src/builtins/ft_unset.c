@@ -20,7 +20,7 @@ bool	is_valid_identifier(char *str)
 {
 	int	i;
 
-	if (str == NULL)
+	if (str == NULL || str[0] == '$')
 		return (false);
 	i = 0;
 	if (ft_isdigit(str[i]))
