@@ -35,7 +35,8 @@ static void	replace_env_var(t_list *env_list, char *var_name, char *var_value)
 		env_var = env_list->content;
 		if (is_same_string(env_var->name, var_name))
 		{
-			env_var->value = var_value;
+			free(env_var->value);
+			env_var->value = ft_strdup(var_value);
 			return ;
 		}
 		env_list = env_list->next;
@@ -77,10 +78,16 @@ static int	add_env_var(t_command *command, int arg_index)
 	env_list = command->env;
 	input_var = ft_split(command->args[arg_index], '=');
 	if (is_env_var(env_list, input_var[0]))
+	{
 		replace_env_var(env_list, input_var[0], input_var[1]);
+		free(input_var[0]);
+		if (input_var[1] != NULL)
+			free(input_var[1]);
+	}
 	else if (!is_valid_identifier(input_var[0]))
 	{
 		print_error_msg(command->args[arg_index], NOT_VALID_IDENTIFIER);
+		free_str(input_var);
 		return (EXIT_FAILURE);
 	}
 	else
@@ -90,6 +97,7 @@ static int	add_env_var(t_command *command, int arg_index)
 				ft_lstnew(create_env_var(input_var[0],
 						remove_double_quotes_from_str(input_var[1]))));
 	}
+	free(input_var);
 	return (EXIT_SUCCESS);
 }
 
