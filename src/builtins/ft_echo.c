@@ -90,19 +90,41 @@ static void	echo_print(t_command *command, int i, bool new_line)
 		printf("\n");
 }
 
+static int	check_if_end_quote(char *str)
+{
+	int	count = 0;
+	while(*str != '\0')
+	{
+		if (*str == '"')
+			count++;
+		str++;
+	}
+	if (count % 2 == 0)
+		return false;
+	return true;
+}
+
 int	ft_echo(t_command *command)
 {
 	int		i;
 	bool	new_line;
+	bool	closing_doublequote;
 
 	i = 0;
 	new_line = true;
+	closing_doublequote = true;
 	if (command->num_args > 0)
 	{
 		new_line = check_new_line(command->args[i]);
+		closing_doublequote = check_if_end_quote(command->args[i]);
 		if (new_line == false)
 		{
 			i++;
+			if (closing_doublequote)
+			{
+				printf(">dquote");
+				return (EXIT_FAILURE);
+			}
 			while (!check_new_line(command->args[i])
 				|| is_same_string(command->args[i], " "))
 				i++;
