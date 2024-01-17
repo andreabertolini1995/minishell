@@ -108,8 +108,11 @@ int	ft_echo(t_command *command)
 				i++;
 		}
 	}
-	echo_print(command, i, new_line);
-	if (is_same_string("$>", command->args[0]))
-		return (EXIT_UNEXP_VALUE);
+	if (i < command->num_args) //solves seg fault for command echo (by itself)
+	{
+		echo_print(command, i, new_line);
+		if (is_same_string("$>", command->args[0]))
+			return (EXIT_UNEXP_VALUE);
+	}
 	return (EXIT_SUCCESS);
 }

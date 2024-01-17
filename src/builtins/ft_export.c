@@ -64,6 +64,7 @@ static char	*remove_double_quotes_from_str(char *str)
 			i++;
 			j++;
 		}
+		str_without_quotes[i] = '\0';
 		return (str_without_quotes);
 	}
 	else
