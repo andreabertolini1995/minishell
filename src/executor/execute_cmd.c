@@ -38,6 +38,7 @@ void	execute_cmd(t_command *command, char **argv, char *envp[2])
 	char	*cmd_path;
 	char	**sub_paths;
 
+	path = NULL; // needs to be initialised for /bin/ls/wrong/command
 	check_redirect(command);
 	if (is_same_string("/bin/", command->cmd))
 		cmd_path = command->cmd;

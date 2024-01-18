@@ -28,7 +28,9 @@ t_token	*create_token(char *str, int type, t_list *env)
 t_command	*create_command(int num_args, t_list *env, int exit_code)
 {
 	t_command	*command;
+	int			i;
 
+	i = 0;
 	command = (t_command *) malloc (sizeof(t_command));
 	if (command == NULL)
 		return (NULL);
@@ -37,6 +39,11 @@ t_command	*create_command(int num_args, t_list *env, int exit_code)
 	command->args = (char **) malloc (sizeof(char *) * num_args);
 	if (command->args == NULL)
 		return (NULL);
+	while (i < num_args)
+	{
+		command->args[i] = NULL;
+		i++;
+	}
 	command->operator = NULL;
 	command->infile_redirect = NULL;
 	command->outfile_redirect = NULL;
