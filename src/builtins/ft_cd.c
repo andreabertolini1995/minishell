@@ -73,12 +73,16 @@ static int	change_dir(t_command *command, char *pwd)
 	command1 = create_export_cmd(command, "OLDPWD",
 			getcwd(buffer, sizeof(buffer)));
 	ft_export(command1);
+	if (command1->args != NULL)
+		free(command1->args[0]);
 	free(command1->args);
 	free(command1);
 	chdir(pwd);
 	command2 = create_export_cmd(command, "PWD",
 			getcwd(buffer, sizeof(buffer)));
 	ft_export(command2);
+	if (command2->args != NULL)
+		free(command2->args[0]);
 	free(command2->args);
 	free(command2);
 	return (EXIT_SUCCESS);

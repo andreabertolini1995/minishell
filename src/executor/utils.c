@@ -12,7 +12,7 @@
 
 #include "../include/minishell.h"
 
-void	exit_program(t_command *command, char *path, char **argv)
+void	exit_program(t_command *command, char *path)
 {
 	if (ft_strlen(command->cmd) > 0)
 	{
@@ -21,7 +21,6 @@ void	exit_program(t_command *command, char *path, char **argv)
 		else
 			print_error_msg(command->cmd, CMD_NOT_FOUND);
 		free_command(command);
-		free_argv(argv);
 		free(path);
 		exit(EXIT_CMD_NOT_FOUND);
 	}

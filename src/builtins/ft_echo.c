@@ -77,6 +77,11 @@ int	ft_echo(t_command *command)
 
 	i = 0;
 	new_line = true;
+	if (command->num_args == 0)
+	{
+		printf("\n");
+		return EXIT_SUCCESS;
+	}
 	if (command->num_args > 0)
 	{
 		new_line = check_new_line(command->args[i]);

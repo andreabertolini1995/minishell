@@ -68,8 +68,6 @@ void	free_command(t_command *command)
 	{
 		free(command->cmd);
 		free(command->operator);
-		free(command->outfile_redirect);
-		free(command->infile_redirect);
 		free(command->infile);
 		free(command->outfile);
 	}

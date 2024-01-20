@@ -68,6 +68,7 @@ static void	minishell(t_list *env)
 		commands_list = parser(tokens_list, env, exit_code);
 		free_tokens(tokens_list);
 		exit_code = executor(commands_list);
+		// ft_lstiter(commands_list, print_command);
 		free_commands(commands_list);
 	}
 }
