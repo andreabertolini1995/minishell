@@ -31,9 +31,6 @@ static char	*create_word(char *cmd, int length)
 	return (word);
 }
 
-/* 
-TO DO: Update this function based on the itoa.
-*/
 static bool	is_word_const(char *word, t_list *env)
 {
 	char	*env_var;
@@ -47,8 +44,6 @@ static bool	is_word_const(char *word, t_list *env)
 			if (env_var == NULL)
 				return (true);
 		}
-		else if (word[1] == '?' && ft_strlen(word) == 2)
-			return (true);
 	}
 	free(env_var);
 	return (false);

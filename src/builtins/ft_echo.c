@@ -33,22 +33,6 @@ static bool	check_new_line(char *option)
 	return (true);
 }
 
-static void	print_exit_code(t_command *command)
-{
-	if (g_signal_num == SIGINT)
-	{
-		printf("%d", EXIT_SIGINT);
-		g_signal_num = EXIT_SUCCESS;
-	}
-	else if (g_signal_num == SIGQUIT)
-	{
-		printf("%d", EXIT_SIGQUIT);
-		g_signal_num = EXIT_SUCCESS;
-	}
-	else
-		printf("%d", command->exit_code);
-}
-
 static void	print_word(char *word)
 {
 	int	i;
@@ -70,18 +54,14 @@ static void	print_word(char *word)
 	}
 }
 
-/* 
-This function has to change according to the fact that
-in the lexer we translate directly $? into the numeric exit code.
-*/
 static void	echo_print(t_command *command, int i, bool new_line)
 {
 	while (i < command->num_args)
 	{
 		if (is_same_string("$>", command->args[i]))
 			print_error_msg(NULL, UNEXPECTED_VALUE);
-		else if (is_same_string("$?", command->args[i])) // to be changed
-			print_exit_code(command);
+		else if (command->exit_code != 0)
+			printf("%d", command->exit_code);
 		else
 			print_word(command->args[i]);
 		i++;

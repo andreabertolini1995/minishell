@@ -41,5 +41,6 @@ void	print_command(void *content)
 	printf("Outfile redirection: %s\n", command->outfile_redirect);
 	printf("Infile: %s\n", command->infile);
 	printf("Outfile: %s\n", command->outfile);
+	printf("Exit code: %d\n", command->exit_code);
 	printf("\n");
 }

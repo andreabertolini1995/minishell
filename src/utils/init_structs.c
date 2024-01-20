@@ -25,6 +25,22 @@ t_token	*create_token(char *str, int type, t_list *env)
 	return (token);
 }
 
+static void	set_exit_code(t_command *command, int exit_code)
+{
+	if (g_signal_num == SIGINT)
+	{
+		command->exit_code = EXIT_SIGINT;
+		g_signal_num = EXIT_SUCCESS;
+	}
+	else if (g_signal_num == SIGQUIT)
+	{
+		command->exit_code = EXIT_SIGQUIT;
+		g_signal_num = EXIT_SUCCESS;
+	}
+	else
+		command->exit_code = exit_code;
+}
+
 t_command	*create_command(int num_args, t_list *env, int exit_code)
 {
 	t_command	*command;
@@ -43,7 +59,7 @@ t_command	*create_command(int num_args, t_list *env, int exit_code)
 	command->infile = NULL;
 	command->outfile = NULL;
 	command->env = env;
-	command->exit_code = exit_code;
+	set_exit_code(command, exit_code);
 	return (command);
 }
 
