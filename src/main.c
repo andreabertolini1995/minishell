@@ -51,9 +51,9 @@ static void	minishell(t_list *env)
 	int		exit_code;
 
 	exit_code = 0;
-	g_signal_num = EXIT_SUCCESS;
 	while (42)
 	{
+		g_signal_num = EXIT_SUCCESS;//move this inside the loop so that it updates after heredoc
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		cmd = readline("****: ");
