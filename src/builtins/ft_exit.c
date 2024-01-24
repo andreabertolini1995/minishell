@@ -67,6 +67,7 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 	int		exit_code;
 	char 	*str;
 
+	signal_from_child = 0;
 	close(pipe_fd[1]);
 	read(pipe_fd[0], &signal_from_child, sizeof(int));
 	close(pipe_fd[0]);
