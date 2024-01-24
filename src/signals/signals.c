@@ -27,7 +27,17 @@ void	sigint_handler(int signum)
 void	sigint_handler_heredoc(int signum)
 {
 	(void)signum;
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	g_signal_num = SIGINT;
+}
+
+void	sigint_handler_heredoc1(int signum)
+{
+	(void)signum;
+	rl_on_new_line();
+	rl_replace_line("", 0);
 	g_signal_num = SIGINT;
 }
 
