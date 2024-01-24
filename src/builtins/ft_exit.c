@@ -18,7 +18,7 @@ char	*remove_quotes_from_str(char *str)
 	int		i;
 	int		j;
 
-	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str)));
+	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str) + 1));
 	if (new_str == NULL)
 		return (NULL);
 	i = 0;
@@ -32,6 +32,7 @@ char	*remove_quotes_from_str(char *str)
 		}
 		i++;
 	}
+	new_str[j] = '\0';
 	return (new_str);
 }
 
@@ -64,15 +65,18 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 {
 	int		signal_from_child;
 	int		exit_code;
+	char 	*str;
 
 	close(pipe_fd[1]);
 	read(pipe_fd[0], &signal_from_child, sizeof(int));
 	close(pipe_fd[0]);
 	if (signal_from_child == SIGINT)
 	{
+		str = remove_quotes_from_str(command->args[0]);
 		if (command->num_args == 1)
 		{
-			exit_code = ft_atoi(remove_quotes_from_str(command->args[0]));
+			exit_code = ft_atoi(str);
+			free(str);
 			if (exit_code == 0)
 				exit(EXIT_ALPHA_ARG);
 			else
