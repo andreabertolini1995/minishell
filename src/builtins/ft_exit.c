@@ -73,9 +73,9 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 	close(pipe_fd[0]);
 	if (signal_from_child == SIGINT)
 	{
-		str = remove_quotes_from_str(command->args[0]);
 		if (command->num_args == 1)
 		{
+			str = remove_quotes_from_str(command->args[0]);
 			exit_code = ft_atoi(str);
 			free(str);
 			if (exit_code == 0)
