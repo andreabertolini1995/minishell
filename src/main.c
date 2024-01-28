@@ -65,6 +65,7 @@ static void	minishell(t_list *env)
 		add_history(cmd);
 		tokens_list = lexer(cmd, env, exit_code);
 		free(cmd);
+		// ft_lstiter(tokens_list, print_token);
 		commands_list = parser(tokens_list, env, exit_code);
 		free_tokens(tokens_list);
 		exit_code = executor(commands_list);
