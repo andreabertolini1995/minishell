@@ -173,7 +173,7 @@ char		*ft_strcpy(char *dest, char *src);
 void		sigint_handler(int signum);
 void		sigint_blocking_cmd_handler(int signum);
 void		sigint_handler_heredoc(int signum);
-void		sigint_handler_heredoc1(int signum);
+void		sigint_handler_infile_redirect(int signum);
 void		sigquit_handler(int signum);
 
 // Utils

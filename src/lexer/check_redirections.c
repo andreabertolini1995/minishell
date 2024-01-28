@@ -35,10 +35,8 @@ char	*check_for_infile_redirection(char *cmd,
 	{
 		ft_lstadd_back(tokens_list,
 			ft_lstnew(create_token("<<", REDIRECTION, env)));
-		{
-			signal(SIGINT, sigint_handler_heredoc1);
-			cmd++;
-		}
+		signal(SIGINT, sigint_handler_infile_redirect);
+		cmd++;
 	}
 	else
 		ft_lstadd_back(tokens_list,

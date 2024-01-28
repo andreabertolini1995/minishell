@@ -33,7 +33,7 @@ void	sigint_handler_heredoc(int signum)
 	g_signal_num = SIGINT;
 }
 
-void	sigint_handler_heredoc1(int signum)
+void	sigint_handler_infile_redirect(int signum)
 {
 	(void)signum;
 	rl_on_new_line();
