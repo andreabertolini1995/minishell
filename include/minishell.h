@@ -35,7 +35,6 @@
 # define EXIT_CMD_NOT_FOUND 127
 # define EXIT_SIGINT 130
 # define EXIT_SIGQUIT 131
-# define EXIT_ALPHA_ARG 255
 
 extern int	g_signal_num;
 
@@ -163,8 +162,8 @@ int			clear(void);
 bool		is_env_var(t_list *env_list, char *var_name);
 char		*ft_getenv(t_list *env_list, char *var_name);
 char		*remove_quotes_from_str(char *str);
-void		ft_exit_child(t_command *command, int *pipe_fd);
-void		ft_exit_parent(t_command *command, int *pipe_fd);
+int			ft_exit_child(t_command *command, int *pipe_fd);
+int			ft_exit_parent(t_command *command, int *pipe_fd);
 void		print_error_msg(char *str, int msg_type);
 char		*append_path(char *original, char *substring, char *replacement);
 char		*ft_strcpy(char *dest, char *src);

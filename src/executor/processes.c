@@ -26,7 +26,7 @@ int	execute_builtin_child(t_command *command, int *pipe_fd)
 	else if (is_same_string(command->cmd, "env"))
 		exit_code = ft_env(command, "env");
 	else if (is_same_string(command->cmd, "exit"))
-		ft_exit_child(command, pipe_fd);
+		exit_code = ft_exit_child(command, pipe_fd);
 	else if (is_same_string(command->cmd, "clear"))
 		exit_code = clear();
 	return (exit_code);
@@ -46,7 +46,7 @@ int	execute_builtin_parent(t_command *command, int *pipe_fd)
 	else if (is_same_string(command->cmd, "unset"))
 		exit_code = ft_unset(command);
 	else if (is_same_string(command->cmd, "exit"))
-		ft_exit_parent(command, pipe_fd);
+		exit_code = ft_exit_parent(command, pipe_fd);
 	return (exit_code);
 }
 

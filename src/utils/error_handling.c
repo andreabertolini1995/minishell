@@ -18,18 +18,26 @@ int	return_with_error(char *error_msg)
 	return (EXIT_FAILURE);
 }
 
+void	ft_putstr_fd(char *s, int fd)
+{
+	write(fd, s, ft_strlen(s));
+}
+
 void	print_error_msg(char *str, int msg_type)
 {
+	ft_putstr_fd("minishell: ", 1);
+	ft_putstr_fd(str, 1);
+	ft_putstr_fd(": ", 1);
 	if (msg_type == CMD_NOT_FOUND)
-		printf("minishell: %s: command not found\n", str);
+		ft_putstr_fd("command not found\n", 2);
 	else if (msg_type == NO_FILE_OR_DIR)
-		printf("minishell: %s: No such file or directory\n", str);
+		ft_putstr_fd("No such file or directory\n", 2);
 	else if (msg_type == NUM_ARG_REQUIRED)
-		printf("minishell: exit: %s: numeric argument required\n", str);
+		ft_putstr_fd("numeric argument required\n", 2);
 	else if (msg_type == TOO_MANY_ARGS)
-		printf("minishell: exit: too many arguments\n");
+		ft_putstr_fd("too many arguments\n", 2);
 	else if (msg_type == NOT_VALID_IDENTIFIER)
-		printf("minishell: export: '%s': not a valid identifier\n", str);
-	else if (msg_type == UNEXPECTED_VALUE)
-		printf("minishell: syntax error near unexpected token `newline'\n");
+		ft_putstr_fd("not a valid identifier\n", 2);
+	// else if (msg_type == UNEXPECTED_VALUE)
+	// 	printf("minishell: syntax error near unexpected token `newline'\n");
 }

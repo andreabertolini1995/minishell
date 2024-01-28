@@ -71,8 +71,7 @@ int	ft_unset(t_command *command)
 	{
 		if (!is_valid_identifier(command->args[arg_index]))
 		{
-			printf("minishell: unset: '%s': not a valid identifier\n",
-				command->args[arg_index]);
+			print_error_msg(command->cmd, NOT_VALID_IDENTIFIER);
 			return (EXIT_FAILURE);
 		}
 		else if (!is_same_string(command->args[arg_index], " ")

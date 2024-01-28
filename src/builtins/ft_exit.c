@@ -18,7 +18,7 @@ char	*remove_quotes_from_str(char *str)
 	int		i;
 	int		j;
 
-	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str)));
+	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str) + 1));
 	if (new_str == NULL)
 		return (NULL);
 	i = 0;
@@ -32,35 +32,62 @@ char	*remove_quotes_from_str(char *str)
 		}
 		i++;
 	}
+	new_str[j] = '\0';
 	return (new_str);
 }
 
-void	ft_exit_child(t_command *command, int *pipe_fd)
+static void	combine_args_to_exit_code(t_command *command)
+{
+	char	*temp;
+	int		exit_code;
+
+	temp = ft_strjoin(command->args[0], command->args[1]);
+	exit_code = ft_atoi(remove_quotes_from_str(temp));
+	free(temp);
+	exit(exit_code);
+}
+
+static void	deal_single_argument(t_command *command,
+				int *pipe_fd, int signal_to_send)
+{
+	char	*arg_str;
+
+	arg_str = remove_quotes_from_str(command->args[0]);
+	if (ft_atoi(arg_str) == 0)
+		print_error_msg(command->args[0], NUM_ARG_REQUIRED);
+	free(arg_str);
+	write(pipe_fd[1], &signal_to_send, sizeof(int));
+	close(pipe_fd[1]);
+}
+
+int	ft_exit_child(t_command *command, int *pipe_fd)
 {
 	int		signal_to_send;
-	char	*arg_str;
 
 	signal_to_send = SIGINT;
 	printf("exit\n");
 	if (command->num_args == 1)
-	{
-		arg_str = remove_quotes_from_str(command->args[0]);
-		if (ft_atoi(arg_str) == 0)
-			print_error_msg(command->args[0], NUM_ARG_REQUIRED);
-		free(arg_str);
-		write(pipe_fd[1], &signal_to_send, sizeof(int));
-		close(pipe_fd[1]);
-	}
+		deal_single_argument(command, pipe_fd, signal_to_send);
 	else if (command->num_args > 1)
-		print_error_msg(NULL, TOO_MANY_ARGS);
+	{
+		if (is_same_string(command->args[0], "-")
+			|| is_same_string(command->args[0], "+"))
+			combine_args_to_exit_code(command);
+		else
+		{
+			print_error_msg(command->cmd, TOO_MANY_ARGS);
+			return (EXIT_FAILURE);
+		}
+	}
 	else
 	{
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
+	return (EXIT_SUCCESS);
 }
 
-void	ft_exit_parent(t_command *command, int *pipe_fd)
+int	ft_exit_parent(t_command *command, int *pipe_fd)
 {
 	int		signal_from_child;
 	int		exit_code;
@@ -68,19 +95,22 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 	close(pipe_fd[1]);
 	read(pipe_fd[0], &signal_from_child, sizeof(int));
 	close(pipe_fd[0]);
-	if (signal_from_child == SIGINT)
+	if (command->num_args == 1)
 	{
-		if (command->num_args == 1)
-		{
-			exit_code = ft_atoi(remove_quotes_from_str(command->args[0]));
-			if (exit_code == 0)
-				exit(EXIT_ALPHA_ARG);
-			else
-				exit(exit_code);
-		}
-		else if (command->num_args > 1)
-			exit(EXIT_FAILURE);
+		exit_code = ft_atoi(remove_quotes_from_str(command->args[0]));
+		if (exit_code == 0)
+			exit(NO_FILE_OR_DIR);
 		else
-			exit(EXIT_SUCCESS);
+			exit(exit_code);
 	}
+	else if (command->num_args > 1)
+	{
+		if (is_same_string(command->args[0], "-")
+			|| is_same_string(command->args[0], "+"))
+			combine_args_to_exit_code(command);
+		else 
+			return (EXIT_FAILURE);
+	}
+	exit(EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
