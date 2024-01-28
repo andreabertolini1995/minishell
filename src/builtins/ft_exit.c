@@ -18,7 +18,7 @@ char	*remove_quotes_from_str(char *str)
 	int		i;
 	int		j;
 
-	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str)));
+	new_str = (char *) malloc (sizeof(char) * (ft_strlen(str) + 1));
 	if (new_str == NULL)
 		return (NULL);
 	i = 0;
@@ -32,27 +32,51 @@ char	*remove_quotes_from_str(char *str)
 		}
 		i++;
 	}
+	new_str[j] = '\0';
 	return (new_str);
+}
+
+bool	is_numeric(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (!isdigit(str[i]) && str[i] != '-' && str[i] != '+')
+			return (false);
+		i++;
+	}
+	return true;
 }
 
 void	ft_exit_child(t_command *command, int *pipe_fd)
 {
 	int		signal_to_send;
 	char	*arg_str;
+	char 	*temp;
 
 	signal_to_send = SIGINT;
 	printf("exit\n");
 	if (command->num_args == 1)
 	{
 		arg_str = remove_quotes_from_str(command->args[0]);
-		if (ft_atoi(arg_str) == 0)
-			print_error_msg(command->args[0], NUM_ARG_REQUIRED);
+		if (!is_numeric(arg_str))
+			print_error_msg("", NUM_ARG_REQUIRED);
 		free(arg_str);
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
 		close(pipe_fd[1]);
 	}
 	else if (command->num_args > 1)
-		print_error_msg(NULL, TOO_MANY_ARGS);
+	{
+		temp = ft_strjoin(command->args[0], command->args[1]);
+		arg_str = remove_quotes_from_str(temp);
+		if(ft_atoi(arg_str) == 0)
+			print_error_msg("", NUM_ARG_REQUIRED);
+		free(arg_str);
+		write(pipe_fd[1], &signal_to_send, sizeof(int));
+		close(pipe_fd[1]);
+	}
 	else
 	{
 		write(pipe_fd[1], &signal_to_send, sizeof(int));
@@ -64,7 +88,9 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 {
 	int		signal_from_child;
 	int		exit_code;
+	char 	*temp;
 
+	signal_from_child = 0;
 	close(pipe_fd[1]);
 	read(pipe_fd[0], &signal_from_child, sizeof(int));
 	close(pipe_fd[0]);
@@ -76,10 +102,31 @@ void	ft_exit_parent(t_command *command, int *pipe_fd)
 			if (exit_code == 0)
 				exit(EXIT_ALPHA_ARG);
 			else
+			{
 				exit(exit_code);
+			}
 		}
 		else if (command->num_args > 1)
-			exit(EXIT_FAILURE);
+		{
+			if (is_same_string(command->args[0], "-") || is_same_string(command->args[0], "+"))
+			{
+				temp = ft_strjoin(command->args[0] , command->args[1]);
+				exit_code = ft_atoi(remove_quotes_from_str(temp));
+				if (exit_code == 0)
+					exit(EXIT_ALPHA_ARG);
+				else
+					exit(exit_code);
+			}
+			else 
+			{
+				temp = ft_strjoin(command->args[0], command->args[1]);
+				if (!is_numeric(temp))
+				{
+					print_error_msg(NULL, TOO_MANY_ARGS);
+					exit(EXIT_FAILURE);
+				}
+			}
+		}
 		else
 			exit(EXIT_SUCCESS);
 	}
