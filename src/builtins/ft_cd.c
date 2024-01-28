@@ -90,6 +90,11 @@ static int	change_dir(t_command *command, char *pwd)
 
 int	ft_cd(t_command *command)
 {
+	if (command->num_args > 1)
+	{
+		print_error_msg(command->args[0], TOO_MANY_ARGS);
+		return (EXIT_FAILURE);
+	}
 	if (command->num_args == 0
 		|| (command->num_args == 1
 			&& is_same_string(command->args[0], "~")))

@@ -54,6 +54,18 @@ static void	print_word(char *word)
 	}
 }
 
+static bool	is_known_exit_code(int exit_code)
+{
+	if (exit_code != 0
+		&& exit_code != 1
+		&& exit_code != 2
+		&& exit_code != 127
+		&& exit_code != 130
+		&& exit_code != 131)
+		return (false);
+	return (true); 
+}
+
 static void	echo_print(t_command *command, int i, bool new_line)
 {
 	while (i < command->num_args)
@@ -61,7 +73,11 @@ static void	echo_print(t_command *command, int i, bool new_line)
 		// if (!ft_strncmp("$>", command->args[i], ft_strlen("$>")))
 		// 	print_error_msg(NULL, UNEXPECTED_VALUE);
 		if (command->exit_code != 0)
+		{
+			if (!is_known_exit_code(command->exit_code))
+				command->exit_code = 0;
 			printf("%d", command->exit_code);
+		}
 		else
 			print_word(command->args[i]);
 		i++;
