@@ -27,6 +27,7 @@ static bool	check_new_line(char *option)
 			i++;
 		while (option[i] == 'n')
 			i++;
+		break ;
 	}
 	if (i == ft_strlen(option))
 		return (false);
