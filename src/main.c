@@ -36,7 +36,8 @@ static t_list	*store_env(char **envp)
 	while ((envp[i]) != NULL)
 	{
 		env_var = ft_split(envp[i], '=');
-		ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
+		if (env_var[0] != NULL && env_var[1] != NULL)
+			ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
 		free_str(env_var);
 		i++;
 	}
@@ -81,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
-	// init_shell();
+	init_shell();
 	minishell(env);
 	free_env(env);
 }
