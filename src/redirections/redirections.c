@@ -73,7 +73,7 @@ static void	launch_heredoc(t_command *command)
 
 void	redirect_input(t_command *command)
 {
-	if (is_same_string(command->infile_redirect, "<<"))
+	if (!ft_strncmp(command->infile_redirect, "<<", ft_strlen("<<")))
 		launch_heredoc(command);
 	else
 		infile_redirect(command->infile);
