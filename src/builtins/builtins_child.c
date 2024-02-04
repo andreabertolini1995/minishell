@@ -24,13 +24,22 @@ int	ft_pwd(void)
 	return (EXIT_SUCCESS);
 }
 
+static char	*update_result(char *env_var_value, char *result)
+{
+	char	*temp;
+
+	temp = ft_strjoin(result, env_var_value);
+	free(result);
+	result = temp;
+	return (result);
+}
+
 char	*ft_getenv(t_list *env_list, char *var_name)
 {
 	t_env	*env_var;
 	char	*result;
 	size_t	var_name_length;
 	size_t	count;
-	char	*temp;
 
 	result = NULL;
 	var_name_length = ft_strlen(var_name);
@@ -45,11 +54,7 @@ char	*ft_getenv(t_list *env_list, char *var_name)
 				if (result == NULL)
 					result = ft_strdup(env_var->value);
 				else
-				{
-					temp = ft_strjoin(result, env_var->value);
-					free(result);
-					result = temp;
-				}
+					result = update_result(env_var->value, result);
 				count += ft_strlen(env_var->name) + 1;
 			}
 		}

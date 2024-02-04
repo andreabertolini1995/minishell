@@ -38,6 +38,4 @@ void	print_error_msg(char *str, int msg_type)
 		ft_putstr_fd("too many arguments\n", 2);
 	else if (msg_type == NOT_VALID_IDENTIFIER)
 		ft_putstr_fd("not a valid identifier\n", 2);
-	// else if (msg_type == UNEXPECTED_VALUE)
-	// 	printf("minishell: syntax error near unexpected token `newline'\n");
 }

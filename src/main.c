@@ -37,7 +37,8 @@ static t_list	*store_env(char **envp)
 	{
 		env_var = ft_split(envp[i], '=');
 		if (env_var[0] != NULL && env_var[1] != NULL)
-			ft_lstadd_back(&env, ft_lstnew(create_env_var(env_var[0], env_var[1])));
+			ft_lstadd_back(&env,
+				ft_lstnew(create_env_var(env_var[0], env_var[1])));
 		free_str(env_var);
 		i++;
 	}
@@ -66,11 +67,9 @@ static void	minishell(t_list *env)
 		add_history(cmd);
 		tokens_list = lexer(cmd, env, exit_code);
 		free(cmd);
-		// ft_lstiter(tokens_list, print_token);
 		commands_list = parser(tokens_list, env, exit_code);
 		free_tokens(tokens_list);
 		exit_code = executor(commands_list);
-		// ft_lstiter(commands_list, print_command);
 		free_commands(commands_list);
 	}
 }
@@ -82,7 +81,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
-	// init_shell();
+	init_shell();
 	minishell(env);
 	free_env(env);
 }
