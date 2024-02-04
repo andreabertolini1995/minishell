@@ -16,10 +16,10 @@ void	redirect_output(t_command *command)
 {
 	int	file;
 
-	if (is_same_string(command->outfile_redirect, ">"))
-		file = open(command->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
-	else
+	if (is_same_string(command->outfile_redirect, ">>"))
 		file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
+	else
+		file = open(command->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	dup2(file, STDOUT_FILENO);
 	close(file);
 }
