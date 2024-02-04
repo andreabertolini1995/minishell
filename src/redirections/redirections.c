@@ -16,7 +16,7 @@ void	redirect_output(t_command *command)
 {
 	int	file;
 
-	if (is_same_string(command->outfile_redirect, ">>"))
+	if (!ft_strncmp(command->outfile_redirect, ">>", ft_strlen(">>")))
 		file = open(command->outfile, O_WRONLY | O_CREAT | O_APPEND, 0777);
 	else
 		file = open(command->outfile, O_WRONLY | O_CREAT | O_TRUNC, 0777);
