@@ -31,6 +31,16 @@ static char	*check_if_env(char *word, t_list *env)
 	return (NULL);
 }
 
+static int	update_exit_code(int exit_code)
+{
+	if (g_signal_num == SIGINT)
+		return (EXIT_SIGINT);
+	else if (g_signal_num == SIGQUIT)
+		return (EXIT_SIGQUIT);
+	else
+		return (exit_code);
+}
+
 static char	*check_if_exit_code(char *word, t_list *env, int exit_code)
 {
 	if (word[0] == '$' && ft_strlen(word) > 1)
@@ -46,7 +56,7 @@ static char	*check_if_exit_code(char *word, t_list *env, int exit_code)
 		else if (word[1] == '?' && ft_strlen(word) == 2)
 		{
 			free (word);
-			return (ft_itoa(exit_code));
+			return (ft_itoa(update_exit_code(exit_code)));
 		}
 	}
 	return (NULL);
@@ -86,21 +96,6 @@ bool	is_word_env(char *word, t_list *env)
 			}
 		}
 		i++;
-	}
-	return (false);
-}
-
-bool	is_word_exit_code(char *word, t_list *env)
-{
-	if (word[0] == '$' && ft_strlen(word) > 1)
-	{
-		if (word[1] != '?' && word[1] != ' ' && word[1] != '\t')
-		{
-			if (ft_getenv(env, ft_split(word, '$')[1]) == NULL)
-				return (true);
-		}
-		else if (word[1] == '?' && ft_strlen(word) == 2)
-			return (true);
 	}
 	return (false);
 }

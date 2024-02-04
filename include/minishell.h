@@ -119,7 +119,6 @@ int			calculate_word_length(t_list **tokens_list,
 bool		is_there_second_double_quote(char *cmd);
 char		*check_if_env_or_exit_code(char *word, t_list *env, int exit_code);
 bool		is_word_env(char *word, t_list *env);
-bool		is_word_exit_code(char *word, t_list *env);
 
 // Executor
 int			executor(t_list *commands_list);

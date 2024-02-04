@@ -49,12 +49,12 @@ static void	print_word(char *word)
 
 static bool	is_known_exit_code(int exit_code)
 {
-	if (exit_code != 0
-		&& exit_code != 1
-		&& exit_code != 2
-		&& exit_code != 127
-		&& exit_code != 130
-		&& exit_code != 131)
+	if (exit_code != EXIT_SUCCESS
+		&& exit_code != EXIT_FAILURE
+		&& exit_code != EXIT_UNEXP_VALUE
+		&& exit_code != EXIT_CMD_NOT_FOUND
+		&& exit_code != EXIT_SIGINT
+		&& exit_code != EXIT_SIGQUIT)
 		return (false);
 	return (true); 
 }
@@ -63,14 +63,9 @@ static void	echo_print(t_command *command, int i, bool new_line)
 {
 	while (i < command->num_args)
 	{
-		if (command->exit_code != 0)
-		{
-			if (!is_known_exit_code(command->exit_code))
-				command->exit_code = 0;
-			printf("%d", command->exit_code);
-		}
-		else
-			print_word(command->args[i]);
+		if (!is_known_exit_code(command->exit_code))
+			command->args[i] = "0";
+		print_word(command->args[i]);
 		i++;
 	}
 	if (new_line == true)
