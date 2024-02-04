@@ -82,7 +82,7 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 	env = store_env(envp);
-	init_shell();
+	// init_shell();
 	minishell(env);
 	free_env(env);
 }
