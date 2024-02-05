@@ -69,7 +69,9 @@ bool	is_blocking_command(t_command *command)
 		if ((is_same_string(command->cmd, "cat")
 				&& command->num_args == 0)
 			|| (is_same_string(command->cmd, "grep")
-				&& command->num_args > 0))
+				&& command->num_args > 0)
+			|| (is_same_string(command->cmd, "wc")
+				&& command->num_args == 0))
 			return (true);
 	}
 	return (false);
